@@ -1,0 +1,17 @@
+{
+  "name": "constructionrelease",
+  "displayName": "constructionrelease",
+  "expo": {
+    "name": "constructionrelease",
+    "slug": "constructionrelease",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
