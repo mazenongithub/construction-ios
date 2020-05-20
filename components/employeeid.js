@@ -1,0 +1,74 @@
+import React from 'react';
+import {FlatList, View,Text,TouchableOpacity} from 'react-native';
+import Construction from './construction'
+import {MyStylesheet} from './styles'
+import { TextInput } from 'react-native-gesture-handler';
+class EmployeeID {
+   
+    showemployeesearch() {
+        const employeeid = new EmployeeID();
+        const construction = new Construction();
+        const myemployees = construction.getmyemployees.call(this)
+        const search = this.state.employee;
+        let results = [];
+        let myusers = [];
+        if(myemployees) {
+            myemployees.map(myemployee=> {
+                myusers.push(construction.getemployeebyproviderid.call(this,myemployee.providerid))
+            })
+        }
+        if(myusers.length>0 && search) {
+            myusers.map(myuser=> {
+                
+
+                if (myuser.firstname.toLowerCase().startsWith(search.toLowerCase()) || myuser.lastname.toLowerCase().startsWith(search.toLowerCase())) {
+                    results.push(employeeid.showsearchids.call(this, myuser))
+                }
+            })
+
+            
+        }
+        return results;
+    }
+    showsearchids(myuser) {
+        const construction = new Construction();
+        const regularFont = construction.getRegularFont.call(this)
+        const styles = MyStylesheet();
+        return(
+        <View style={[styles.generalFlex, styles.bottomMargin10]} key={myuser.providerid}>
+            <View style={[styles.flex1]}>
+                <Text style={[regularFont]} onPress={()=>{this.handleemployeeid(myuser.providerid)}}>{myuser.firstname} {myuser.lastname} </Text>
+            </View>
+        </View>
+        )
+    }
+        showemployeeid() {
+            const construction = new Construction();
+            const employeeid = new EmployeeID()
+            const styles = MyStylesheet();
+            const regularFont = construction.getRegularFont.call(this)
+            const activeemployee = () => {
+                const myemployeeid = this.getemployeeid();
+                const myuser = construction.getemployeebyproviderid.call(this, myemployeeid)
+                if(myuser) {
+                    return(<Text style={[styles.activeBackground,regularFont]}>{myuser.firstname} {myuser.lastname}</Text>)
+                }
+            }
+
+            return( 
+                <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                <View style={[styles.flex1]}>
+                    <Text style={[regularFont]}> EmployeeID</Text>
+                    {activeemployee()}
+                    <TextInput style={[styles.regularFont,styles.defaultInput]} 
+                        value={this.state.employee}
+                        onChangeText={text=>{this.setState({employee:text})}}
+                    />
+                    {employeeid.showemployeesearch.call(this)}
+                </View>
+            </View>
+           )
+    
+        }
+}
+export default EmployeeID;
