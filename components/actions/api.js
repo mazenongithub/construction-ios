@@ -1,4 +1,30 @@
 import EnvironmentalVariables from '../functions/enviornmentalvariables'
+
+
+export async function LoadCSIs() {
+    const variables = new EnvironmentalVariables();
+    const serverAPI = variables.getvariables.call(this).serverAPI;
+
+    let APIURL = `${serverAPI}/construction/loadcsi`
+
+    return fetch(APIURL, { credentials: 'include' }).then(resp => {
+
+        if (!resp.ok) {
+            if (resp.status >= 400 && resp.status < 500) {
+                return resp.json().then(data => {
+                    throw data.message
+                })
+            }
+            else {
+                let err = { errorMessage: 'Please try again later, server is not responding' };
+                throw err;
+            }
+        }
+
+        return resp.json();
+    })
+}
+
 export async function StripeDashboard(providerid, stripe) {
     const variables = new EnvironmentalVariables();
     const serverAPI = variables.getvariables.call(this).serverAPI;

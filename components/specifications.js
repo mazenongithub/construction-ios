@@ -1,70 +1,78 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { connect } from 'react-redux';
-import * as actions from './actions';
-import { MyStylesheet } from './styles';
+import React from 'react';
+import { MyStylesheet } from './styles'
 import Construction from './construction';
-import CSI from './csi'
+import {View, Text} from 'react-native'
 
-class Specifications extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {csiid:false,csi_1:'', csi_2:'',csi_3:''}
-    }
-    getcsiid() {
+class Specifications {
+
+
+    showspecification(spec) {
         const construction = new Construction();
-        const csi = construction.getcsibyid.call(this,this.state.csiid)
-        if (csi) {
-            return (`${csi.csi}-${csi.title}`)
-        } else {
-            return ""
-        }
-       
-    }
-handlecsiid(csiid) {
-    const construction = new Construction();
-    const csi = construction.getcsibyid.call(this,csiid)
-    let csi_1 = "";
-    let csi_2 = "";
-    let csi_3 = "";
-    if(csi) {
-    csi_1 = csi.csi.substr(0, 2)
-                csi_2 = csi.csi.substr(2, 2)
-                csi_3 = csi.csi.substr(4, 2)
-    }
-    this.setState({csiid,csi_1,csi_2,csi_3})
-}
-    render() {
-        const construction = new Construction();
-        const mycompany = construction.getcompany.call(this)
+        const csiid = spec.csiid;
+        const csi = construction.getcsibyid.call(this, csiid)
         const styles = MyStylesheet();
-        const csi = new CSI();
-        const headerFont = construction.getHeaderFont.call(this)
-        return (
-            <View style={[styles.generalFlex]}>
-                <View style={[styles.flex1]}>
+        const regularFont = construction.getRegularFont.call(this)
 
-                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
-                        <View style={[styles.flex1]}>
-                            <Text style={[headerFont, styles.alignCenter]}>/{mycompany.url}/construction</Text>
+    
+        return (
+        <View style={{ ...styles.generalContainer }} key={spec.specid}>
+        <Text style={{...styles.generalFont, ...regularFont,...styles.generalLink}} 
+        >{csi.csi} - {csi.title}</Text>
+        </View>
+        )
+
+    }
+
+    showspecifications() {
+        const construction = new Construction();
+        const activeparams = construction.getactiveproject.call(this);
+        const projectid = activeparams.projectid;
+        const myproject = construction.getprojectbyid.call(this,projectid);
+        const specifications = new Specifications();
+        let specids = [];
+        if(myproject) {
+        const specs = construction.getspecficationsbyprojectid.call(this, myproject.projectid)
+        console.log(specs)
+        if (specs) {
+            // eslint-disable-next-line
+            specs.map(spec => {
+                specids.push(specifications.showspecification.call(this,spec))
+            })
+        }
+    }
+        return specids;
+    }
+
+    getspecifications() {
+        const styles = MyStylesheet();
+        const construction = new Construction();
+        const headerFont = construction.getHeaderFont.call(this);
+        const activeparams = construction.getactiveproject.call(this);
+        const projectid = activeparams.projectid;
+        const myproject = construction.getprojectbyid.call(this,projectid);
+        const specifications = new Specifications();
+        if(myproject) {
+        return (
+            <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                <View style={{ ...styles.flex1 }}>
+                    
+                    <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                        <View style={{ ...styles.flex1}}>
+                            <Text style={{ ...styles.boldFont, ...headerFont, ...styles.alignCenter }}>/{myproject.title}</Text>
+                            <Text style={{ ...styles.boldFont, ...headerFont, ...styles.alignCenter }}> Specifications</Text>
                         </View>
                     </View>
 
-                   {csi.showcsi.call(this)}
-                    
+                    {specifications.showspecifications.call(this)}
+               
                 </View>
             </View>)
-}
-}
 
-function mapStateToProps(state) {
-    return {
-        myusermodel: state.myusermodel,
-        navigation: state.navigation,
-        project: state.project,
-        allusers: state.allusers,
-        allcompanys: state.allcompanys
+        }
     }
+
 }
 
-export default connect(mapStateToProps, actions)(Specifications)
+
+
+export default Specifications

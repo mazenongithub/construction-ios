@@ -12,7 +12,7 @@ import Equipment from './equipment'
 import Materials from './materials'
 import Accounts from './accounts'
 import Specifications from './specifications';
-import { CheckUserLogin, LogoutUser, StripeDashboard } from './actions/api';
+import { CheckUserLogin, LogoutUser, StripeDashboard, LoadCSIs } from './actions/api';
 import { returnCompanyList } from './functions';
 import Construction from './construction'
 import Project from './project';
@@ -33,7 +33,8 @@ import Bid from './bid'
 import BidScheduleLineItem from './bidschedulelineitem'
 import BidLineItem from './bidlineitem'
 import Landing from './landing';
-import ViewAccount from './viewaccount'
+import ViewAccount from './viewaccount';
+
 
 class ConstructionApp extends Component {
     constructor(props) {
@@ -49,13 +50,28 @@ class ConstructionApp extends Component {
         this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
         Dimensions.addEventListener('change', this.updatedimesions)
         this.props.reduxNavigation({ open: true })
-        this.checkuser()
+        this.checkuser();
+        this.loadcsis();
+     
     }
     componentWillUnmount() {
         Dimensions.removeEventListener('change', this.updatedimesions)
     }
     updatedimesions() {
         this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
+
+    async loadcsis() {
+        try {
+            let response = await LoadCSIs();
+            if (response.hasOwnProperty("csis")) {
+                this.props.reduxCSIs(response.csis);
+    
+            }
+    
+        } catch (err) {
+            alert(err)
+        }
     }
 
     async logoutuser() {
@@ -128,6 +144,7 @@ class ConstructionApp extends Component {
         const landing = new Landing();
         const accounts = new Accounts();
         const viewaccount = new ViewAccount();
+        const specifications = new Specifications();
         switch (menu.main) {
             case 'register':
                 return (register.showregister.call(this));
@@ -210,6 +227,8 @@ class ConstructionApp extends Component {
             case "bidlineitem":
                 return (bidlineitem.showbidlineitem.call(this))
                 break;
+            case "specifications":
+                return(specifications.getspecifications.call(this))
             case "landing":
                 return (landing.showlanding.call(this));
                 break;
@@ -457,6 +476,14 @@ class ConstructionApp extends Component {
         this.setState({ render: 'render' })
 
     }
+    handlespecifications() {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        menu.main = 'specifications'
+        this.props.reduxNavigation(menu);
+        this.setState({ render: 'render' })
+
+    }
     handlebidschedule() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
@@ -624,6 +651,7 @@ class ConstructionApp extends Component {
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactuallabor() }} >/labor</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactualequipment() }}>/equipment</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactualmaterials() }}>/materials</Text>
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlespecifications() }}>/specifications</Text>
                             </View>)
                     }
                 }
@@ -645,6 +673,7 @@ class ConstructionApp extends Component {
                         </View>
                         {open_6()}
                         {open_4()}
+                       
 
 
                     </View>)
@@ -741,7 +770,8 @@ function mapStateToProps(state) {
         navigation: state.navigation,
         project: state.project,
         allusers: state.allusers,
-        allcompanys: state.allcompanys
+        allcompanys: state.allcompanys,
+        csis:state.csis
     }
 }
 

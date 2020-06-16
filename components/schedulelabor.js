@@ -645,7 +645,8 @@ function mapStateToProps(state) {
         navigation: state.navigation,
         project: state.project,
         allusers: state.allusers,
-        allcompanys: state.allcompanys
+        allcompanys: state.allcompanys,
+        csis:state.csis
     }
 }
 

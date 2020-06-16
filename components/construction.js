@@ -725,6 +725,16 @@ class Construction {
         }
         return user;
     }
+    getspecficationsbyprojectid(projectid) {
+        const construction = new Construction();
+        const myproject = construction.getprojectbyid.call(this, projectid)
+        let specifications = false;
+        if (myproject.hasOwnProperty("specifications")) {
+            specifications = myproject.specifications;
+        }
+       
+        return specifications;
+    }
     getprofileDimension() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
@@ -735,16 +745,10 @@ class Construction {
         }
     }
     getallcsicodes() {
-        let codes = [];
+         
         const construction = new Construction();
-        const myuser = construction.getuser.call(this)
-        codes = myuser.company.construction.civilengineer.csicodes.code;
-
-        codes.sort((codea, codeb) => {
-            return (sortcode(codea, codeb))
-        })
-
-        return codes;
+        const csis = construction.getcsis.call(this)
+        return csis;
     }
     downIcon() {
         const construction = new Construction();
@@ -2204,25 +2208,31 @@ class Construction {
             }
             return milestone;
         }
+      
+        getcsis() {
+            let csis = false;
+            if(this.props.csis) {
+                if(this.props.csis.hasOwnProperty("length")) {
+                    csis = this.props.csis;
+                }
+            }
+            return csis;
+        }
         getcsibyid(csiid) {
             let csi = false;
             let construction = new Construction();
-            let company = construction.getcompany.call(this);
-            if (company.hasOwnProperty("construction")) {
-                if (company.construction.hasOwnProperty("civilengineer")) {
-                    if (company.construction.civilengineer.hasOwnProperty("csicodes")) {
-                        // eslint-disable-next-line
-                        company.construction.civilengineer.csicodes.code.map(code => {
-                            if (code.csiid === csiid) {
-                                csi = code;
-
-                            }
-                        })
-                    }
-
+           const csis = construction.getcsis.call(this)
+           if(csis) {
+                    // eslint-disable-next-line
+                    csis.map(code => {
+                        if (code.csiid === csiid) {
+                            csi = code;
+    
+                        }
+                    })
+                
                 }
-
-            }
+            
             return csi;
         }
 
