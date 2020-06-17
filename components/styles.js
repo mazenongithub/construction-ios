@@ -8,6 +8,9 @@ export function MyStylesheet() {
             backgroundColor:'#808080',
             borderRadius:10
         },
+        width90:{
+            width:'90%'
+        },
         marginLeft30:{
             marginLeft:30
         },

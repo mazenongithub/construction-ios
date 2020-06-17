@@ -755,12 +755,7 @@ class ViewInvoice {
 
         }
 
-        const approved = () => {
-            if (invoice.approved) {
-                return (<Text style={[regularFont, styles.alignCenter]}>Invoice Payment On {UTCStringFormatDateforProposal(invoice.approved)}</Text>)
-            }
-
-        }
+       
         const saveproject = () => {
            
                 return(construction.showsaveproject.call(this))
@@ -784,11 +779,7 @@ class ViewInvoice {
                             </View>
                         </View>
 
-                        <View style={[styles.generalFlex, styles.bottomMargin10]}>
-                            <View style={[styles.flex1]}>
-                                {approved()}
-                            </View>
-                        </View>
+                      
 
                         {viewinvoice.invoicesummary.call(this)}
 

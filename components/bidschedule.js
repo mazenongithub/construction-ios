@@ -353,7 +353,6 @@ class BidSchedule {
                             <View style={[styles.flex1, styles.showBorder]}>
                                 <Text style={[regularFont, styles.alignCenter]}>Overhead and Profit %</Text>
                                 <Text style={[ regularFont]}>{profit.toString()} </Text>
-                                />
                             </View>
                             <View style={[styles.flex1, styles.showBorder]}>
                                 <Text style={[regularFont, styles.alignCenter]}>Bid Price</Text>

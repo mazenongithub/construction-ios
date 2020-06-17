@@ -27,13 +27,13 @@ class CSI {
             }
             return validate;
         }
-        if (csi_1) {
+        if (csi_1.length === 2) {
             searchcsi += csi_1.substr(0, 2)
         }
-        if (csi_2) {
+        if (csi_2.length === 2) {
             searchcsi += csi_2.substr(0, 2)
         }
-        if (csi_3) {
+        if (csi_3.length === 2) {
             searchcsi += csi_3.substr(0, 2)
         }
     

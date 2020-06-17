@@ -177,9 +177,6 @@ class ConstructionApp extends Component {
             case 'viewaccount':
                 return (viewaccount.showaccount.call(this));
                 break;
-            case 'construction':
-                return (<Specifications update={this.updatestate.bind(this)} />);
-                break;
             case 'project':
                 return (project.showproject.call(this));
                 break;
@@ -311,13 +308,7 @@ class ConstructionApp extends Component {
         this.props.reduxNavigation(menu)
         this.setState({ render: 'render' })
     }
-    handleconstruction() {
-        const construction = new Construction();
-        let menu = construction.getnavigation.call(this);
-        menu.main = "construction";
-        this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
-    }
+   
 
     handleviewproposal(proposalid) {
         const construction = new Construction();
@@ -600,7 +591,6 @@ class ConstructionApp extends Component {
                             <View>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleemployees() }}>  /employees</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => this.handleaccounts()}>  /accounts</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleconstruction() }}>  /construction</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleequipment() }}>  /equipment</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlematerials() }}>  /materials</Text>
                             </View>)

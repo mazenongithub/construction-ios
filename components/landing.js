@@ -12,56 +12,43 @@ class Landing {
             {
                 imageid: 'main_slide',
                 uri: require('../slides/main_slide.png'),
-                capt: 'Construction Management by CivilEngineer.io',
+                capt: 'Construction Management by CivilEngineer.io. The best construction management App in the IStore. Create your company, add your employees, start providing services for our PMs',
                 title: 'Construction Management'
 
             },
             {
                 imageid: 'register',
                 uri: require('../slides/register.png'),
-                capt: 'Registration form after apple sign, email, and profile. Click Register to Create Profile',
+                capt: 'Registration is simple and Quick. You will need your apple id, your email address, and to create a Profile URL. When this criteria has been met the Register Button will appear. It will automatically Register you when this criteria has been met during apple signin. ',
                 title: 'Register'
 
             },
             {
                 imageid: 'profile',
                 uri: require('../slides/profile.png'),
-                capt: 'Profile after Registration and updating photo',
+                capt: 'After Registration, you have access to Profile and to your Company Components',
                 title: 'Profile'
 
             },
             {
                 imageid: 'company',
                 uri: require('../slides/company.png'),
-                capt: 'Create a new Company Profile',
+                capt: 'Create a new Company or Add self to existing Company. ',
                 title: 'Company'
 
             },
-            {
-                imageid: 'company_1',
-                uri: require('../slides/company_1.png'),
-                capt: 'Updating Company Info',
-                title: 'Company Info'
-
-            },
-            {
-                imageid: 'accounts',
-                uri: require('../slides/accounts.png'),
-                capt: 'Adding Company Accounts',
-                title: 'Accounts'
-
-            },
+       
             {
                 imageid: 'viewaccounts',
                 uri: require('../slides/showaccounts.png'),
-                capt: 'Viewing all Accounts',
-                title: 'Viewing Accounts'
+                capt: 'Create accounts for your employees, equipment and materials. Employees can hold multiple accounts. It is one account per equipment. One account per material.',
+                title: 'Create Accounts '
 
             },
             {
                 imageid: 'viewaccount',
                 uri: require('../slides/viewaccount.png'),
-                capt: 'Viewing of account connected to Stripe Dashboard for payments',
+                capt: 'View of Account Summary. Containing Live Link to Stripe Dashboard for payments. Each Account receive transfers from the PM when they settle your invoice',
                 title: 'View Account'
 
             },
@@ -69,115 +56,112 @@ class Landing {
             {
                 imageid: 'employee',
                 uri: require('../slides/employees.png'),
-                capt: 'Adding Employees',
-                title: 'Employees'
+                capt: 'Adding myself as the first employee to the company',
+                title: 'Add Employees'
 
             },
             {
                 imageid: 'employee_1',
                 uri: require('../slides/employees_1.png'),
-                capt: 'Determining Labor rate per working hours after adding benefits',
+                capt: 'Entering employee information is important to calculate the labor rates',
                 title: 'Calculating Labor Rate '
 
             },
             {
                 imageid: 'equipment',
                 uri: require('../slides/equipment.png'),
-                capt: 'Adding Company Equipment',
+                capt: 'Add your companys equipment',
                 title: 'Equipment'
 
             },
             {
                 imageid: 'equipment_2',
                 uri: require('../slides/equipment_2.png'),
-                capt: 'Calculating Equipment Rate per working hour based on the cost of ownership',
+                capt: 'The Program will calculate the equipment rate when you enter the costs and ownership information. You can also use rental equipment instead. ',
                 title: 'Calulating Equipment Rates'
 
             },
             {
                 imageid: 'materials',
                 uri: require('../slides/materials.png'),
-                capt: 'Adding Company Materials',
+                capt: 'Add your company materials, unit, and unit prices. They can still be adjusted for each item on the project. ',
                 title: 'Materials'
 
             },
-            {
-                imageid: 'construction',
-                uri: require('../slides/construction.png'),
-                capt: 'List of construction specs built in to the program, there are 6,800 across 52 Divisions',
-                title: 'Construction'
-
-            },
+   
             {
                 imageid: 'project',
                 uri: require('../slides/project.png'),
-                capt: 'Project Component visable after Client Adds you to the Project',
+                capt: 'Project Component contains the links to the different project components and shows the basic project information',
                 title: 'Project'
+
+            },
+            {
+                imageid: 'specification',
+                uri: require('../slides/specification.png'),
+                capt: 'Specifications written by Engineers provided for the Project',
+                title: 'Specification'
+
+            },
+            {
+                imageid: 'costestimate',
+                uri: require('../slides/costestimate.png'),
+                capt: 'Engineers provider quantity take-off schedule for the Project for Bid',
+                title: 'Cost Estimate'
 
             },
             {
                 imageid: 'labor_1',
                 uri: require('../slides/labor_1.png'),
-                capt: 'Schedule Labor Component',
+                capt: 'Example of the working labor component. The Service Provider should enter both their schedule labor and record their actual labor separately as well. ',
                 title: 'Schedule Labor'
 
             },
-            {
-                imageid: 'labor',
-                uri: require('../slides/labor.png'),
-                capt: 'Entered Schedule labor item',
-                title: 'Schedule Labor Entered'
-
-            },
+      
             {
                 imageid: 'schedulematerials',
                 uri: require('../slides/schedulematerials.png'),
-                capt: 'Schedule Materials Component',
+                capt: 'Working Schedule Material components. In addition the service provider should enter the actual materials seperately inside the actualmaterial component. ',
                 title: 'Entering Schedule Materials'
 
             },
             {
                 imageid: 'scheduleequipment',
                 uri: require('../slides/scheduleequipment.png'),
-                capt: 'Schedule Equipment Component',
+                capt: 'Working Schedule Equipment components enters the schedule equipment for the project. The Service Provider should also enter their actual equipment also',
                 title: 'Entering Schedule Equipment'
 
             },
             {
                 imageid: 'proposals',
                 uri: require('../slides/proposal.png'),
-                capt: 'Proposal Component, adds Profit to schedule items',
+                capt: 'Create a Proposal to Send to the PM for authorization. Adjust your schedule pay items inside of the proposal components',
                 title: 'Proposals'
 
             },
-            {
-                imageid: 'proposals_1',
-                uri: require('../slides/proposal_1.png'),
-                capt: 'Saving project within proposal component',
-                title: 'Proposals Save Project'
-
-            },
+          
             {
                 imageid: 'viewproposal',
                 uri: require('../slides/viewproposal.png'),
-                capt: 'View proposal component adds quantity and unit to produce unit price',
+                capt: 'View proposal component is the proposal. You can adjust the quantity and unit to produce unit prices. Profit is calculated from the payitems. When you change it this adjusts the profit for each item. ',
                 title: 'View Proposal'
 
             },
             {
                 imageid: 'lem',
                 uri: require('../slides/lem.png'),
-                capt: 'Labor, Equipment, and Material breakdown for each pay item',
-                title: 'lem'
+                capt: 'Labor, Equipment, and Material breakdown for each pay item. This should be done for both schedule and actual',
+                title: 'Labor, Equipment, Materials'
 
             },
             {
                 imageid: 'viewinvoice',
                 uri: require('../slides/viewinvoice.png'),
-                capt: 'Construction Invoice with summary of Transfer Payments',
+                capt: 'View Invoice is the invoice. It shows the payment and transfer status while the invoice is being settled. Adjusting the profit for invoice item adjusts the profit for each pay item',
                 title: 'View Invoice'
 
-            }
+            },
+           
 
         ];
         return myimages;
@@ -219,7 +203,7 @@ class Landing {
                         key={image.imageid}
                     />
                     <Text style={[headerFont, styles.alignCenter]}>{image.title}</Text>
-                    <Text style={[regularFont, styles.alignCenter]}>{image.capt}</Text>
+                    <Text style={[regularFont, styles.alignCenter, styles.width90]}>{image.capt}</Text>
                 </View>
             </View>)
 
