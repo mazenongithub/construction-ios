@@ -276,6 +276,30 @@ export function CreateRentalRate(month, week, day, hour) {
     return ({ month, week, day, hour })
 }
 
+export function LetterCounter(i) {
+    switch (Number(i)) {
+        case 1:
+            return 'A'
+        case 2:
+            return 'B'
+        case 3:
+            return 'C'
+
+        default:
+            break;
+    }
+}
+
+export function sortpart(b, a) {
+    if (Number(b.part) < Number(a.part)) {
+        return -1
+
+    } else {
+        return 1;
+    }
+
+}
+
 export function CreateEquipment(equipmentid, equipment, ownershipstatus, accountid) {
     return ({ equipmentid, equipment, ownershipstatus, accountid})
 }

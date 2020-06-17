@@ -567,17 +567,7 @@ class ActualLabor extends Component {
             return laborids;
         }
 
-        checkinvoice() {
-            let check = true;
-            const construction = new Construction();
-            if (this.state.activelaborid) {
-                const mylabor = construction.findactuallaborbyid.call(this, this.state.activelaborid)
-                if (mylabor.invoiceid) {
-                    check = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
-                }
-            }
-            return check;
-        }
+      
 
         render() {
             const construction = new Construction();
@@ -591,10 +581,17 @@ class ActualLabor extends Component {
             const milestoneid = new MilestoneID();
             const myuser = construction.getuser.call(this)
             const regularFont = construction.getRegularFont.call(this)
-            const headerFont = construction.getHeaderFont.call(this)
-            const checkinvoice = this.checkinvoice();
+            const headerFont = construction.getHeaderFont.call(this);
+            const checkinvoice = () => {
+                let check = true;
+                if(this.state.activelaborid) {
+                    check = construction.checkinvoicelaborid.call(this,this.state.activelaborid)
+                }
+                return check;
+            }
+            
             const showtimein = () => {
-                if (checkinvoice || !this.state.activelaborid) {
+                if (!this.state.activelaborid || checkinvoice()) {
                     return (timein.showdate.call(this))
 
                 } else {
@@ -614,7 +611,7 @@ class ActualLabor extends Component {
 
             const showtimeout = () => {
 
-                if (checkinvoice || !this.state.activelaborid) {
+                if (checkinvoice() || !this.state.activelaborid) {
 
                     return (timeout.showdate.call(this))
 
@@ -633,7 +630,7 @@ class ActualLabor extends Component {
 
             }
             const showemployeeid = () => {
-                if (checkinvoice || !this.state.activelaborid) {
+                if (checkinvoice() || !this.state.activelaborid) {
                     return (employeeid.showemployeeid.call(this))
                 } else {
                     const mylabor = construction.findactuallaborbyid.call(this, this.state.activelaborid)
@@ -644,7 +641,7 @@ class ActualLabor extends Component {
             }
 
             const showmilestone = () => {
-                if (checkinvoice || !this.state.activelaborid) {
+                if (checkinvoice() || !this.state.activelaborid) {
                     return (milestoneid.showmilestoneid.call(this))
                 } else {
                     const mylabor = construction.findactuallaborbyid.call(this, this.state.activelaborid)
@@ -660,7 +657,7 @@ class ActualLabor extends Component {
             }
 
             const showdescription = () => {
-                if (checkinvoice || !this.state.activelaborid) {
+                if (checkinvoice() || !this.state.activelaborid) {
                     return (<View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]}>Description</Text>
@@ -683,7 +680,7 @@ class ActualLabor extends Component {
             }
 
             const showcsi = () => {
-                if (checkinvoice || !this.state.activelaborid) {
+                if (checkinvoice() || !this.state.activelaborid) {
                     return (csi.showcsi.call(this))
                 } else {
                     const mylabor = construction.findactuallaborbyid.call(this, this.state.activelaborid)

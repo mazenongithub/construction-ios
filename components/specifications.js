@@ -17,7 +17,7 @@ class Specifications {
         return (
         <View style={{ ...styles.generalContainer }} key={spec.specid}>
         <Text style={{...styles.generalFont, ...regularFont,...styles.generalLink}} 
-        >{csi.csi} - {csi.title}</Text>
+         onPress={()=>{this.handlespecification(csiid)}}>{csi.csi} - {csi.title}</Text>
         </View>
         )
 

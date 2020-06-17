@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, View, TouchableOpacity, Image, Text } from 'react-native';
 import { MyStylesheet } from './styles';
-import { sortcode, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric,  UTCTimefromCurrentDate } from './functions'
+import { sortcode, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric,  UTCTimefromCurrentDate, sortpart } from './functions'
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { SaveCompany, SaveProfile, SaveProject, ClientLogin } from './actions/api'
 
@@ -724,6 +724,90 @@ class Construction {
             })
         }
         return user;
+    }
+
+    getspecficationsbyprojectid(projectid) {
+        const construction = new Construction();
+        const myproject = construction.getprojectbyid.call(this, projectid)
+        let specifications = false;
+        if (myproject.hasOwnProperty("specifications")) {
+            specifications = myproject.specifications;
+        }
+       
+        return specifications;
+    }
+
+
+    getspecificationbycsi(projectid, csiid) {
+        const construction = new Construction();
+        const specs = construction.getspecficationsbyprojectid.call(this, projectid)
+        let myspec = false;
+        if (specs) {
+            // eslint-disable-next-line
+            specs.map(spec => {
+                if (spec.csiid === csiid) {
+                    myspec = spec;
+                }
+            })
+        }
+        return myspec;
+    }
+
+    getsectionbyid(projectid, csiid, sectionid) {
+        const construction = new Construction();
+        const spec = construction.getspecificationbycsi.call(this, projectid, csiid)
+        let mysection = false;
+        if (spec) {
+
+            if (spec.hasOwnProperty("sections")) {
+                // eslint-disable-next-line
+                spec.sections.map(section => {
+                    if (section.sectionid === sectionid) {
+                        mysection = section;
+                    }
+                })
+            }
+        }
+        return mysection;
+    }
+
+    getsectionnumberbyid(projectid, csiid, sectionid) {
+        const construction = new Construction();
+        const spec = construction.getspecificationbycsi.call(this, projectid, csiid)
+        let mycounter = "";
+        if (spec.hasOwnProperty("sections")) {
+            const section = construction.getsectionbyid.call(this, projectid, csiid, sectionid)
+            if (section) {
+                let part = section.part;
+
+                spec.sections.sort((b, a) => {
+                    return sortpart(b, a)
+                })
+
+                let counter = 1;
+                // eslint-disable-next-line
+                spec.sections.map((section, i) => {
+                    if (section.part === part) {
+
+                        if (section.sectionid === sectionid) {
+                            mycounter = counter;
+                        } else {
+                            counter += 1;
+                        }
+
+                    }
+
+
+
+                })
+
+            }
+
+        }
+        if (Number(mycounter) < 10) {
+            mycounter = `0${mycounter}`
+        }
+        return mycounter;
     }
     getspecficationsbyprojectid(projectid) {
         const construction = new Construction();
@@ -1717,7 +1801,7 @@ class Construction {
         const construction = new Construction();
         const myequipment = construction.findactualequipmentbyid.call(this,equipmentid);
         let checkinvoice = true;
-        if(myequipment.chargeid) {
+        if(myequipment.settlementid) {
        
             checkinvoice = false;
         
@@ -1730,7 +1814,7 @@ class Construction {
         const construction = new Construction();
         const mymaterial = construction.findactualmaterialbyid.call(this,materialid);
         let checkinvoice = true;
-        if(mymaterial.chargeid) {
+        if(mymaterial.settlementid) {
             checkinvoice = false;
         
     }
@@ -1743,7 +1827,7 @@ class Construction {
         const mylabor = construction.findactuallaborbyid.call(this,laborid);
         let checkinvoice = true;
      
-            if(mylabor.chargeid) {
+            if(mylabor.settlementid) {
                 checkinvoice = false;
             }
 

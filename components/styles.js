@@ -8,6 +8,12 @@ export function MyStylesheet() {
             backgroundColor:'#808080',
             borderRadius:10
         },
+        marginLeft30:{
+            marginLeft:30
+        },
+        marginLeft60:{
+            marginLeft:60
+        },
         showBorder: {
             borderWidth: 1
         },

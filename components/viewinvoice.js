@@ -423,42 +423,35 @@ class ViewInvoice {
         const projectid = activeproject.projectid;
         const invoiceid = activeproject.invoiceid;
         const regularFont = construction.getRegularFont.call(this)
-        const checkinvoice = construction.checkinvoice.call(this,projectid,invoiceid)
+    
         const showprofit = () => {
-            if(checkinvoice) {
+   
             return (<TextInput style={[styles.defaultInput, regularFont, styles.alignCenter]}
                 value={profit.toString()}
                 onChangeText={text => { viewinvoice.handlechangeprofit.call(this, text, item.csiid, invoiceid, projectid) }}
             />)
-            } else {
-            
-                return(<Text style={[regularFont,styles.alignCenter]}>{profit.toString()} </Text>)
-            }
+           
 
 
         }
         const showunit = () => {
-            if(checkinvoice) {
+         
             return (<TextInput style={[styles.defaultInput, regularFont, styles.alignCenter]}
                 value={unit}
                 onChangeText={text => { viewinvoice.handlechangeunit.call(this, text, item.csiid, invoiceid, projectid) }}
             />)
-            } else {
-                return(<Text style={[regularFont,styles.alignCenter]}> {unit}</Text>)
-            }
+          
 
         }
         const showquantity = () => {
-            if(checkinvoice) {
+           
             return (<TextInput style={[styles.defaultInput, regularFont, styles.alignCenter]}
                 keyboardType='numeric'
                 value={quantity.toString()}
                 onChangeText={text => { viewinvoice.handlechangequantity.call(this, text, item.csiid, invoiceid, projectid) }}
             />)
 
-            } else {
-                return(<Text style={[regularFont, styles.alignCenter]}>{quantity.toString()}</Text>)
-            }
+           
 
         }
 
@@ -754,7 +747,7 @@ class ViewInvoice {
         const headerFont = construction.getHeaderFont.call(this)
         const invoice = construction.getinvoicebyid.call(this, myproject.projectid, invoiceid)
         const regularFont = construction.getRegularFont.call(this)
-        const checkinvoice = construction.checkinvoice.call(this,projectid,invoiceid)
+       
         const updated = () => {
             if (invoice.updated) {
                 return (<Text style={[regularFont, styles.alignCenter]}>Invoice Updated On {UTCStringFormatDateforProposal(invoice.updated)}</Text>)
@@ -769,9 +762,9 @@ class ViewInvoice {
 
         }
         const saveproject = () => {
-            if(checkinvoice) {
+           
                 return(construction.showsaveproject.call(this))
-            }
+            
         }
 
         if (myuser) {

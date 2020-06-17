@@ -12,6 +12,7 @@ import Equipment from './equipment'
 import Materials from './materials'
 import Accounts from './accounts'
 import Specifications from './specifications';
+import Specification from './specification';
 import { CheckUserLogin, LogoutUser, StripeDashboard, LoadCSIs } from './actions/api';
 import { returnCompanyList } from './functions';
 import Construction from './construction'
@@ -34,6 +35,7 @@ import BidScheduleLineItem from './bidschedulelineitem'
 import BidLineItem from './bidlineitem'
 import Landing from './landing';
 import ViewAccount from './viewaccount';
+import CostEstimate from './costestimate';
 
 
 class ConstructionApp extends Component {
@@ -52,7 +54,7 @@ class ConstructionApp extends Component {
         this.props.reduxNavigation({ open: true })
         this.checkuser();
         this.loadcsis();
-     
+
     }
     componentWillUnmount() {
         Dimensions.removeEventListener('change', this.updatedimesions)
@@ -66,9 +68,9 @@ class ConstructionApp extends Component {
             let response = await LoadCSIs();
             if (response.hasOwnProperty("csis")) {
                 this.props.reduxCSIs(response.csis);
-    
+
             }
-    
+
         } catch (err) {
             alert(err)
         }
@@ -145,6 +147,8 @@ class ConstructionApp extends Component {
         const accounts = new Accounts();
         const viewaccount = new ViewAccount();
         const specifications = new Specifications();
+        const specification = new Specification();
+        const costestimate = new CostEstimate();
         switch (menu.main) {
             case 'register':
                 return (register.showregister.call(this));
@@ -179,6 +183,9 @@ class ConstructionApp extends Component {
             case 'project':
                 return (project.showproject.call(this));
                 break;
+                case 'costestimate':
+                    return (costestimate.showestimate.call(this));
+                    break;
             case 'schedulelabor':
                 return (<ScheduleLabor update={this.updatestate.bind(this)} />);
                 break;
@@ -228,7 +235,9 @@ class ConstructionApp extends Component {
                 return (bidlineitem.showbidlineitem.call(this))
                 break;
             case "specifications":
-                return(specifications.getspecifications.call(this))
+                return (specifications.getspecifications.call(this));
+            case "specification":
+                return (specification.getspecification.call(this))
             case "landing":
                 return (landing.showlanding.call(this));
                 break;
@@ -393,6 +402,18 @@ class ConstructionApp extends Component {
         this.props.reduxProject(project)
         this.setState({ render: 'render' })
     }
+
+    handlespecification(csiid) {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        menu.main = 'specification'
+        const project = construction.getactiveproject.call(this)
+        project.specifications = { csiid }
+        this.props.reduxNavigation(menu);
+        this.props.reduxProject(project)
+        this.setState({ render: 'render' })
+
+    }
     handlebidlineitem(csiid) {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
@@ -416,6 +437,14 @@ class ConstructionApp extends Component {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
         menu.main = 'schedulelabor'
+        this.props.reduxNavigation(menu)
+        this.setState({ render: 'render' })
+
+    }
+    handlecostestimate() {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        menu.main = 'costestimate'
         this.props.reduxNavigation(menu)
         this.setState({ render: 'render' })
 
@@ -652,6 +681,7 @@ class ConstructionApp extends Component {
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactualequipment() }}>/equipment</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactualmaterials() }}>/materials</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlespecifications() }}>/specifications</Text>
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlecostestimate() }}>/estimate</Text>
                             </View>)
                     }
                 }
@@ -673,7 +703,7 @@ class ConstructionApp extends Component {
                         </View>
                         {open_6()}
                         {open_4()}
-                       
+
 
 
                     </View>)
@@ -771,7 +801,7 @@ function mapStateToProps(state) {
         project: state.project,
         allusers: state.allusers,
         allcompanys: state.allcompanys,
-        csis:state.csis
+        csis: state.csis
     }
 }
 

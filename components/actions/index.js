@@ -5,6 +5,16 @@ export const reduxUser = (myusermodel) => async dispatch => {
     dispatch({ type: MYUSERMODEL, payload: myusermodel })
 }
 
+export function sortpart(b, a) {
+    if (Number(b.part) < Number(a.part)) {
+        return -1
+
+    } else {
+        return 1;
+    }
+
+}
+
 export const reduxCSIs = (csis) => async dispatch => {
     dispatch({ type: CSIS, payload:csis })
 }
