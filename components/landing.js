@@ -12,7 +12,7 @@ class Landing {
             {
                 imageid: 'main_slide',
                 uri: require('../slides/main_slide.png'),
-                capt: 'Construction Management by CivilEngineer.io. The best construction management App in the IStore. Create your company, add your employees, start providing services for our PMs',
+                capt: 'Construction Management by CivilEngineer.io. The best App for service providing companies in the IStore. Start when you create your company. See the Slideshow and then Join',
                 title: 'Construction Management'
 
             },
