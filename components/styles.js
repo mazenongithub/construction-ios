@@ -70,6 +70,16 @@ export function MyStylesheet() {
         bottomMargin10: {
             marginBottom: 10
         },
+        activeactualbutton:{
+            backgroundColor:'#FFC100'
+        },
+        notactiveactualbutton:{
+            backgroundColor:'#C9243F'
+
+        },
+        specialActualButton:{
+            color:'#F37021'
+        },
         bottomMargin15: {
             marginBottom: 15
         },

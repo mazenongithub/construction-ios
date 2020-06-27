@@ -717,7 +717,7 @@ class Actual extends Component {
         }
         const activebackground = (materialid) => {
             if (this.state.activematerialid === materialid) {
-                return (styles.activeBackground)
+                return (styles.activeactualbutton)
             }
 
         }
@@ -864,7 +864,7 @@ class Actual extends Component {
 
             const getactivelaborbackground = (laborid) => {
                 if (this.state.activelaborid === laborid) {
-                    return styles.activeBackground;
+                    return styles.activeactualbutton;
                 }
 
             }
@@ -1017,7 +1017,7 @@ class Actual extends Component {
 
         const activeequipment = (equipmentid) => {
             if (this.state.activeequipmentid === equipmentid) {
-                return (styles.activeBackground)
+                return (styles.activeactualbutton)
             }
 
         }
@@ -1358,24 +1358,24 @@ handleunitcost(unitcost) {
 
         const laborbackground = () => {
             if (this.state.active === 'labor') {
-                return (styles.activebutton)
+                return (styles.activeactualbutton)
             } else {
-                return (styles.notactivebutton)
+                return (styles.notactiveactualbutton)
             }
         }
         const equipmentbackground = () => {
             if (this.state.active === 'equipment') {
-                return (styles.activebutton)
+                return (styles.activeactualbutton)
             } else {
-                return (styles.notactivebutton)
+                return (styles.notactiveactualbutton)
             }
         }
 
         const materialbackground = () => {
             if (this.state.active === 'materials') {
-                return (styles.activebutton)
+                return (styles.activeactualbutton)
             } else {
-                return (styles.notactivebutton)
+                return (styles.notactiveactualbutton)
             }
         }
 
@@ -1506,13 +1506,13 @@ handleunitcost(unitcost) {
 
                         <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
                             <View style={{ ...styles.flex1, ...laborbackground(),...styles.margin5,...styles.showBorder,...styles.addRadius }}>
-                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialButton }} onPress={() => { this.setState({ active: 'labor' }) }}>Labor</Text>
+                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialActualButton }} onPress={() => { this.setState({ active: 'labor' }) }}>Labor</Text>
                             </View>
                             <View style={{ ...styles.flex1, ...styles.alignCenter, ...equipmentbackground(),...styles.margin5, ...styles.showBorder,...styles.addRadius }}>
-                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialButton }} onPress={() => { this.setState({ active: 'equipment' }) }}>Equipment</Text>
+                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialActualButton }} onPress={() => { this.setState({ active: 'equipment' }) }}>Equipment</Text>
                             </View>
                             <View style={{ ...styles.flex1, ...styles.alignCenter, ...materialbackground(),...styles.margin5,...styles.showBorder,...styles.addRadius  }}>
-                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialButton }} onPress={() => { this.setState({ active: 'materials' }) }}>Materials</Text>
+                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialActualButton }} onPress={() => { this.setState({ active: 'materials' }) }}>Materials</Text>
                             </View>
                         </View>
 
