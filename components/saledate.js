@@ -1,96 +1,189 @@
-import React from 'react'
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {DateStringfromObj,DateObjfromString} from './functions'
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { MyStylesheet } from './styles'
 import Construction from './construction';
-import { MyStylesheet } from './styles';
+import MaterialCalender from './saledatecalender'
+import { validateMonth, validateDate, validateYear } from './functions';
+import {View, Text, TextInput} from 'react-native'
 
 class SaleDate {
-    handlesaledate() {
-        if(this.state.showsaledate) {
-        this.setState({showsaledate:false})
-        } else {
-            this.setState({showsaledate:true})
-        }
-    }
 
 
-    showdate() {
-
-        const saledate = new SaleDate();
+    handleyear(year) {
+        this.setState({ saledateyear: year })
         const construction = new Construction();
-        const styles = MyStylesheet();
-        const timeicon = construction.gettimeicon.call(this)
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
 
-        const saledateimage = () => {
-          
-                
-            if(this.state.showsaledate) {
-                return( <Image source={require('./png/hidetime.png')}
-                resizeMethod='scale'
-                style={timeicon}
-            />)
-            } else {
-                return( <Image source={require('./png/showtime.png')}
-                resizeMethod='scale'
-                style={timeicon}
-            />)
-            }
         
-    }
+                if (year.length === 4) {
+
+                    if(validateYear(year)) {
 
 
-        const showsaledate = () => {
-            if(this.state.showsaledate) {
-                return (
-        
-                    <DateTimePicker
-                        mode={'date'}
-                        value={DateObjfromString(this.getsaledate())}
-                        onChange={(e,newDate)=> {
-                            {this.handlesaledate(DateStringfromObj(newDate))}
-                        }}
-                    />
-             
-        )
-            }
+                        if (this.state.activeequipmentid) {
+                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            if (myequipment) {
+
+                                const i = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid)
+                                let day = this.state.saledateday;
+                                let month = this.state.saledatemonth;
+                                const timein = `${year}-${month}-${day}`
+
+                                myuser.company.equipment.myequipment[i].ownership.saledate = timein;
+                                this.props.reduxUser(myuser)
+                                this.setState({ render: 'render' })
+
+
+                            }
+
+                        }
+
+                    } else {
+                        alert(`Invalid Year format ${year}`)
+                    }
+
+                  
+                }
+
+            
         }
-       
-        return (
-            <View style={[styles.generalFlex]}>
-            <View style={[styles.flex1]}>
-
-                <View style={[styles.generalFlex]}>
-                    <View style={[styles.flex4]}>
-                        <Text style={[styles.regularFont]}>Sale Date</Text>
-                    </View>
-
-                    <View style={[styles.flex1]}>
-                    <TouchableOpacity onPress={() => { saledate.handlesaledate.call(this) }}>
-                       {saledateimage()}
-                    </TouchableOpacity>
-                    </View>
-
-                </View>
-
-
-
-                <View style={[styles.generalFlex]}>
-                    <View style={[styles.flex1]}>
-                        {showsaledate()}
-                    </View>
-                </View>
-
-            </View>
-        </View>
-                   
-              
-           
-        )
-
-        
     }
 
+    handleday(day) {
+        day = day.toString();
+        this.setState({ saledateday: day })
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
+
+    
+                if (day.length === 2) {
+
+            
+                        if(validateDate(day)) {
+
+                        if (this.state.activeequipmentid) {
+                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            if (myequipment) {
+
+                                const i = construction.getequipmentkeybyid.call(this,this.state.activeequipmentid)
+                                let year = this.state.saledateyear;
+                                let month = this.state.saledatemonth;
+                                const timein = `${year}-${month}-${day}`
+                                 myuser.company.equipment.myequipment[i].ownership.saledate = timein;
+                                this.props.reduxUser(myuser)
+                                this.setState({ render: 'render' })
+
+
+                            }
+
+                        }
+
+                
+
+                } else {
+                    alert(`Invalid day format ${day}`)
+                }
+
+            }
+
+            
+        }
+    }
+
+    handlemonth(month) {
+        this.setState({ saledatemonth: month })
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
+
+
+                if (month.length === 2) {
+
+                    if(validateMonth(month)) {
+
+                
+
+
+
+                        if (this.state.activeequipmentid) {
+                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            if (myequipment) {
+
+                                const i = construction.getequipmentkeybyid.call(this,  this.state.activeequipmentid)
+                                let day = this.state.saledateday;
+                                let year = this.state.saledateyear;
+                                const timein = `${year}-${month}-${day}`
+                                 myuser.company.equipment.myequipment[i].ownership.saledate = timein;
+                                this.props.reduxUser(myuser)
+                                this.setState({ render: 'render' })
+
+
+                            }
+
+                        }
+
+                    
+
+                } else {
+                    alert(`Invalid month format ${month}`)
+                }
+
+                }
+
+            
+        }
+    }
+
+
+
+
+
+    showsaledate() {
+        const styles = MyStylesheet();
+        const construction = new Construction();
+        const headerFont = construction.getHeaderFont.call(this)
+        const regularFont = construction.getRegularFont.call(this)
+        const saledate = new SaleDate();
+        const calender = new MaterialCalender();
+        return (
+            <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                <View style={{ ...styles.flex1, ...styles.calenderContainer }}>
+
+                    <View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1 }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont }}>Sale Date (MM-DD-YYYY) </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                            <TextInput style={{ ...styles.generalFont, ...headerFont, ...styles.defaultInput, ...styles.alignCenter }} value={this.state.saledatemonth.toString()}
+                                onChangeText={text => { saledate.handlemonth.call(this, text) }} />
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                            <TextInput style={{ ...styles.generalFont, ...headerFont, ...styles.defaultInput, ...styles.alignCenter }}
+                                value={this.state.saledateday.toString()}
+                                onChangeText={text => { saledate.handleday.call(this, text) }} />
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                            <TextInput style={{ ...styles.generalFont, ...headerFont, ...styles.defaultInput, ...styles.alignCenter }}
+                                value={this.state.saledateyear.toString()}
+                                onChangeText={text => { saledate.handleyear.call(this, text) }} />
+                        </View>
+                        
+                       
+                    </View>
+                    {calender.showMaterialCalender.call(this)}
+
+
+                </View>
+            </View>)
+    }
 
 }
+
 export default SaleDate;

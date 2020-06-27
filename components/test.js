@@ -1,25 +1,49 @@
-createnewinvoice() {
-    const construction = new Construction();
-    const makeID = new MakeID();
-    let myuser = construction.getuser.call(this);
-    if (myuser) {
-        let invoiceid = makeID.invoiceid.call(this);
-        let providerid = myuser.providerid;
-        let updated = inputDateObjOutputAdjString(this.state.updated);
-        let approved = this.state.approved;
-        let newinvoice = CreateInvoice(invoiceid, providerid, updated, approved);
-        let activeproject = construction.getactiveproject.call(this);
-        const myproject =construction.getprojectbyid.call(this,activeproject.projectid)
-        let i = construction.getprojectkeybyid.call(this, activeproject.projectid);
-        if (myproject.hasOwnProperty("invoices")) {
-            myuser.company.projects.myproject[i].invoices.myinvoice.push(newinvoice)
+const showmaterialquantity = () => {
+    if (this.state.active === 'materials') {
+        return (
+            <View style={{ ...styles.generalFlex }}>
+                <View style={{ ...styles.flex1, ...styles.addMargin }}>
+                    <View style={{ ...styles.generalContainer }}>
+                        <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity</Text>
+                    </View>
+                    <View style={{ ...styles.generalContainer }}>
+                        <TextInput style={{ ...styles.generalFont, ...regularFont }}
+                            value={this.getquantity()}
+                            onChangeText={text => { this.handlequantity(text) }}
+                        />
+                    </View>
 
-        } else {
-            myuser.company.projects.myproject[i].invoices = { myinvoice: [newinvoice] }
+                </View>
+                <View style={{ ...styles.flex1, ...styles.addMargin }}>
 
-        }
-        this.props.reduxUser(myuser);
-        this.setState({ activeinvoiceid: invoiceid })
+                    <View style={{ ...styles.generalContainer }}>
+                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit</Text>
+                    </View>
+                    <View style={{ ...styles.generalContainer }}>
+                        <TextInput style={{ ...styles.generalFont, ...regularFont }}
+                            value={this.getunit()}
+                            onChangeText={text => { this.handleunit(text) }}
+                        />
+                    </View>
+
+                </View>
+                <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                    <View style={{ ...styles.generalContainer }}>
+                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost</Text>
+                    </View>
+                    <View style={{ ...styles.generalContainer }}>
+                        <TextInput style={{ ...styles.generalFont, ...regularFont }}
+                            value={this.getunitcost()}
+                            onChangeText={text => { this.handleunitcost(text) }}
+                        />
+                    </View>
+
+                </View>
+
+            </View>
+        )
+
     }
-
 }
+

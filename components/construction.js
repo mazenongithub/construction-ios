@@ -7,6 +7,17 @@ import { SaveCompany, SaveProfile, SaveProject, ClientLogin } from './actions/ap
 
 
 class Construction {
+
+    getbuttonheight() {
+        if (this.state.width > 1200) {
+            return ({ height: 75 })
+        } else if (this.state.width > 800) {
+            return ({ height: 58 })
+        } else {
+            return ({ height: 40 })
+        }
+    }
+
     getactiveaccountid() {
         let accountid = false;
             if(this.props.project) {
@@ -611,6 +622,26 @@ class Construction {
 
     getremoveicon() {
         return ({ width: 41, height: 34 })
+    }
+
+    getcostbyid(equipmentid,costid) {
+      
+        const construction = new Construction();
+        let costs = false;
+        const myequipment = construction.getmyequipmentbyid.call(this,equipmentid)
+
+        if (myequipment.hasOwnProperty("ownership")) {
+            // eslint-disable-next-line
+            myequipment.ownership.cost.map((cost, i) => {
+                if (cost.costid === costid) {
+                    costs = cost;
+                }
+
+            })
+
+        }
+
+        return costs
     }
 
     getallusers() {
@@ -2318,6 +2349,13 @@ class Construction {
                 }
             
             return csi;
+        }
+
+        getampmicon() {
+          
+                return ({ width: 57, height: 33 })
+            
+    
         }
 
         getmymaterialbyid(materialid) {

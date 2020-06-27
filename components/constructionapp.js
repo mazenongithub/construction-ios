@@ -17,12 +17,8 @@ import { CheckUserLogin, LogoutUser, StripeDashboard, LoadCSIs } from './actions
 import { returnCompanyList } from './functions';
 import Construction from './construction'
 import Project from './project';
-import ScheduleLabor from './schedulelabor'
-import ActualLabor from './actuallabor'
-import ScheduleMaterials from './schedulematerials'
-import ActualMaterials from './actualmaterials'
-import ScheduleEquipment from './scheduleequipment'
-import ActualEquipment from './actualequipment'
+import Schedule from './schedule';
+import Actual from './actual';
 import Proposals from './proposals';
 import ViewProposal from './viewproposal';
 import Invoices from './invoices'
@@ -149,6 +145,7 @@ class ConstructionApp extends Component {
         const specifications = new Specifications();
         const specification = new Specification();
         const costestimate = new CostEstimate();
+
         switch (menu.main) {
             case 'register':
                 return (register.showregister.call(this));
@@ -180,26 +177,14 @@ class ConstructionApp extends Component {
             case 'project':
                 return (project.showproject.call(this));
                 break;
-                case 'costestimate':
-                    return (costestimate.showestimate.call(this));
-                    break;
-            case 'schedulelabor':
-                return (<ScheduleLabor update={this.updatestate.bind(this)} />);
+            case 'costestimate':
+                return (costestimate.showestimate.call(this));
                 break;
-            case 'actuallabor':
-                return (<ActualLabor update={this.updatestate.bind(this)} />);
+            case 'schedule':
+                return (<Schedule update={this.updatestate.bind(this)} />);
                 break;
-            case 'schedulematerials':
-                return (<ScheduleMaterials update={this.updatestate.bind(this)} />);
-                break;
-            case 'actualmaterials':
-                return (<ActualMaterials update={this.updatestate.bind(this)} />);
-                break;
-            case 'scheduleequipment':
-                return (<ScheduleEquipment update={this.updatestate.bind(this)} />);
-                break;
-            case 'actualequipment':
-                return (<ActualEquipment update={this.updatestate.bind(this)} />);
+            case 'actual':
+                return (<Actual update={this.updatestate.bind(this)} />);
                 break;
             case 'proposals':
                 return (proposals.showproposals.call(this));
@@ -308,7 +293,7 @@ class ConstructionApp extends Component {
         this.props.reduxNavigation(menu)
         this.setState({ render: 'render' })
     }
-   
+
 
     handleviewproposal(proposalid) {
         const construction = new Construction();
@@ -424,10 +409,18 @@ class ConstructionApp extends Component {
         this.setState({ render: 'render' })
 
     }
-    handleschedulelabor() {
+    handleschedule() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
-        menu.main = 'schedulelabor'
+        menu.main = 'schedule'
+        this.props.reduxNavigation(menu)
+        this.setState({ render: 'render' })
+
+    }
+    handleactual() {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        menu.main = 'actual'
         this.props.reduxNavigation(menu)
         this.setState({ render: 'render' })
 
@@ -440,46 +433,9 @@ class ConstructionApp extends Component {
         this.setState({ render: 'render' })
 
     }
-    handleactuallabor() {
-        const construction = new Construction();
-        const menu = construction.getnavigation.call(this);
-        menu.main = 'actuallabor'
-        this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
 
-    }
-    handleschedulematerials() {
-        const construction = new Construction();
-        const menu = construction.getnavigation.call(this);
-        menu.main = 'schedulematerials'
-        this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
 
-    }
-    handleactualmaterials() {
-        const construction = new Construction();
-        const menu = construction.getnavigation.call(this);
-        menu.main = 'actualmaterials'
-        this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
 
-    }
-    handleactualequipment() {
-        const construction = new Construction();
-        const menu = construction.getnavigation.call(this);
-        menu.main = 'actualequipment'
-        this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
-
-    }
-    handlescheduleequipment() {
-        const construction = new Construction();
-        const menu = construction.getnavigation.call(this);
-        menu.main = 'scheduleequipment'
-        this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
-
-    }
     handleinvoices() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
@@ -660,16 +616,13 @@ class ConstructionApp extends Component {
                         return (
                             <View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.margin5, styles.bottomMargin10, styles.paddingTopBottom10]}>
                                 <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.makeprojectactive(myproject.projectid) }}>/{myproject.title}</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebidschedule() }}> /bidschedule</Text>
+
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleschedule() }}>/schedule</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleproposals() }}> /proposals</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleschedulelabor() }}>/labor</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlescheduleequipment() }}>/equipment</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleschedulematerials() }}>/materials</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebid() }}>/bid</Text>
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebidschedule() }}> /bidschedule</Text>
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactual() }}>/actual</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleinvoices() }}>/invoices</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactuallabor() }} >/labor</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactualequipment() }}>/equipment</Text>
-                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactualmaterials() }}>/materials</Text>
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebid() }}>/bid</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlespecifications() }}>/specifications</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlecostestimate() }}>/estimate</Text>
                             </View>)

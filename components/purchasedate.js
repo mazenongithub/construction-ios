@@ -1,95 +1,189 @@
-import React from 'react'
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {DateStringfromObj,DateObjfromString} from './functions'
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { MyStylesheet } from './styles'
 import Construction from './construction';
-import { MyStylesheet } from './styles';
+import MaterialCalender from './purchasedatecalender'
+import { validateMonth, validateDate, validateYear } from './functions';
+import {View, Text, TextInput} from 'react-native'
 
 class PurchaseDate {
-    handlepurchasedate() {
-        if(this.state.showpurchasedate) {
-         this.setState({ showpurchasedate:false})
-        } else {
-            this.setState({showpurchasedate:true})
-        }
-    }
 
-    showdate() {
-        const purchasedate = new PurchaseDate();
+
+    handleyear(year) {
+        this.setState({ purchasedateyear: year })
         const construction = new Construction();
-        const styles = MyStylesheet();
-        const timeicon = construction.gettimeicon.call(this)
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
 
-        const purchasedateimage = () => {
-          
-                
-            if(this.state.showpurchasedate) {
-                return( <Image source={require('./png/hidetime.png')}
-                resizeMethod='scale'
-                style={timeicon}
-            />)
-            } else {
-                return( <Image source={require('./png/showtime.png')}
-                resizeMethod='scale'
-                style={timeicon}
-            />)
-            }
         
-    }
+                if (year.length === 4) {
+
+                    if(validateYear(year)) {
 
 
-        const showpurchasedate = () => {
-            if(this.state.showpurchasedate) {
-                return (
-          
-                    <DateTimePicker
-                        mode={'date'}
-                        value={DateObjfromString(this.getpurchasedate())}
-                        onChange={(e,newDate) => {
-                            {this.handlepurchasedate(DateStringfromObj(newDate))}
-                        }}
-                    />
-              
-           
-        )
-            }
+                        if (this.state.activeequipmentid) {
+                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            if (myequipment) {
+
+                                const i = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid)
+                                let day = this.state.purchasedateday;
+                                let month = this.state.purchasedatemonth;
+                                const timein = `${year}-${month}-${day}`
+
+                                myuser.company.equipment.myequipment[i].ownership.purchasedate = timein;
+                                this.props.reduxUser(myuser)
+                                this.setState({ render: 'render' })
+
+
+                            }
+
+                        }
+
+                    } else {
+                        alert(`Invalid Year format ${year}`)
+                    }
+
+                  
+                }
+
+            
         }
-       
-        return (
-            <View style={[styles.generalFlex]}>
-            <View style={[styles.flex1]}>
-
-                <View style={[styles.generalFlex]}>
-                    <View style={[styles.flex4]}>
-                        <Text style={[styles.regularFont]}>Purchase Date</Text>
-                    </View>
-
-                    <View style={[styles.flex1]}>
-                    <TouchableOpacity onPress={() => { purchasedate.handlepurchasedate.call(this) }}>
-                       {purchasedateimage()}
-                    </TouchableOpacity>
-                    </View>
-
-                </View>
-
-
-
-                <View style={[styles.generalFlex]}>
-                    <View style={[styles.flex1]}>
-                        {showpurchasedate()}
-                    </View>
-                </View>
-
-            </View>
-        </View>
-                   
-              
-           
-        )
-       
-        
     }
 
+    handleday(day) {
+        day = day.toString();
+        this.setState({ purchasedateday: day })
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
+
+    
+                if (day.length === 2) {
+
+            
+                        if(validateDate(day)) {
+
+                        if (this.state.activeequipmentid) {
+                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            if (myequipment) {
+
+                                const i = construction.getequipmentkeybyid.call(this,this.state.activeequipmentid)
+                                let year = this.state.purchasedateyear;
+                                let month = this.state.purchasedatemonth;
+                                const timein = `${year}-${month}-${day}`
+                                 myuser.company.equipment.myequipment[i].ownership.purchasedate = timein;
+                                this.props.reduxUser(myuser)
+                                this.setState({ render: 'render' })
+
+
+                            }
+
+                        }
+
+                
+
+                } else {
+                    alert(`Invalid day format ${day}`)
+                }
+
+            }
+
+            
+        }
+    }
+
+    handlemonth(month) {
+        this.setState({ purchasedatemonth: month })
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
+
+
+                if (month.length === 2) {
+
+                    if(validateMonth(month)) {
+
+                
+
+
+
+                        if (this.state.activeequipmentid) {
+                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            if (myequipment) {
+
+                                const i = construction.getequipmentkeybyid.call(this,  this.state.activeequipmentid)
+                                let day = this.state.purchasedateday;
+                                let year = this.state.purchasedateyear;
+                                const timein = `${year}-${month}-${day}`
+                                 myuser.company.equipment.myequipment[i].ownership.purchasedate = timein;
+                                this.props.reduxUser(myuser)
+                                this.setState({ render: 'render' })
+
+
+                            }
+
+                        }
+
+                    
+
+                } else {
+                    alert(`Invalid month format ${month}`)
+                }
+
+                }
+
+            
+        }
+    }
+
+
+
+
+
+    showpurchasedate() {
+        const styles = MyStylesheet();
+        const construction = new Construction();
+        const headerFont = construction.getHeaderFont.call(this)
+        const regularFont = construction.getRegularFont.call(this)
+        const purchasedate = new PurchaseDate();
+        const calender = new MaterialCalender();
+        return (
+            <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                <View style={{ ...styles.flex1, ...styles.calenderContainer }}>
+
+                    <View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1 }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont }}>Purchase Date (MM-DD-YYYY) </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                            <TextInput style={{ ...styles.generalFont, ...headerFont, ...styles.defaultInput, ...styles.alignCenter }} value={this.state.purchasedatemonth.toString()}
+                                onChangeText={text => { purchasedate.handlemonth.call(this, text) }} />
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                            <TextInput style={{ ...styles.generalFont, ...headerFont, ...styles.defaultInput, ...styles.alignCenter }}
+                                value={this.state.purchasedateday.toString()}
+                                onChangeText={text => { purchasedate.handleday.call(this, text) }} />
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                            <TextInput style={{ ...styles.generalFont, ...headerFont, ...styles.defaultInput, ...styles.alignCenter }}
+                                value={this.state.purchasedateyear.toString()}
+                                onChangeText={text => { purchasedate.handleyear.call(this, text) }} />
+                        </View>
+                        
+                       
+                    </View>
+                    {calender.showMaterialCalender.call(this)}
+
+
+                </View>
+            </View>)
+    }
 
 }
+
 export default PurchaseDate;

@@ -1,3 +1,178 @@
+export function validateMinutes(min) {
+    const reg_ex = /^[0-5][0-9]$/;
+return(reg_ex.test(min));
+}
+export function  validateYear(year) {
+    const reg_ex = /^[12][0-9]{3}$/;
+return(reg_ex.test(year));
+}
+export function validateDate(date) {
+    const reg_ex = /^(0?[1-9]|[12][0-9]|3[01])$/;
+return(reg_ex.test(date));
+
+}
+export function validateMonth(mon) {
+const reg_ex = /^0[1-9]|1[0-2]$/;
+return(reg_ex.test(mon))
+}
+
+export function getYearfromTimein(timein) {
+    //let timein ='2020-05-13 20:00:00'
+timein = timein.replace(/-/g, '/');
+const newDate = new Date(`${timein} UTC`)
+return newDate.getFullYear();
+
+}
+
+export function getFirstIsOnDate(datein) {
+
+    let monthdisplay = datein.getMonth() + 1;
+    let fullyear = datein.getFullYear();
+    let thefirstofthemonth = new Date(`${fullyear}/${monthdisplay}/1`);
+    let firstday = thefirstofthemonth.getDay();
+    switch (firstday) {
+        case 0:
+            return "Sun";
+        case 1:
+            return "Mon";
+        case 2:
+            return "Tues";
+        case 3:
+            return "Weds";
+        case 4:
+            return "Thurs";
+        case 5:
+            return "Fri";
+        case 6:
+            return "Sat";
+        default:
+            return;
+    }
+}
+
+
+export function check_31_date(dateobj) {
+
+    let month = dateobj.getMonth();
+    if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11) {
+        return 31;
+    }
+}
+
+
+export function check_30_date(dateobj) {
+
+    let month = dateobj.getMonth();
+    if (month !== 1) {
+        return 30;
+    }
+}
+
+
+export function check_29_feb_leapyear_date(dateobj)  {
+
+    let month = dateobj.getMonth();
+
+    if (month === 1) {
+        let year = dateobj.getFullYear();
+        if (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)) {
+            return 29;
+        }
+        else {
+            return;
+        }
+    }
+    else {
+        return 29;
+    }
+
+}
+
+
+export function check_31_time(timein) {
+    const dateobj = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    let month = dateobj.getMonth();
+    if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11) {
+        return 31;
+    }
+}
+
+
+export function check_30_time(timein) {
+    const dateobj = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    let month = dateobj.getMonth();
+    if (month !== 1) {
+        return 30;
+    }
+}
+
+
+export function check_29_feb_leapyear_time(timein)  {
+    const dateobj = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    let month = dateobj.getMonth();
+
+    if (month === 1) {
+        let year = dateobj.getFullYear();
+        if (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)) {
+            return 29;
+        }
+        else {
+            return;
+        }
+    }
+    else {
+        return 29;
+    }
+
+}
+export function getFirstIsOnTime(timein) {
+    let datein = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    let monthdisplay = datein.getMonth() + 1;
+    let fullyear = datein.getFullYear();
+    let thefirstofthemonth = new Date(`${fullyear}/${monthdisplay}/1`);
+    let firstday = thefirstofthemonth.getDay();
+    switch (firstday) {
+        case 0:
+            return "Sun";
+        case 1:
+            return "Mon";
+        case 2:
+            return "Tues";
+        case 3:
+            return "Weds";
+        case 4:
+            return "Thurs";
+        case 5:
+            return "Fri";
+        case 6:
+            return "Sat";
+        default:
+            return;
+    }
+}
+
+
+export function getDayString(day) {
+
+    switch (day) {
+        case 0:
+            return "Sunday";
+        case 1:
+            return "Monday";
+        case 2:
+            return "Tuesday";
+        case 3:
+            return "Wednesday";
+        case 4:
+            return "Thursday";
+        case 5:
+            return "Friday";
+        case 6:
+            return "Saturday";
+        default:
+            return;
+    }
+}
 export function UTCStringFormatDateforProposal(timeout) {
 
 
@@ -374,6 +549,132 @@ export function sortpart(b, a) {
 
 }
 
+
+export function getMinutesfromTimein(timein) {
+    //let timein ='2020-05-13 20:00:00'
+timein = timein.replace(/-/g, '/');
+const newDate = new Date(`${timein} UTC`)
+let  minutes = newDate.getMinutes();
+if(minutes < 10) {
+ minutes =`0${minutes}` 
+}
+return(minutes);
+}
+
+export function getHoursfromTimein(timein) {
+    //let timein ='2020-05-13 20:00:00'
+timein = timein.replace(/-/g, '/');
+const newDate = new Date(`${timein} UTC`)
+let hours = newDate.getHours();
+if(hours > 12) {
+  hours = hours - 12;
+ 
+}
+if(hours < 10) {
+ hours =`0${hours}` 
+}
+return(hours);
+
+}
+
+export function getDayfromTimein(timein) {
+    //let timein ='2020-05-13 20:00:00'
+     timein = timein.replace(/-/g, '/');
+     const newDate = new Date(`${timein} UTC`)
+     let date = newDate.getDate();
+     if(date <10) {
+     date = `0${date}`
+       
+     }
+     return date;
+ }
+
+ export function makeTimeString(year,month,day,hours,minutes,time) {
+    return `${year}-${month}-${day} ${hours}:${minutes} ${time}`
+}
+
+
+export function UTCTimeStringfromTime(timein) {
+    //let timein = '2020-06-02 04:01 pm'
+    const time = timein.substring(17,19)
+    let hours = timein.substring(11,13);
+    if(time === 'pm') {
+     hours = Number(hours) + 12
+    }
+    const sym = () => {
+      let myoffset = new Date().getTimezoneOffset()/60
+      let sym = "+";
+      if(myoffset > 0) {
+        sym = "-"
+      }
+      return sym;
+      
+    }
+    const extraoffset = () => {
+     let myoffset = (new Date().getTimezoneOffset()/60)*2
+    
+      if(myoffset <10) {
+        myoffset =`0${myoffset}`
+      }
+      return myoffset;
+    }
+    let minutes = timein.substring(14,16)
+    let year = timein.substring(0,4)
+    let month = timein.substring(5,7);
+    let day = timein.substring(8,10)
+    
+    timein = `${year}/${month}/${day} ${hours}:${minutes}:00${sym()}${extraoffset()}:00`
+    const newDate = new Date(timein)
+    hours = newDate.getHours();
+    if(hours < 10) {
+      hours = `0${hours}`
+    }
+    minutes = newDate.getMinutes();
+    if(minutes<10) {
+      minutes = `0${minutes}`
+    }
+    year = newDate.getFullYear();
+    day = newDate.getDate();
+    if(day < 10) {
+      day=`0${day}`
+    }
+    month = newDate.getMonth()+1;
+    if(month<10) {
+     month = `0${month}`
+    }
+   return( `${year}-${month}-${day} ${hours}:${minutes}:00`);
+}
+
+
+ export function getAMPMfromTimeIn(timein) {
+    //let timein ='2020-05-13 20:00:00'
+    timein = timein.replace(/-/g, '/');
+    const newDate = new Date(`${timein} UTC`)
+    let hours = newDate.getHours();
+    let ampm = "";
+    if(hours > 12) {
+      ampm ='pm'
+     
+    } else {
+      ampm='am'
+    }
+    
+    return(ampm); 
+}
+
+export function getMonthfromTimein(timein) {
+    console.log(timein)
+    timein = timein.replace(/-/g, '/');
+    const newDate = new Date(`${timein} UTC`)
+     let month = newDate.getMonth() + 1;
+    if (month < 10) {
+        month = `0${month}`
+
+    }
+    console.log(timein, month)
+    return month;
+}
+
 export function CreateEquipment(equipmentid, equipment, ownershipstatus, accountid) {
     return ({ equipmentid, equipment, ownershipstatus, accountid})
 }
@@ -385,6 +686,38 @@ export function makeID(length) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+}
+export function monthstring(month) {
+
+    
+    switch (month) {
+        case 0:
+            return ("January");
+        case 1:
+            return ("February");
+        case 2:
+            return ("March");
+        case 3:
+            return ("April");
+        case 4:
+            return ("May");
+        case 5:
+            return ("June");
+        case 6:
+            return ("July");
+        case 7:
+            return ("August");
+        case 8:
+            return ("September");
+        case 9:
+            return ("October");
+        case 10:
+            return ("November");
+        case 11:
+            return ("December");
+        default:
+            break;
+    }
 }
 export function CreateAccount(accountid, accountname) {
     return ({ accountid, accountname })

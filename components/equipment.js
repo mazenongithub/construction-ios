@@ -15,8 +15,91 @@ import MakeID from './makeids';
 class Equipment extends Component {
     constructor(props) {
         super(props)
-        this.state = { render: '', accountname:'', activeequipmentid: '', accountid: '', equipment: '', ownership: '', activecostid: '', cost: '', purchasedate: new Date(), saledate: new Date(), purchasecalender: 'open', resaledate: '', detail: '', resalevalue: '', loaninterest: '', workinghours: '', showdetail: true, equipmentdate: new Date(), costmenu: true,showpurchasedate:false,showsaledate:false, showequipmentdate:false }
+        this.state = { render: '', width: 0, height: 0, activeequipmentid: '', accountid: '', equipment: '', ownership: '', activecostid: '', cost: '', resaledate: '', detail: '', resalevalue: '', loaninterest: '', workinghours: '', showdetail: true, equipmentdate: new Date(), costmenu: true, purchasecalender: true, purchasedateday: '', purchasedatemonth: '', purchasedateyear: '', saledateday: '', saledatemonth: '', saledateyear: '', salecalender: true, equipmentcalender: true, equipmentdateday: '', equipmentdateyear: '', equipmentdatemonth: '' }
     }
+    componentDidMount() {
+        this.reset()
+        
+    }
+    reset() {
+
+        this.purchasedatedefault();
+        this.saledatedefault();
+        this.equipmentdatedefault()
+        this.setState({accountname:'', material:'', equipment:''})
+    }
+
+    saledatedefault() {
+        const saledatemonth = () => {
+            let month = new Date().getMonth() + 1;
+            if (month < 10) {
+                month = `0${month}`
+            }
+            return month;
+        }
+        const saledateday = () => {
+            let day = new Date().getDate();
+            if (day < 10) {
+                day = `0${day}`
+            }
+            return day;
+        }
+        const saledateyear = () => {
+            let year = new Date().getFullYear();
+
+            return year;
+        }
+        this.setState({ saledateyear: saledateyear(), saledatemonth: saledatemonth(), saledateday: saledateday() })
+    }
+
+
+    equipmentdatedefault() {
+        const equipmentdatemonth = () => {
+            let month = new Date().getMonth() + 1;
+            if (month < 10) {
+                month = `0${month}`
+            }
+            return month;
+        }
+        const equipmentdateday = () => {
+            let day = new Date().getDate();
+            if (day < 10) {
+                day = `0${day}`
+            }
+            return day;
+        }
+        const equipmentdateyear = () => {
+            let year = new Date().getFullYear();
+
+            return year;
+        }
+        this.setState({ equipmentdateyear: equipmentdateyear(), equipmentdatemonth: equipmentdatemonth(), equipmentdateday: equipmentdateday() })
+    }
+
+
+    purchasedatedefault() {
+        const purchasedatemonth = () => {
+            let month = new Date().getMonth() + 1;
+            if (month < 10) {
+                month = `0${month}`
+            }
+            return month;
+        }
+        const purchasedateday = () => {
+            let day = new Date().getDate();
+            if (day < 10) {
+                day = `0${day}`
+            }
+            return day;
+        }
+        const purchasedateyear = () => {
+            let year = new Date().getFullYear();
+
+            return year;
+        }
+        this.setState({ purchasedateyear: purchasedateyear(), purchasedatemonth: purchasedatemonth(), purchasedateday: purchasedateday() })
+    }
+
     accountidindex(equipmentid) {
         const construction = new Construction();
         const myequipment = construction.getmyequipmentbyid.call(this, equipmentid)
@@ -27,14 +110,26 @@ class Equipment extends Component {
     }
     makeequipmentactive(equipmentid) {
         const construction = new Construction();
-        const equipment = construction.getmyequipmentbyid.call(this,equipmentid);
-        const accountid = equipment.accountid;
-        const account = construction.getaccountbyid.call(this,accountid)
-        const accountname = account.accountname;
-        if (this.state.activeequipmentid === equipmentid) {
-            this.setState({ activeequipmentid: false, accountname:'' })
+        if (this.state.activeequipmentid !== equipmentid) {
+            const myequipment = construction.getmyequipmentbyid.call(this, equipmentid)
+            if (myequipment) {
+                let accountname = "";
+                const account = construction.getaccountbyid.call(this,myequipment.accountid)
+                if(account) {
+                    accountname = account.accountname;
+                }
+                const purchasedateyear = myequipment.ownership.purchasedate.substring(0, 4)
+                const purchasedatemonth = myequipment.ownership.purchasedate.substring(5, 7);
+                const purchasedateday = myequipment.ownership.purchasedate.substring(8, 10);
+                const saledateyear = myequipment.ownership.saledate.substring(0, 4)
+                const saledatemonth = myequipment.ownership.saledate.substring(5, 7);
+                const saledateday = myequipment.ownership.saledate.substring(8, 10);
+                this.setState({ activeequipmentid: equipmentid, purchasedateyear, purchasedatemonth, purchasedateday, saledateyear, saledatemonth, saledateday, accountname })
+            }
         } else {
-            this.setState({ activeequipmentid: equipmentid, accountname })
+
+            this.reset();
+            this.setState({ activeequipmentid: false })
         }
     }
 
@@ -430,11 +525,27 @@ class Equipment extends Component {
     }
 
     makecostidactive(costid) {
-        if (this.state.activecostid === costid) {
-            this.setState({ activecostid: false })
-        } else {
-            console.log("ACTIVECOSTID", costid)
-            this.setState({ activecostid: costid })
+        const construction = new Construction();
+
+        if (this.state.activeequipmentid) {
+            const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
+            if (myequipment) {
+                if (this.state.activecostid === costid) {
+                 
+                    this.setState({ activecostid: false, equipmentdateday:'', equipmentdatemonth:'', equipmentdateyear:'' })
+                } else {
+                    const cost = construction.getcostbyid.call(this, myequipment.equipmentid, costid)
+                    if(cost) {
+                    const equipmentdateyear = cost.timein.substring(0, 4)
+                    const equipmentdatemonth = cost.timein.substring(5, 7);
+                    const equipmentdateday = cost.timein.substring(8, 10);
+                    this.setState({ activecostid: costid, equipmentdateday, equipmentdatemonth, equipmentdateyear })
+
+                    }
+                }
+
+            }
+
         }
     }
 
@@ -680,13 +791,13 @@ class Equipment extends Component {
                             <View style={[styles.flex1]}>
                                 <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                     <View style={[styles.flex1]}>
-                                        {purchasedate.showdate.call(this)}
+                                        {purchasedate.showpurchasedate.call(this)}
                                     </View>
                                 </View>
 
                                 <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                     <View style={[styles.flex1]}>
-                                        {saledate.showdate.call(this)}
+                                        {saledate.showsaledate.call(this)}
                                     </View>
                                 </View>
 
@@ -698,7 +809,7 @@ class Equipment extends Component {
 
                                 <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                     <View style={[styles.flex1]}>
-                                        {equipmentdate.showdate.call(this)}
+                                        {equipmentdate.showequipmentdate.call(this)}
                                     </View>
                                 </View>
 

@@ -37,49 +37,42 @@ class Project {
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handleproposals() }}> /proposals (Schedule)</Text>
+                            <Text style={[regularFont]} onPress={() => { this.handleschedule() }}> /schedule</Text>
+                        </View>
+                       
+                    </View>
+
+                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                        <View style={[styles.flex1]}>
+                            <Text style={[regularFont]} onPress={() => { this.handleproposals() }}> /proposals </Text>
                         </View>
                     </View>
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handleschedulelabor() }}> /labor</Text>
-                        </View>
-                        <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handlescheduleequipment() }}> /equipment</Text>
+                            <Text style={[regularFont]}  onPress={() => { this.handlebidschedule() }}> /bidschedule</Text>
                         </View>
                     </View>
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handleschedulematerials() }}> /materials</Text>
+                            <Text style={[regularFont]} onPress={() => { this.handleactual() }}> /actual</Text>
                         </View>
-                        <View style={[styles.flex1]}>
-                            <Text style={[regularFont]}> /bidschedule</Text>
-                        </View>
+
                     </View>
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={()=>{this.handleinvoices()}}> /invoices (Actual)</Text>
+                            <Text style={[regularFont]} onPress={()=>{this.handleinvoices()}}> /invoices </Text>
                         </View>
                     </View>
 
-                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
-                        <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handleactualabor() }}> /labor</Text>
-                        </View>
-                        <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handleactualequipment() }}> /equipment</Text>
-                        </View>
-                    </View>
+       
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                   
                         <View style={[styles.flex1]}>
-                            <Text style={[regularFont]} onPress={() => { this.handleactualmaterials() }}> /materials</Text>
-                        </View>
-                        <View style={[styles.flex1]}>
-                            <Text style={[regularFont]}> /bid</Text>
+                            <Text style={[regularFont]}  onPress={() => { this.handlebid() }}> /bid</Text>
                         </View>
                     </View>
 
