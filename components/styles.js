@@ -97,6 +97,10 @@ export function MyStylesheet() {
         slidecontainer: {
             height: 423
         },
+        generalContainer:{
+            backfaceVisibility:'visible'
+        },
+       
         generalFlex: {
             flexDirection: 'row',
             flexWrap: 'wrap',

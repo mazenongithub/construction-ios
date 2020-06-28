@@ -36,7 +36,7 @@ import MaterialID from './materialid';
 class Actual extends Component {
     constructor(props) {
         super(props);
-        this.state = { render: '', width: 0, height: 0, active: '', activelaborid: false, activeequipmentid: false, activematerialid: false, providerid: '', timeinmonth: '', timeinday: '', timeinyear: '', timeinhours: '', timeinminutes: '', timeinampm: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '', timeoutmonth: '', timeoutday: '', timeoutminutes: '', timeouthours: '', timeoutyear: '', timeoutampm: '', milestoneid: '', csiid: '', laborrate: 0, equipmentrate: 0, mymaterialid: '', myequipmentid: '', materialdateday: '', materialdatemonth: '', materialdateyear: '', quantity: '', unit: '', unitcost: '', calendertimein: true, calendertimeout: true, materialcalender: true, material: '',equipment:'', employee:''}
+        this.state = { render: '', width: 0, height: 0, active: '', activelaborid: false, activeequipmentid: false, activematerialid: false, providerid: '', timeinmonth: '', timeinday: '', timeinyear: '', timeinhours: '', timeinminutes: '', timeinampm: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '', timeoutmonth: '', timeoutday: '', timeoutminutes: '', timeouthours: '', timeoutyear: '', timeoutampm: '', milestoneid: '', csiid: '', laborrate: 0, equipmentrate: 0, mymaterialid: '', myequipmentid: '', materialdateday: '', materialdatemonth: '', materialdateyear: '', quantity: '', unit: '', unitcost: '', calendertimein: true, calendertimeout: true, materialcalender: true, material: '', equipment: '', employee: '' }
 
     }
     componentDidMount() {
@@ -49,7 +49,7 @@ class Actual extends Component {
         this.timeindefault()
         this.timeoutdefault();
         this.materialdatedefault();
-        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment:'', employee:''})
+        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee: '' })
 
     }
 
@@ -212,7 +212,7 @@ class Actual extends Component {
                     const timetimeout = this.state.timeoutampm;
                     let timeout = makeTimeString(yearout, monthout, dayout, hoursout, minutesout, timetimeout);
                     timeout = UTCTimeStringfromTime(timeout);
-                    const laborrate = construction.gethourlyrate.call(this, providerid)
+                    const laborrate = construction.gethourlyrate.call(this, providerid).toFixed(2)
                     const profit = 0;
                     const engineerid = myuser.providerid;
 
@@ -256,7 +256,7 @@ class Actual extends Component {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         const makeid = new MakeID();
-        const equipment = construction.getmyequipmentbyid.call(this,myequipmentid)
+        const equipment = construction.getmyequipmentbyid.call(this, myequipmentid)
         if (myuser) {
             const activeparams = construction.getactiveproject.call(this)
             const project = construction.getprojectbyid.call(this, activeparams.projectid)
@@ -266,11 +266,11 @@ class Actual extends Component {
                 if (this.state.activeequipmentid) {
                     const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid)
                     if (myequipment) {
-                           
+
                         const j = construction.getactualequipmentkeybyid.call(this, projectid, this.state.activeequipmentid)
                         myuser.company.projects.myproject[i].actualequipment.myequipment[j].myequipmentid = myequipmentid;
                         this.props.reduxUser(myuser)
-                        this.setState({ equipment:equipment.equipment})
+                        this.setState({ equipment: equipment.equipment })
                     }
 
                 } else {
@@ -306,7 +306,7 @@ class Actual extends Component {
                         myuser.company.projects.myproject[i].actualequipment.myequipment = [newEquipment]
                     }
                     this.props.reduxUser(myuser)
-                    this.setState({ activeequipmentid: equipmentid, equipment:equipment.equipment })
+                    this.setState({ activeequipmentid: equipmentid, equipment: equipment.equipment })
 
 
                 }
@@ -342,7 +342,7 @@ class Actual extends Component {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         const makeid = new MakeID();
-        const material = construction.getmymaterialbyid.call(this,mymaterialid);
+        const material = construction.getmymaterialbyid.call(this, mymaterialid);
         if (myuser) {
             const activeparams = construction.getactiveproject.call(this)
             const project = construction.getprojectbyid.call(this, activeparams.projectid)
@@ -355,7 +355,7 @@ class Actual extends Component {
                         const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid)
                         myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].mymaterialid = mymaterialid;
                         this.reduxUser({ myuser })
-                        this.setState({material:material.material })
+                        this.setState({ material: material.material })
                     }
 
                 } else {
@@ -381,7 +381,7 @@ class Actual extends Component {
                     }
 
                     this.props.reduxUser(myuser)
-                    this.setState({ activematerialid: materialid, material:material.material })
+                    this.setState({ activematerialid: materialid, material: material.material })
 
                 }
             }
@@ -517,8 +517,8 @@ class Actual extends Component {
                 const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
                 if (mylabor) {
                     let csi = construction.getcsibyid.call(this, mylabor.csiid)
-                    if(csi) {
-                    return `${csi.csi}-${csi.title}`
+                    if (csi) {
+                        return `${csi.csi}-${csi.title}`
                     }
 
                 }
@@ -526,9 +526,9 @@ class Actual extends Component {
                 const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
                 if (mymaterial) {
                     let csi = construction.getcsibyid.call(this, mymaterial.csiid);
-                    if(csi) {
-                    
-                    return `${csi.csi}-${csi.title}`
+                    if (csi) {
+
+                        return `${csi.csi}-${csi.title}`
                     }
                 }
             } else if (this.state.activeequipmentid && this.state.active === 'equipment') {
@@ -536,9 +536,9 @@ class Actual extends Component {
 
                 if (myequipment) {
                     let csi = construction.getcsibyid.call(this, myequipment.csiid);
-                    if(csi) {
-                 
-                    return `${csi.csi}-${csi.title}`
+                    if (csi) {
+
+                        return `${csi.csi}-${csi.title}`
                     }
                 }
 
@@ -721,22 +721,27 @@ class Actual extends Component {
             }
 
         }
+        const remove = () => {
+            if (!mymaterial.settlementid) {
+                return (<TouchableOpacity onPress={() => { this.removematerial(mymaterial) }}>
+                    <Image source={require('./png/removeIcon.png')}
+                        style={removeIcon}
+                        resizeMethod='scale'
+                    />
+                </TouchableOpacity>)
+            }
+        }
         if (this.state.active === 'materials') {
             if (project) {
                 const projectid = project.projectid;
                 const milestone = construction.getmilestonebyid.call(this, mymaterial.milestoneid)
 
-                return (<View style={{ ...styles.generalContainer, ...activebackground(mymaterial.materialid) }} key={mymaterial.materialid}>
+                return (<View style={{ ...styles.generalContainer, ...activebackground(mymaterial.materialid), ...styles.bottomMargin15 }} key={mymaterial.materialid}>
                     <Text style={{ ...regularFont, ...styles.generalFont }} onPress={() => { this.makematerialactive(mymaterial.materialid) }} key={mymaterial.materialid}>{formatDateStringDisplay(mymaterial.timein)}
                         {material.material} CSI: {csi.csi}-{csi.title} Milestone: {milestone.milestone}
                         {mymaterial.quantity}  x ${mymaterial.unitcost}/{mymaterial.unit} = ${(mymaterial.quantity * mymaterial.unitcost).toFixed(2)}
                     </Text>
-                    <TouchableOpacity onPress={() => { this.removematerial(mymaterial) }}>
-                        <Image source={require('./png/removeIcon.png')}
-                            style={removeIcon}
-                            resizeMethod='scale'
-                        />
-                    </TouchableOpacity>
+                    {remove()}
 
                 </View>)
 
@@ -860,7 +865,16 @@ class Actual extends Component {
                     return (styles.generalButton);
                 }
             }
-            console.log(getbutton())
+            const remove = () => {
+                if (!labor.settlementid) {
+                    return (<TouchableOpacity onPress={() => { this.removelaborid(labor) }}>
+                        <Image source={require('./png/removeIcon.png')}
+                            style={removeIcon}
+                            resizeMethod='scale'
+                        />
+                    </TouchableOpacity>)
+                }
+            }
 
             const getactivelaborbackground = (laborid) => {
                 if (this.state.activelaborid === laborid) {
@@ -872,19 +886,14 @@ class Actual extends Component {
             if (this.state.active === 'labor') {
 
                 return (
-                    <View key={labor.laborid} style={{ ...styles.generalContainer }}>
+                    <View key={labor.laborid} style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
                         <Text style={{ ...getactivelaborbackground(labor.laborid), ...styles.generalFont, ...regularFont }} onPress={() => { this.makelaboractive(labor.laborid) }}>
                             {employee.firstname} {employee.lastname}: {labor.description} Milestone {milestone.milestone} CSI:{csi.csi}-{csi.title}
                 From {inputUTCStringForLaborID(labor.timein)} to {inputUTCStringForLaborID(labor.timeout)}
                 ${Number(hourlyrate).toFixed(2)}/Hr x {calculatetotalhours(labor.timeout, labor.timein)} Hrs = ${(Number(calculatetotalhours(labor.timeout, labor.timein)) * hourlyrate).toFixed(2)}
                         </Text>
 
-                        <TouchableOpacity onPress={() => { this.removelaborid(labor) }}>
-                            <Image source={require('./png/removeIcon.png')}
-                                style={removeIcon}
-                                resizeMethod='scale'
-                            />
-                        </TouchableOpacity>
+                        {remove()}
 
 
                     </View>)
@@ -947,7 +956,7 @@ class Actual extends Component {
         const construction = new Construction();
         const activeparams = construction.getactiveproject.call(this)
         const project = construction.getprojectbyid.call(this, activeparams.projectid)
-        
+
         if (project) {
             const projectid = project.projectid;
             if (this.state.activeequipmentid === equipmentid) {
@@ -957,9 +966,9 @@ class Actual extends Component {
             } else {
 
                 const myequipment = construction.getactualequipmentbyid.call(this, projectid, equipmentid)
-                
+
                 if (myequipment) {
-                    const equipment = construction.getmyequipmentbyid.call(this,myequipment.myequipmentid)
+                    const equipment = construction.getmyequipmentbyid.call(this, myequipment.myequipmentid)
                     const timeinmonth = getMonthfromTimein(myequipment.timein);
                     const timeinday = getDayfromTimein(myequipment.timein);
                     const timeinyear = getYearfromTimein(myequipment.timein)
@@ -988,7 +997,7 @@ class Actual extends Component {
                             csi_4 = csi.csi.substring(7, 9);
                         }
                     }
-                    this.setState({ activeequipmentid: equipmentid, timeinmonth, timeinday, timeinyear, timeinhours, timeinminutes, timeinampm, timeoutmonth, timeoutday, timeoutyear, timeouthours, timeoutminutes, timeoutampm, csi_1, csi_2, csi_3, csi_4, equipment:equipment.equipment})
+                    this.setState({ activeequipmentid: equipmentid, timeinmonth, timeinday, timeinyear, timeinhours, timeinminutes, timeinampm, timeoutmonth, timeoutday, timeoutyear, timeouthours, timeoutminutes, timeoutampm, csi_1, csi_2, csi_3, csi_4, equipment: equipment.equipment })
 
                 }
             }
@@ -1021,23 +1030,28 @@ class Actual extends Component {
             }
 
         }
+        const remove = () => {
+            if (!equipment.settlementid) {
+                return (<TouchableOpacity onPress={() => { this.removeequipment(equipment) }}>
+                    <Image source={require('./png/removeIcon.png')}
+                        style={removeIcon}
+                        resizeMethod='scale'
+                    />
+                </TouchableOpacity>)
+            }
+        }
         if (project) {
 
             const milestone = construction.getmilestonebyid.call(this, equipment.milestoneid)
             const myequipment = construction.getmyequipmentbyid.call(this, equipment.myequipmentid);
 
-            return (<View style={{ ...styles.generalContainer, ...styles.generalFont }} key={equipment.equipmentid}>
+            return (<View style={{ ...styles.generalContainer, ...styles.generalFont, ...styles.bottomMargin15 }} key={equipment.equipmentid}>
                 <Text style={{ ...activeequipment(equipment.equipmentid), ...regularFont }} onPress={() => { this.makeequipmentactive(equipment.equipmentid) }}>
                     {myequipment.equipment} From: {inputUTCStringForLaborID(equipment.timein)} to {inputUTCStringForLaborID(equipment.timeout)}
                  CSI: {csi.csi} - {csi.title} Milestone: {milestone.milestone}
                 Total Hours: {totalhours} x  {equipmentrate} = ${amount.toFixed(2)}
                 </Text>
-                <TouchableOpacity onPress={() => { this.removeequipment(equipment) }}>
-                    <Image source={require('./png/removeIcon.png')}
-                        style={removeIcon}
-                        resizeMethod='scale'
-                    />
-                </TouchableOpacity>
+                {remove()}
             </View>
             )
 
@@ -1073,222 +1087,197 @@ class Actual extends Component {
     }
 
 
-getequipmentrate() {
-    const construction = new Construction();
-    const activeparams = construction.getactiveproject.call(this)
-    const project = construction.getprojectbyid.call(this, activeparams.projectid)
-    let equipmentrate = "";
-    if (project) {
-        const projectid = project.projectid;
-        if (this.state.activeequipmentid) {
-            const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid);
-            if (myequipment) {
-                equipmentrate = myequipment.equipmentrate;
-            }
-        } else {
-            equipmentrate = this.state.equipmentrate;
-        }
-
-    }
-
-
-    return equipmentrate;
-}
-
-
-
-
-getlaborrate() {
-    const construction = new Construction();
-    const activeparams = construction.getactiveproject.call(this)
-    const project = construction.getprojectbyid.call(this, activeparams.projectid)
-    let laborrate = "";
-    if (project) {
-        const projectid = project.projectid;
-        if (this.state.activelaborid) {
-            const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid);
-            if (mylabor) {
-                laborrate = mylabor.laborrate;
-            }
-        } else {
-            laborrate = this.state.laborrate;
-        }
-    }
-    return laborrate;
-}
-
-handleequipmentrate(equipmentrate) {
-    const construction = new Construction();
-    const myuser = construction.getuser.call(this);
-    if (isNumeric(equipmentrate)) {
-        if (myuser) {
-            const activeparams = construction.getactiveproject.call(this)
-            const project = construction.getprojectbyid.call(this, activeparams.projectid)
-            if (project) {
-                const projectid = project.projectid;
-                const i = construction.getprojectkeybyid.call(this, projectid)
-                if (this.state.activeequipmentid) {
-                    const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid)
-                    if (myequipment) {
-                        const j = construction.getactualequipmentkeybyid.call(this, projectid, this.state.activeequipmentid)
-                        myuser.company.projects.myproject[i].actualequipment.myequipment[j].equipmentrate = equipmentrate;
-                        this.props.reduxUser(myuser)
-                        this.setState({ render: 'render' })
-                    }
-
-                } else {
-                    this.setState({ equipmentrate })
-                }
-            }
-        }
-    } else {
-        this.setState({ equipmentrate })
-        alert(`Equipment rate ${equipmentrate} must be numeric `)
-    }
-}
-
-handlelaborrate(laborrate) {
-    const construction = new Construction();
-    const myuser = construction.getuser.call(this);
-    if (isNumeric(laborrate)) {
-        if (myuser) {
-            const activeparams = construction.getactiveproject.call(this)
-            const project = construction.getprojectbyid.call(this, activeparams.projectid)
-            if (project) {
-                const projectid = project.projectid;
-                const i = construction.getprojectkeybyid.call(this, projectid)
-                if (this.state.activelaborid) {
-                    const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
-                    if (mylabor) {
-                        const j = construction.getactuallaborkeybyid.call(this, projectid, this.state.activelaborid)
-                        myuser.company.projects.myproject[i].actuallabor.mylabor[j].laborrate = laborrate;
-                        this.props.reduxUser(myuser)
-                        this.setState({ render: 'render' })
-                    }
-
-                } else {
-                    this.setState({ laborrate })
-                }
-            }
-        }
-
-    } else {
-        alert(`Labor Rate ${laborrate} must be numeric`)
-    }
-}
-
-getquantity() {
-    const construction = new Construction();
-    const activeparams = construction.getactiveproject.call(this)
-    const project = construction.getprojectbyid.call(this, activeparams.projectid)
-    let quantity = this.state.quantity;
-    if (project) {
-        const projectid = project.projectid;
-
-        if (this.state.activematerialid) {
-            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
-            quantity = mymaterial.quantity;
-
-        }
-
-    }
-    return quantity;
-
-}
-getunit() {
-    const construction = new Construction();
-    const activeparams = construction.getactiveproject.call(this)
-    const project = construction.getprojectbyid.call(this, activeparams.projectid)
-    let unit = this.state.unit;
-    if (project) {
-        const projectid = project.projectid;
-
-        if (this.state.activematerialid) {
-            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
-            unit = mymaterial.unit;
-
-        }
-
-    }
-    return unit;
-
-}
-getunitcost() {
-    const construction = new Construction();
-    const activeparams = construction.getactiveproject.call(this)
-    const project = construction.getprojectbyid.call(this, activeparams.projectid)
-    let unitcost = this.state.unitcost;
-    if (project) {
-        const projectid = project.projectid;
-
-        if (this.state.activematerialid) {
-            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
-            unitcost = mymaterial.unitcost;
-
-        }
-
-    }
-    return unitcost;
-
-}
-handlequantity(quantity) {
-    const construction = new Construction();
-    const myuser = construction.getuser.call(this)
-    if (isNumeric(quantity)) {
-        if (myuser) {
-            const activeparams = construction.getactiveproject.call(this)
-            const project = construction.getprojectbyid.call(this, activeparams.projectid)
-            if (project) {
-                const projectid = project.projectid;
-                const i = construction.getprojectkeybyid.call(this, projectid);
-                if (this.state.activematerialid) {
-                    const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
-                    if (mymaterial) {
-                        const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid);
-                        myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].quantity = quantity;
-                        this.props.reduxUser(myuser)
-                        this.setState({ render: 'render' })
-                    }
-                } else {
-                    this.setState({ quantity })
-                }
-            }
-        }
-
-    } else {
-        this.setState({ quantity })
-        alert(`Quantity ${quantity} must be numeric`)
-    }
-
-}
-handleunit(unit) {
-    const construction = new Construction();
-    const myuser = construction.getuser.call(this)
-    if (myuser) {
+    getequipmentrate() {
+        const construction = new Construction();
         const activeparams = construction.getactiveproject.call(this)
         const project = construction.getprojectbyid.call(this, activeparams.projectid)
+        let equipmentrate = "";
         if (project) {
             const projectid = project.projectid;
-            const i = construction.getprojectkeybyid.call(this, projectid);
-            if (this.state.activematerialid) {
-                const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
-                if (mymaterial) {
-                    const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid);
-                    myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].unit = unit;
-                    this.props.reduxUser(myuser)
-                    this.setState({ render: 'render' })
+            if (this.state.activeequipmentid) {
+                const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid);
+                if (myequipment) {
+                    equipmentrate = myequipment.equipmentrate;
                 }
             } else {
-                this.setState({ unit })
+                equipmentrate = this.state.equipmentrate;
             }
+
+        }
+
+
+        return equipmentrate;
+    }
+
+
+
+
+    getlaborrate() {
+        const construction = new Construction();
+        const activeparams = construction.getactiveproject.call(this)
+        const project = construction.getprojectbyid.call(this, activeparams.projectid)
+        let laborrate = "";
+        if (project) {
+            const projectid = project.projectid;
+            if (this.state.activelaborid) {
+                const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid);
+                if (mylabor) {
+                    laborrate = mylabor.laborrate;
+                }
+            } else {
+                laborrate = this.state.laborrate;
+            }
+        }
+        return laborrate;
+    }
+
+    handleequipmentrate(equipmentrate) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        if (isNumeric(equipmentrate)) {
+            if (myuser) {
+                const activeparams = construction.getactiveproject.call(this)
+                const project = construction.getprojectbyid.call(this, activeparams.projectid)
+                if (project) {
+                    const projectid = project.projectid;
+                    const i = construction.getprojectkeybyid.call(this, projectid)
+                    if (this.state.activeequipmentid) {
+                        const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid)
+                        if (myequipment) {
+                            const j = construction.getactualequipmentkeybyid.call(this, projectid, this.state.activeequipmentid)
+                            myuser.company.projects.myproject[i].actualequipment.myequipment[j].equipmentrate = equipmentrate;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
+                        }
+
+                    } else {
+                        this.setState({ equipmentrate })
+                    }
+                }
+            }
+        } else {
+            this.setState({ equipmentrate })
+            alert(`Equipment rate ${equipmentrate} must be numeric `)
         }
     }
 
-}
-handleunitcost(unitcost) {
-    const construction = new Construction();
-    const myuser = construction.getuser.call(this)
-    if (isNumeric(unitcost)) {
+    handlelaborrate(laborrate) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        if (isNumeric(laborrate)) {
+            if (myuser) {
+                const activeparams = construction.getactiveproject.call(this)
+                const project = construction.getprojectbyid.call(this, activeparams.projectid)
+                if (project) {
+                    const projectid = project.projectid;
+                    const i = construction.getprojectkeybyid.call(this, projectid)
+                    if (this.state.activelaborid) {
+                        const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
+                        if (mylabor) {
+                            const j = construction.getactuallaborkeybyid.call(this, projectid, this.state.activelaborid)
+                            myuser.company.projects.myproject[i].actuallabor.mylabor[j].laborrate = laborrate;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
+                        }
+
+                    } else {
+                        this.setState({ laborrate })
+                    }
+                }
+            }
+
+        } else {
+            alert(`Labor Rate ${laborrate} must be numeric`)
+        }
+    }
+
+    getquantity() {
+        const construction = new Construction();
+        const activeparams = construction.getactiveproject.call(this)
+        const project = construction.getprojectbyid.call(this, activeparams.projectid)
+        let quantity = this.state.quantity;
+        if (project) {
+            const projectid = project.projectid;
+
+            if (this.state.activematerialid) {
+                const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
+                quantity = mymaterial.quantity;
+
+            }
+
+        }
+        return quantity;
+
+    }
+    getunit() {
+        const construction = new Construction();
+        const activeparams = construction.getactiveproject.call(this)
+        const project = construction.getprojectbyid.call(this, activeparams.projectid)
+        let unit = this.state.unit;
+        if (project) {
+            const projectid = project.projectid;
+
+            if (this.state.activematerialid) {
+                const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
+                unit = mymaterial.unit;
+
+            }
+
+        }
+        return unit;
+
+    }
+    getunitcost() {
+        const construction = new Construction();
+        const activeparams = construction.getactiveproject.call(this)
+        const project = construction.getprojectbyid.call(this, activeparams.projectid)
+        let unitcost = this.state.unitcost;
+        if (project) {
+            const projectid = project.projectid;
+
+            if (this.state.activematerialid) {
+                const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
+                unitcost = mymaterial.unitcost;
+
+            }
+
+        }
+        return unitcost;
+
+    }
+    handlequantity(quantity) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (isNumeric(quantity)) {
+            if (myuser) {
+                const activeparams = construction.getactiveproject.call(this)
+                const project = construction.getprojectbyid.call(this, activeparams.projectid)
+                if (project) {
+                    const projectid = project.projectid;
+                    const i = construction.getprojectkeybyid.call(this, projectid);
+                    if (this.state.activematerialid) {
+                        const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
+                        if (mymaterial) {
+                            const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid);
+                            myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].quantity = quantity;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
+                        }
+                    } else {
+                        this.setState({ quantity })
+                    }
+                }
+            }
+
+        } else {
+            this.setState({ quantity })
+            alert(`Quantity ${quantity} must be numeric`)
+        }
+
+    }
+    handleunit(unit) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
         if (myuser) {
             const activeparams = construction.getactiveproject.call(this)
             const project = construction.getprojectbyid.call(this, activeparams.projectid)
@@ -1299,22 +1288,47 @@ handleunitcost(unitcost) {
                     const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
                     if (mymaterial) {
                         const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid);
-                        myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].unitcost = unitcost;
+                        myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].unit = unit;
                         this.props.reduxUser(myuser)
                         this.setState({ render: 'render' })
                     }
                 } else {
-                    this.setState({ unitcost })
+                    this.setState({ unit })
                 }
             }
         }
 
-    } else {
-        this.setState({ unitcost })
-        alert(`Unit cost ${unitcost} must be numeric`)
     }
+    handleunitcost(unitcost) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (isNumeric(unitcost)) {
+            if (myuser) {
+                const activeparams = construction.getactiveproject.call(this)
+                const project = construction.getprojectbyid.call(this, activeparams.projectid)
+                if (project) {
+                    const projectid = project.projectid;
+                    const i = construction.getprojectkeybyid.call(this, projectid);
+                    if (this.state.activematerialid) {
+                        const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
+                        if (mymaterial) {
+                            const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid);
+                            myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].unitcost = unitcost;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
+                        }
+                    } else {
+                        this.setState({ unitcost })
+                    }
+                }
+            }
 
-}
+        } else {
+            this.setState({ unitcost })
+            alert(`Unit cost ${unitcost} must be numeric`)
+        }
+
+    }
 
 
 
@@ -1336,25 +1350,18 @@ handleunitcost(unitcost) {
         const timein = new TimeIn();
         const timeout = new TimeOut();
 
-        const showmaterialdate = () => {
-            if (this.state.active === 'materials') {
-                return (materialdate.showmaterialdate.call(this))
+        const validate = () => {
+            let validation = true;
+            if (this.state.activelaborid && this.state.active === 'labor') {
+                validation = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
+            } else if (this.state.activematerialid && this.state.active === 'materials') {
+                validation = construction.checkinvoicematerialid.call(this, this.state.activematerialid)
+            } else if (this.state.activeequipmentid && this.state.active === 'equipment') {
+                validation = construction.checkinvoiceequipmentid.call(this, this.state.activeequipmentid)
             }
-        }
-        const showemployeeid = () => {
-            if (this.state.active === 'labor') {
-                return (employeeid.showemployeeid.call(this))
-            } else {
-                return;
-            }
-
+            return validation;
         }
 
-        const showtimein = () => {
-            if (this.state.active === 'labor' || this.state.active === 'equipment') {
-                return (timein.showtimein.call(this))
-            }
-        }
 
         const laborbackground = () => {
             if (this.state.active === 'labor') {
@@ -1380,118 +1387,362 @@ handleunitcost(unitcost) {
         }
 
 
-        const showequipmentid = () => {
-            if (this.state.active === 'equipment') {
-                return (equipmentid.showequipmentid.call(this))
-            } else {
-                return;
-            }
-
-        }
-
-        const showmaterialid = () => {
-            if (this.state.active === 'materials') {
-                return (materialid.showmaterialid.call(this))
-            } else {
-                return;
-            }
-
-        }
-
-        const showtimeout = () => {
-            if (this.state.active === 'labor' || this.state.active === 'equipment') {
-                return (timeout.showtimeout.call(this))
-            }
-        }
-        const equipmentrate = () => {
-            if (this.state.active === 'equipment' && this.state.activeequipmentid) {
-                return (
-                    <View style={{ ...styles.generalContainer }}>
-                        <View style={{ ...styles.generalContainer }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont }}>Equipment Rate</Text>
-                        </View>
-                        <View style={{ ...styles.generalContainer }}>
-                            <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
-                                value={this.getequipmentrate().toString()}
-                                onChangeText={text => { this.handleequipmentrate(text) }}
-        
-                            />
-                        </View>
-        
-                    </View>
-                )
-            }
-        }
-        const laborrate = () => {
-            if (this.state.active === 'labor' && this.state.activelaborid) {
-                return (
-                    <View style={{ ...styles.generalContainer }}>
-                        <View style={{ ...styles.generalContainer }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont }}>Labor Rate</Text>
-                        </View>
-                        <View style={{ ...styles.generalContainer }}>
-                            <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput}}
-                                value={this.getlaborrate().toString()}
-                                onChangeText={text => { this.handlelaborrate(text) }}
-        
-                            />
-                        </View>
-        
-                    </View>
-                )
-            }
-        }
-
-        const showmaterialquantity = () => {
-            if (this.state.active === 'materials') {
-                return (
-                    <View style={{ ...styles.generalFlex }}>
-                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
-                            
-                        
-                            <View style={{ ...styles.generalContainer }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont  }}>Quantity</Text>
-                                <TextInput style={{ ...styles.generalFont, ...regularFont,...styles.defaultInput  }}
-                                    value={this.getquantity().toString()}
-                                    onChangeText={text => { this.handlequantity(text) }}
-                                />
-                            </View>
-        
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
-        
-                            <View style={{ ...styles.generalContainer }}>
-                                <Text style={{ ...styles.generalFont, ...regularFont }}>Unit</Text>
-                            </View>
-                            <View style={{ ...styles.generalContainer }}>
-                                <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput  }}
-                                    value={this.getunit().toString()}
-                                    onChangeText={text => { this.handleunit(text) }}
-                                />
-                            </View>
-        
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.addMargin }}>
-        
-                            <View style={{ ...styles.generalContainer }}>
-                                <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost</Text>
-                            </View>
-                            <View style={{ ...styles.generalContainer }}>
-                                <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
-                                    value={this.getunitcost().toString()}
-                                    onChangeText={text => { this.handleunitcost(text) }}
-                                />
-                            </View>
-        
-                        </View>
-        
-                    </View>
-                )
-        
-            }
-        }
 
         if (project) {
+            const projectid = project.projectid;
+
+            const showmaterialquantity = () => {
+                if (this.state.active === 'materials') {
+                    if (validate()) {
+                        return (
+                            <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                                <View style={{ ...styles.flex1, ...styles.addMargin }}>
+                                    <View style={{ ...styles.generalContainer }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity</Text>
+                                    </View>
+                                    <View style={{ ...styles.generalContainer }}>
+                                        <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                            value={this.getquantity()}
+                                            onChangeText={text => { this.handlequantity(text) }}
+                                        />
+                                    </View>
+
+                                </View>
+                                <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                                    <View style={{ ...styles.generalContainer }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit</Text>
+                                    </View>
+                                    <View style={{ ...styles.generalContainer }}>
+                                        <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                            value={this.getunit()}
+                                            onChangeText={text => { this.handleunit(text) }}
+                                        />
+                                    </View>
+
+                                </View>
+                                <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                                    <View style={{ ...styles.generalContainer }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost</Text>
+                                    </View>
+                                    <View style={{ ...styles.generalContainer }}>
+                                        <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                            value={this.getunitcost()}
+                                            onChangeText={text => { this.handleunitcost(text) }}
+                                        />
+                                    </View>
+
+                                </View>
+
+                            </View>
+                        )
+
+                    } else {
+                        if (this.state.activematerialid) {
+                            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
+                            if (mymaterial) {
+                                return (<View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                                    <View style={{ ...styles.flex1 }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity: {mymaterial.quantity}</Text>
+                                    </View>
+                                    <View style={{ ...styles.flex1 }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit: {mymaterial.unit}</Text>
+                                    </View>
+                                    <View style={{ ...styles.flex1 }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost: {mymaterial.unitcost}</Text>
+                                    </View>
+                                </View>)
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+            const equipmentrate = () => {
+                if (this.state.active === 'equipment' && this.state.activeequipmentid) {
+                    if (validate()) {
+                        return (
+                            <View style={{ ...styles.generalContainer }}>
+                                <View style={{ ...styles.generalContainer }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>Equipment Rate</Text>
+                                </View>
+                                <View style={{ ...styles.generalContainer }}>
+                                    <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                        value={this.getequipmentrate()}
+                                        onChangeText={text => { this.handleequipmentrate(text) }}
+
+                                    />
+                                </View>
+
+                            </View>
+                        )
+
+                    } else {
+                        const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid);
+                        if (myequipment) {
+                            return (<View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                <Text style={{ ...styles.generalFont, ...regularFont }}>Equipment Rate: {myequipment.equipmentrate}</Text>
+                            </View>)
+
+                        }
+
+                    }
+                }
+            }
+
+            const laborrate = () => {
+                if (this.state.active === 'labor' && this.state.activelaborid) {
+                    if (validate()) {
+                        return (
+                            <View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                <View style={{ ...styles.generalContainer }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>Labor Rate</Text>
+                                </View>
+                                <View style={{ ...styles.generalContainer }}>
+                                    <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                        value={this.getlaborrate().toString()}
+                                        onChangeText={text => { this.handlelaborrate(text) }}
+
+                                    />
+                                </View>
+
+                            </View>
+                        )
+                    } else {
+                        if (this.state.active === 'labor' && this.state.activelaborid) {
+                            const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid);
+                            if (mylabor) {
+                                return (
+                                    <View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                        <Text style={{ ...styles.generalFont, ...regularFont }}> Labor Rate: {mylabor.laborrate}</Text>
+                                    </View>)
+                            }
+                        }
+                    }
+                }
+            }
+
+            const showtimeout = () => {
+                if (this.state.active === 'labor' || this.state.active === 'equipment') {
+                    if (validate()) {
+                        return (timeout.showtimeout.call(this))
+                    } else {
+
+                        if (this.state.activelaborid && this.state.active === 'labor') {
+                            const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid);
+                            if (mylabor) {
+                                return (<View style={{ ...styles.generalContainer }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont, ...styles.bottomMargin15 }}>Time Out: {inputUTCStringForLaborID(mylabor.timeout)}</Text>
+                                </View>)
+                            }
+                        } else if (this.state.activeequipmentid && this.state.active === 'equipment') {
+                            const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid)
+                            if (myequipment) {
+                                return (<View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>Time Out {inputUTCStringForLaborID(myequipment.timeout)}</Text>
+                                </View>)
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+
+            const showtimein = () => {
+                if (this.state.active === 'labor' || this.state.active === 'equipment') {
+                    if (validate()) {
+                        return (timein.showtimein.call(this))
+                    } else {
+
+                        if (this.state.activelaborid && this.state.active === 'labor') {
+                            const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid);
+                            if (mylabor) {
+                                return (<View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>TimeIn: {inputUTCStringForLaborID(mylabor.timein)}</Text>
+                                </View>)
+                            }
+                        } else if (this.state.activeequipmentid && this.state.active === 'equipment') {
+                            const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid)
+                            if (myequipment) {
+                                return (<View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>Time In {inputUTCStringForLaborID(myequipment.timein)}</Text>
+                                </View>)
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+            const showmaterialdate = () => {
+                if (this.state.active === 'materials') {
+                    if (this.state.activematerialid) {
+                        const validate = construction.checkinvoicematerialid.call(this, this.state.activematerialid)
+                        if (validate) {
+                            return (materialdate.showmaterialdate.call(this))
+                        } else {
+                            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
+                            if (mymaterial) {
+                                return (<View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}> Time In: {formatDateStringDisplay(mymaterial.timein)}</Text>
+                                </View>)
+                            }
+                        }
+
+                    } else {
+                        return (materialdate.showmaterialdate.call(this))
+                    }
+                }
+            }
+
+            const showmaterialid = () => {
+                if (this.state.active === 'materials') {
+                    if (this.state.activematerialid) {
+                        const validate = construction.checkinvoicematerialid.call(this, this.state.activematerialid)
+                        if (validate) {
+                            return (materialid.showmaterialid.call(this))
+
+                        } else {
+                            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
+                            if (mymaterial) {
+                                const material = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
+                                if (material) {
+                                    return (<Text style={{ ...styles.generalFont, ...regularFont, ...styles.bottomMargin15 }}>Material: {material.material}</Text>)
+                                }
+                            }
+                        }
+                    }
+                    return (materialid.showmaterialid.call(this))
+                } else {
+                    return;
+                }
+
+            }
+
+            const showequipmentid = () => {
+                if (this.state.active === 'equipment') {
+                    if (this.state.activeequipmentid) {
+                        const validate = construction.checkinvoiceequipmentid.call(this, this.state.activeequipmentid)
+                        if (validate) {
+                            return (equipmentid.showequipmentid.call(this))
+
+                        } else {
+                            const equipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid);
+                            if (equipment) {
+                                const myequipment = construction.getmyequipmentbyid.call(this, equipment.myequipmentid);
+                                if (myequipment) {
+                                    return (<Text style={{ ...styles.generalFont, ...regularFont, ...styles.bottomMargin15 }}>Equipment: {myequipment.equipment}</Text>)
+                                }
+                            }
+
+
+                        }
+                    }
+                    return (equipmentid.showequipmentid.call(this))
+                } else {
+                    return;
+                }
+
+            }
+
+            const showemployeeid = () => {
+                if (this.state.active === 'labor') {
+
+                    if (this.state.activelaborid) {
+                        const validate = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
+                        if (validate) {
+                            return (employeeid.showemployeeid.call(this))
+                        } else {
+                            const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
+                            if (mylabor) {
+                                const employee = construction.getemployeebyproviderid.call(this, mylabor.providerid);
+                                if (employee) {
+                                    return (<Text style={{ ...styles.generalFont, ...regularFont, ...styles.bottomMargin15 }}>Employee: {employee.firstname} {employee.lastname}</Text>)
+                                }
+                            }
+
+                        }
+                    } else {
+                        return (employeeid.showemployeeid.call(this))
+                    }
+
+                } else {
+                    return;
+                }
+
+            }
+
+            const milestonescsi = () => {
+                let validate = true;
+                let getmilestoneid = ""
+                let getcsiid = '';
+                let getmilestone = false;
+                let getcsi = false;
+                if (this.state.active === 'labor' && this.state.activelaborid) {
+                    validate = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
+                    const getmylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid);
+                    if (getmylabor) {
+                        getmilestoneid = getmylabor.milestoneid;
+                        getcsiid = getmylabor.csiid;
+                    }
+                } else if (this.state.active === 'materials' && this.state.activematerialid) {
+                    validate = construction.checkinvoicematerialid.call(this, this.state.activematerialid)
+                    const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid);
+                    if (mymaterial) {
+                        getmilestoneid = mymaterial.milestoneid;
+                        getcsiid = mymaterial.csiid;
+                    }
+                } else if (this.state.active === 'equipment' && this.state.activeequipmentid) {
+                    validate = construction.checkinvoiceequipmentid.call(this, this.state.activeequipmentid);
+                    const myequipment = construction.getactualequipmentbyid.call(this, projectid, this.state.activeequipmentid)
+                    if (myequipment) {
+                        getmilestoneid = myequipment.milestoneid;
+                        getcsiid = myequipment.csiid;
+                    }
+                }
+
+                if (getmilestoneid) {
+                    getmilestone = construction.getmilestonebyid.call(this, getmilestoneid)
+                }
+                if (getcsiid) {
+                    getcsi = construction.getcsibyid.call(this, getcsiid)
+                }
+
+                if (validate) {
+                    return (<View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1 }}>
+                            {milestoneid.showmilestoneid.call(this)}
+                            {csi.showcsi.call(this)}
+                        </View>
+                    </View>)
+
+                } else {
+                    return (
+                        <View style={{ ...styles.generalFlex }}>
+                            <View style={{ ...styles.flex1 }}>
+                                <View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>Milestone: {getmilestone.milestone} </Text>
+                                </View>
+                                <View style={{ ...styles.generalContainer, ...styles.bottomMargin15 }}>
+
+                                    <Text style={{ ...styles.generalFont, ...regularFont }}>CSI: {getcsi.csi} {getcsi.title} </Text>
+                                </View>
+                            </View>
+                        </View>)
+                }
+
+
+
+            }
+
             return (
 
                 <View style={{ ...styles.generalFlex }}>
@@ -1505,30 +1756,23 @@ handleunitcost(unitcost) {
                         </View>
 
                         <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
-                            <View style={{ ...styles.flex1, ...laborbackground(),...styles.margin5,...styles.showBorder,...styles.addRadius }}>
-                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialActualButton }} onPress={() => { this.setState({ active: 'labor' }) }}>Labor</Text>
+                            <View style={{ ...styles.flex1, ...laborbackground(), ...styles.margin5, ...styles.showBorder, ...styles.addRadius }}>
+                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont, ...styles.specialActualButton }} onPress={() => { this.setState({ active: 'labor' }) }}>Labor</Text>
                             </View>
-                            <View style={{ ...styles.flex1, ...styles.alignCenter, ...equipmentbackground(),...styles.margin5, ...styles.showBorder,...styles.addRadius }}>
-                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialActualButton }} onPress={() => { this.setState({ active: 'equipment' }) }}>Equipment</Text>
+                            <View style={{ ...styles.flex1, ...styles.alignCenter, ...equipmentbackground(), ...styles.margin5, ...styles.showBorder, ...styles.addRadius }}>
+                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.headerFamily, ...styles.boldFont, ...styles.addRadius, ...headerFont, ...styles.specialActualButton }} onPress={() => { this.setState({ active: 'equipment' }) }}>Equipment</Text>
                             </View>
-                            <View style={{ ...styles.flex1, ...styles.alignCenter, ...materialbackground(),...styles.margin5,...styles.showBorder,...styles.addRadius  }}>
-                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.boldFont, ...styles.addRadius, ...headerFont,...styles.specialActualButton }} onPress={() => { this.setState({ active: 'materials' }) }}>Materials</Text>
+                            <View style={{ ...styles.flex1, ...styles.alignCenter, ...materialbackground(), ...styles.margin5, ...styles.showBorder, ...styles.addRadius }}>
+                                <Text style={{ ...headerFont, ...styles.alignCenter, ...styles.boldFont, ...styles.addRadius, ...headerFont, ...styles.specialActualButton }} onPress={() => { this.setState({ active: 'materials' }) }}>Materials</Text>
                             </View>
                         </View>
 
                         {showemployeeid()}
                         {showequipmentid()}
                         {showmaterialid()}
-
-                        <View style={{ ...styles.generalFlex }}>
-                            <View style={{ ...styles.flex1 }}>
-                                {milestoneid.showmilestoneid.call(this)}
-                                {csi.showcsi.call(this)}
-                            </View>
-                        </View>
+                        {milestonescsi()}
 
                         {showmaterialdate()}
-
                         {showtimein()}
                         {showtimeout()}
 
