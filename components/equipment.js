@@ -1223,7 +1223,8 @@ class Equipment extends Component {
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[headerFont, styles.alignCenter]}>/{mycompany.url}/equipment</Text>
+                            <Text style={[headerFont, styles.alignCenter, styles.boldFont]}>/{mycompany.url}</Text>
+                            <Text style={[headerFont, styles.alignCenter, styles.boldFont]}>/equipment</Text>
                         </View>
                     </View>
 

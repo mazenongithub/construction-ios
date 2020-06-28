@@ -1425,7 +1425,7 @@ handleunitcost(unitcost) {
         const laborrate = () => {
             if (this.state.active === 'labor' && this.state.activelaborid) {
                 return (
-                    <View style={{ ...styles.generalContainer }}>
+                    <View style={{ ...styles.generalContainer, ...styles.bottomMargin15}}>
                         <View style={{ ...styles.generalContainer }}>
                             <Text style={{ ...styles.generalFont, ...regularFont }}>Labor Rate</Text>
                         </View>

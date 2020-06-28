@@ -67,19 +67,20 @@ class Landing {
                 title: 'Calculating Labor Rate '
 
             },
+
             {
                 imageid: 'equipment',
-                uri: require('../slides/equipment.png'),
-                capt: 'Add your companys equipment',
-                title: 'Equipment'
-
+                uri: require('../slides/myequipment.png'),
+                capt: 'Add company equipment and enter the variables for ownership and rentals',
+                title: 'Company Equipment'
+            
             },
             {
-                imageid: 'equipment_2',
-                uri: require('../slides/equipment_2.png'),
-                capt: 'The Program will calculate the equipment rate when you enter the costs and ownership information. You can also use rental equipment instead. ',
-                title: 'Calulating Equipment Rates'
-
+                imageid: 'equipment_1',
+                uri: require('../slides/myequipment_1.png'),
+                capt: 'After entering the ownership information, the program calculates what the equipment rate cost is per working hour',
+                title: 'Equipment Rates'
+            
             },
             {
                 imageid: 'materials',
@@ -97,6 +98,48 @@ class Landing {
 
             },
             {
+                imageid: 'labor_1',
+                uri: require('../slides/labor_1.png'),
+                capt: 'Schedule labor component used for entering labor on the project ',
+                title: 'Labor '
+
+            },
+            {
+                imageid: 'labor',
+                uri: require('../slides/labor.png'),
+                capt: 'Schedule labor components enters timein, timeout, labor rate for labor. ',
+                title: 'Labor Time '
+
+            },
+            {
+                imageid: 'schedulematerials',
+                uri: require('../slides/schedulematerials.png'),
+                capt: 'Schedule Material Component used for scheduling materials ',
+                title: 'Schedule Materials'
+
+            },
+            {
+                imageid: 'scheduleequipment',
+                uri: require('../slides/scheduleequipment.png'),
+                capt: 'Schedule Material Component used for scheduling equipment ',
+                title: 'Schedule Equipment'
+
+            },
+            {
+                imageid: 'actual',
+                uri: require('../slides/actual.png'),
+                capt: 'Actual Cost component matches schedule component. For entering your actual costs. ',
+                title: 'Enter Actual Costs'
+
+            },  
+            {
+                imageid: 'actual_1',
+                uri: require('../slides/actual_1.png'),
+                capt: 'Actual Cost labor item cannot be modified after it has been invoiced and setted   ',
+                title: 'Actual Cost Item'
+
+            },
+            {
                 imageid: 'specification',
                 uri: require('../slides/specification.png'),
                 capt: 'Specifications written by Engineers provided for the Project',
@@ -110,28 +153,7 @@ class Landing {
                 title: 'Cost Estimate'
 
             },
-            {
-                imageid: 'labor_1',
-                uri: require('../slides/labor_1.png'),
-                capt: 'Example of the working labor component. The Service Provider should enter both their schedule labor and record their actual labor separately as well. ',
-                title: 'Schedule Labor'
-
-            },
-      
-            {
-                imageid: 'schedulematerials',
-                uri: require('../slides/schedulematerials.png'),
-                capt: 'Working Schedule Material components. In addition the service provider should enter the actual materials seperately inside the actualmaterial component. ',
-                title: 'Entering Schedule Materials'
-
-            },
-            {
-                imageid: 'scheduleequipment',
-                uri: require('../slides/scheduleequipment.png'),
-                capt: 'Working Schedule Equipment components enters the schedule equipment for the project. The Service Provider should also enter their actual equipment also',
-                title: 'Entering Schedule Equipment'
-
-            },
+         
             {
                 imageid: 'proposals',
                 uri: require('../slides/proposal.png'),
