@@ -649,9 +649,17 @@ class Schedule extends Component {
                     const materialdateday = mymaterial.timein.substring(8, 10);
 
                     const csi = construction.getcsibyid.call(this, mymaterial.csiid);
-                    const csi_1 = csi.csi.substring(0, 2)
-                    const csi_2 = csi.csi.substring(2, 4);
-                    const csi_3 = csi.csi.substring(4, 6);
+                    let csi_1 = "";
+                    let csi_2 = "";
+                    let csi_3 = "";
+                    let csi_4 = "";
+                    const csi = construction.getcsibyid.call(this, mylabor.csiid);
+                    if(csi) {
+                     csi_1 = csi.csi.substring(0, 2)
+                     csi_2 = csi.csi.substring(2, 4);
+                     csi_3 = csi.csi.substring(4, 6);
+
+                    }
 
                     const material = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
 
@@ -819,15 +827,20 @@ class Schedule extends Component {
                     const timeouthours = getHoursfromTimein(mylabor.timeout)
                     const timeoutminutes = getMinutesfromTimein(mylabor.timeout)
                     const timeoutampm = getAMPMfromTimeIn(mylabor.timeout);
-
-                    const csi = construction.getcsibyid.call(this, mylabor.csiid);
-                    const csi_1 = csi.csi.substring(0, 2)
-                    const csi_2 = csi.csi.substring(2, 4);
-                    const csi_3 = csi.csi.substring(4, 6);
+                    let csi_1 = "";
+                    let csi_2 = "";
+                    let csi_3 = "";
                     let csi_4 = "";
+                    const csi = construction.getcsibyid.call(this, mylabor.csiid);
+                    if(csi) {
+                     csi_1 = csi.csi.substring(0, 2)
+                     csi_2 = csi.csi.substring(2, 4);
+                     csi_3 = csi.csi.substring(4, 6);
+                    
                     if (csi.csi.length > 6) {
                         csi_4 = csi.csi.substring(7, 9);
                     }
+                }
 
 
                     this.setState({ activelaborid: laborid, timeinmonth, timeinday, timeinyear, timeinhours, timeinminutes, timeinampm, timeoutmonth, timeoutday, timeoutyear, timeouthours, timeoutminutes, timeoutampm, csi_1, csi_2, csi_3, csi_4, employee })
@@ -1425,7 +1438,7 @@ handleunitcost(unitcost) {
         const laborrate = () => {
             if (this.state.active === 'labor' && this.state.activelaborid) {
                 return (
-                    <View style={{ ...styles.generalContainer, ...styles.bottomMargin15}}>
+                    <View style={{ ...styles.generalContainer, ...styles.bottomMargin15f}}>
                         <View style={{ ...styles.generalContainer }}>
                             <Text style={{ ...styles.generalFont, ...regularFont }}>Labor Rate</Text>
                         </View>
