@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
 import {
     inputUTCStringForLaborID,
     calculatetotalhours,
@@ -293,7 +293,7 @@ class Actual extends Component {
                     const timetimeout = this.state.timeoutampm;
                     let timeout = makeTimeString(yearout, monthout, dayout, hoursout, minutesout, timetimeout);
                     timeout = UTCTimeStringfromTime(timeout);
-                    const equipmentrate = construction.calculateequipmentratebyid.call(this, myequipmentid, timein, timeout)
+                    const equipmentrate = construction.calculateequipmentratebyid.call(this, myequipmentid, timein, timeout).toFixed(2)
                     const engineerid = myuser.providerid;
 
 
@@ -354,7 +354,7 @@ class Actual extends Component {
                     if (mymaterial) {
                         const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid)
                         myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].mymaterialid = mymaterialid;
-                        this.reduxUser({ myuser })
+                        this.props.reduxUser({ myuser })
                         this.setState({ material: material.material })
                     }
 
@@ -648,7 +648,7 @@ class Actual extends Component {
                     const materialdatemonth = mymaterial.timein.substring(5, 7);
                     const materialdateday = mymaterial.timein.substring(8, 10);
 
-                    const csi = construction.getcsibyid.call(this, mylabor.csiid);
+                    const csi = construction.getcsibyid.call(this, mymaterial.csiid);
                     let csi_1 = "";
                     let csi_2 = "";
                     let csi_3 = "";
@@ -680,6 +680,21 @@ class Actual extends Component {
 
 
     removematerial(mymaterial) {
+        const construction = new Construction();
+        const material = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
+        Alert.alert(
+            'Remove Material',
+            `Are you sure you want to remove ${material.material}?`,
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Material '), style: 'cancel' },
+                { text: 'OK', onPress: () => { this.confirmremovematerial(mymaterial) } },
+            ],
+            { cancelable: false }
+        )
+    }
+
+
+    confirmremovematerial(mymaterial) {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         const material = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
@@ -778,7 +793,21 @@ class Actual extends Component {
 
     }
 
-    removelaborid(labor) {
+    removelaborid(mylabor) {
+        const construction = new Construction();
+        Alert.alert(
+            'Remove Labor',
+            `Are you sure you want to remove labor ${mylabor.providerid}?`,
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Labor '), style: 'cancel' },
+                { text: 'OK', onPress: () => { this.confirmremovelaborid(mylabor) } },
+            ],
+            { cancelable: false }
+        )
+    }
+
+
+    confirmremovelaborid(labor) {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
 
@@ -941,6 +970,20 @@ class Actual extends Component {
     }
 
     removeequipment(equipment) {
+        const construction = new Construction();
+        const myequipment = construction.getmyequipmentbyid.call(this, equipment.myequipmentid)
+        Alert.alert(
+            'Remove Equipment',
+            `Are you sure you want to remove ${myequipment.equipment}?`,
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Equipment '), style: 'cancel' },
+                { text: 'OK', onPress: () => { this.confirmremoveequipment(equipment) } },
+            ],
+            { cancelable: false }
+        )
+    }
+
+    confirmremoveequipment(equipment) {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         const myequipment = construction.getmyequipmentbyid.call(this, equipment.myequipmentid)
@@ -1487,7 +1530,7 @@ class Actual extends Component {
                                 </View>
                                 <View style={{ ...styles.generalContainer }}>
                                     <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
-                                        value={this.getequipmentrate()}
+                                        value={this.getequipmentrate().toString()}
                                         onChangeText={text => { this.handleequipmentrate(text) }}
 
                                     />
