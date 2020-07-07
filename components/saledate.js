@@ -3,28 +3,31 @@ import { MyStylesheet } from './styles'
 import Construction from './construction';
 import MaterialCalender from './saledatecalender'
 import { validateMonth, validateDate, validateYear } from './functions';
-import {View, Text, TextInput} from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 
 class SaleDate {
 
 
     handleyear(year) {
-        this.setState({ saledateyear: year })
+    
         const construction = new Construction();
-        const myuser = construction.getuser.call(this)
-        if (myuser) {
+        const checkmanager = construction.checkmanager.call(this);
+        if (checkmanager) {
+            this.setState({ saledateyear: year })
+            const myuser = construction.getuser.call(this)
+            if (myuser) {
 
-        
+
                 if (year.length === 4) {
 
-                    if(validateYear(year)) {
+                    if (validateYear(year)) {
 
 
                         if (this.state.activeequipmentid) {
-                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
+                            const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid);
                             if (myequipment) {
 
-                                const i = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid)
+                                const i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
                                 let day = this.state.saledateday;
                                 let month = this.state.saledatemonth;
                                 const timein = `${year}-${month}-${day}`
@@ -42,44 +45,50 @@ class SaleDate {
                         alert(`Invalid Year format ${year}`)
                     }
 
-                  
+
                 }
 
-            
+
+            }
+        } else {
+            alert(`Only Managers can modify sale date`)
         }
     }
 
     handleday(day) {
-        day = day.toString();
-        this.setState({ saledateday: day })
         const construction = new Construction();
+        day = day.toString();
+        const checkmanager = construction.checkmanager.call(this);
+        if (checkmanager) {
+        this.setState({ saledateday: day })
+     
         const myuser = construction.getuser.call(this)
         if (myuser) {
 
-    
-                if (day.length === 2) {
 
-            
-                        if(validateDate(day)) {
-
-                        if (this.state.activeequipmentid) {
-                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
-                            if (myequipment) {
-
-                                const i = construction.getequipmentkeybyid.call(this,this.state.activeequipmentid)
-                                let year = this.state.saledateyear;
-                                let month = this.state.saledatemonth;
-                                const timein = `${year}-${month}-${day}`
-                                 myuser.company.equipment.myequipment[i].ownership.saledate = timein;
-                                this.props.reduxUser(myuser)
-                                this.setState({ render: 'render' })
+            if (day.length === 2) {
 
 
-                            }
+                if (validateDate(day)) {
+
+                    if (this.state.activeequipmentid) {
+                        const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid);
+                        if (myequipment) {
+
+                            const i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                            let year = this.state.saledateyear;
+                            let month = this.state.saledatemonth;
+                            const timein = `${year}-${month}-${day}`
+                            myuser.company.equipment.myequipment[i].ownership.saledate = timein;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
+
 
                         }
 
-                
+                    }
+
+
 
                 } else {
                     alert(`Invalid day format ${day}`)
@@ -87,52 +96,60 @@ class SaleDate {
 
             }
 
-            
+
         }
+    } else {
+        alert(`Only Managers can modify equipment sale date`)
+    }
     }
 
     handlemonth(month) {
         this.setState({ saledatemonth: month })
         const construction = new Construction();
         const myuser = construction.getuser.call(this)
+        const checkmanager = construction.checkmanager.call(this);
+        if (checkmanager) {
         if (myuser) {
 
 
-                if (month.length === 2) {
+            if (month.length === 2) {
 
-                    if(validateMonth(month)) {
-
-                
+                if (validateMonth(month)) {
 
 
 
-                        if (this.state.activeequipmentid) {
-                            const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
-                            if (myequipment) {
-
-                                const i = construction.getequipmentkeybyid.call(this,  this.state.activeequipmentid)
-                                let day = this.state.saledateday;
-                                let year = this.state.saledateyear;
-                                const timein = `${year}-${month}-${day}`
-                                 myuser.company.equipment.myequipment[i].ownership.saledate = timein;
-                                this.props.reduxUser(myuser)
-                                this.setState({ render: 'render' })
 
 
-                            }
+                    if (this.state.activeequipmentid) {
+                        const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid);
+                        if (myequipment) {
+
+                            const i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                            let day = this.state.saledateday;
+                            let year = this.state.saledateyear;
+                            const timein = `${year}-${month}-${day}`
+                            myuser.company.equipment.myequipment[i].ownership.saledate = timein;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
+
 
                         }
 
-                    
+                    }
+
+
 
                 } else {
                     alert(`Invalid month format ${month}`)
                 }
 
-                }
+            }
 
-            
+
         }
+    } else {
+        alert(`Only Managers can modify equipment sale date`)
+    }
     }
 
 
@@ -174,8 +191,8 @@ class SaleDate {
                                 value={this.state.saledateyear.toString()}
                                 onChangeText={text => { saledate.handleyear.call(this, text) }} />
                         </View>
-                        
-                       
+
+
                     </View>
                     {calender.showMaterialCalender.call(this)}
 

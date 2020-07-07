@@ -33,6 +33,7 @@ class Company extends Component {
         const myuser = construction.getuser.call(this)
         const url = this.state.url;
         if (myuser) {
+            try{
             let response = await ValidateCompanyID(url);
             console.log("CHECKCOMPANY", response)
             if (response.hasOwnProperty("invalid")) {
@@ -41,6 +42,11 @@ class Company extends Component {
                 let message = `Your Company Will be Hosted at http://construction.civilengineer.io/${myuser.profile}/company/${url}`
                 this.setState({ urlcheck: true, message })
             }
+
+        } catch(err) {
+            
+            alert(err)
+        }
 
         }
     }
@@ -326,6 +332,9 @@ class Company extends Component {
         const mycompany = construction.getcompany.call(this)
         const regularFont = construction.getRegularFont.call(this)
         const headerFont = construction.getHeaderFont.call(this)
+        if(!this.props.allusers.hasOwnProperty("length")) {
+            construction.loadallusers.call(this)
+            }
         const registerIcon = () => {
             if (menu.open) {
                 return ({ width: 174, height: 34 })

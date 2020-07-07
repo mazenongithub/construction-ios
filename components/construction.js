@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dimensions, View, TouchableOpacity, Image, Text } from 'react-native';
 import { MyStylesheet } from './styles';
-import { sortcode, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric,  UTCTimefromCurrentDate, sortpart } from './functions'
+import { sortcode, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric, UTCTimefromCurrentDate, sortpart } from './functions'
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { SaveCompany, SaveProfile, SaveProject, ClientLogin } from './actions/api'
+import { SaveCompany, SaveProfile, SaveProject, ClientLogin, LoadAllUsers } from './actions/api'
 
 
 class Construction {
@@ -20,19 +20,19 @@ class Construction {
 
     getactiveaccountid() {
         let accountid = false;
-            if(this.props.project) {
-                if(this.props.project.hasOwnProperty("accountid")) {
-                  accountid = this.props.project.accountid;
-                }
-                
+        if (this.props.project) {
+            if (this.props.project.hasOwnProperty("accountid")) {
+                accountid = this.props.project.accountid;
             }
-            return accountid;
+
         }
+        return accountid;
+    }
     gettimeicon() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
         if (menu.open) {
-            return ({ width: 20, height:18  })
+            return ({ width: 20, height: 18 })
         } else {
             return ({ width: 43, height: 37 })
         }
@@ -137,12 +137,12 @@ class Construction {
         return labor;
     }
 
-    getTransferbyInvoiceID(projectid,invoiceid) {
-        const construction  = new Construction();
-        const myinvoice = construction.getinvoicebyid.call(this,projectid,invoiceid)
+    getTransferbyInvoiceID(projectid, invoiceid) {
+        const construction = new Construction();
+        const myinvoice = construction.getinvoicebyid.call(this, projectid, invoiceid)
         let transfers = false;
-        if(myinvoice) {
-            if(myinvoice.hasOwnProperty("transfers")) {
+        if (myinvoice) {
+            if (myinvoice.hasOwnProperty("transfers")) {
                 transfers = myinvoice.transfers.transfer;
             }
         }
@@ -217,14 +217,14 @@ class Construction {
         })
         return accounts;
     }
-    getemployeeaccountratio(providerid,accountid) {
+    getemployeeaccountratio(providerid, accountid) {
         const construction = new Construction();
-        const accounts = construction.getemployeeaccountsbyid.call(this,providerid)
+        const accounts = construction.getemployeeaccountsbyid.call(this, providerid)
         let ratio = false;
-        if(accounts) {
+        if (accounts) {
             // eslint-disable-next-line
-            accounts.map(account=> {
-                if(account.accountid === accountid) {
+            accounts.map(account => {
+                if (account.accountid === accountid) {
                     ratio = account.ratio;
                 }
             })
@@ -238,7 +238,7 @@ class Construction {
         let charges = false;
         const calculatelabor = (mylabor) => {
             let hours = calculatetotalhours(mylabor.timeout, mylabor.timein);
-            
+
             let labor = hours * mylabor.laborrate * (1 + (mylabor.profit / 100));
             return labor;
 
@@ -308,6 +308,38 @@ class Construction {
         }
         return charges;
     }
+
+    validateremovemanager(providerid) {
+        // checks to see if there is one manager
+        let validate = true;
+        const construction = new Construction();
+        let obj = construction.getuser.call(this);
+
+        const validatemyuser = (obj) => {
+            let validateuser = false;
+            // eslint-disable-next-line
+            obj.company.office.employees.employee.map(employee => {
+                if (employee.manager === 'manager' && employee.providerid !== providerid) {
+                    validateuser = true;
+                }
+            })
+
+            return validateuser;
+
+        }
+
+        if (obj) {
+            const employee = construction.getemployeebyid.call(this, providerid);
+            if (employee) {
+                validate = validatemyuser(obj)
+
+            }
+        }
+
+        return validate;
+
+    }
+
     findactualmaterialbyid(materialid) {
         const construction = new Construction();
         const projects = construction.getmyprojects.call(this)
@@ -405,6 +437,59 @@ class Construction {
             alert(err)
         }
     }
+
+    async loadallusers() {
+        try {
+            let response = await LoadAllUsers();
+            console.log(response)
+            if (response.hasOwnProperty("allusers")) {
+                let companys = returnCompanyList(response.allusers);
+                this.props.reduxAllCompanys(companys)
+                this.props.reduxAllUsers(response.allusers);
+            }
+        } catch (err) {
+            alert(err)
+        }
+
+    }
+
+    checkactive() {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        let check = false;
+        if(myuser) {
+        const employee =construction.getemployeebyid.call(this,myuser.providerid);
+        if(employee) {
+            if(employee.active === 'active') {
+                check = true;
+            }
+        }
+
+        }
+        return check;
+        
+
+    }
+
+
+    checkmanager() {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        let check = false;
+        if (myuser) {
+            const employee = construction.getemployeebyid.call(this, myuser.providerid);
+            if (employee) {
+                if (employee.manager === 'manager') {
+                    check = true;
+                }
+            }
+
+        }
+        return check;
+
+
+    }
+
     showappleauth() {
         const construction = new Construction();
         const styles = MyStylesheet();
@@ -624,11 +709,11 @@ class Construction {
         return ({ width: 41, height: 34 })
     }
 
-    getcostbyid(equipmentid,costid) {
-      
+    getcostbyid(equipmentid, costid) {
+
         const construction = new Construction();
         let costs = false;
-        const myequipment = construction.getmyequipmentbyid.call(this,equipmentid)
+        const myequipment = construction.getmyequipmentbyid.call(this, equipmentid)
 
         if (myequipment.hasOwnProperty("ownership")) {
             // eslint-disable-next-line
@@ -690,31 +775,31 @@ class Construction {
         }
         return myproject;
     }
- 
+
     updateproposal(proposalid) {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
-        const activeproject= construction.getactiveproject.call(this);
+        const activeproject = construction.getactiveproject.call(this);
         const projectid = activeproject.projectid
-       
-        if(myuser) {
-            const myproject = construction.getprojectbyid.call(this,projectid);
-            if(myproject) {
-                const i = construction.getprojectkeybyid.call(this,projectid)
-                const myproposal = construction.getproposalbyid.call(this,projectid,proposalid)
-                if(myproposal) {
-                    
-                const j = construction.getproposalkeybyid.call(this,projectid,proposalid)
-                console.log('updateproposal', i,j, proposalid, projectid, UTCTimefromCurrentDate())
-                myuser.company.projects.myproject[i].proposals.myproposal[j].updated =  UTCTimefromCurrentDate();
-                this.props.reduxUser(myuser)
-                this.setState({render:'render'})
+
+        if (myuser) {
+            const myproject = construction.getprojectbyid.call(this, projectid);
+            if (myproject) {
+                const i = construction.getprojectkeybyid.call(this, projectid)
+                const myproposal = construction.getproposalbyid.call(this, projectid, proposalid)
+                if (myproposal) {
+
+                    const j = construction.getproposalkeybyid.call(this, projectid, proposalid)
+                    console.log('updateproposal', i, j, proposalid, projectid, UTCTimefromCurrentDate())
+                    myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
+                    this.props.reduxUser(myuser)
+                    this.setState({ render: 'render' })
                 }
             }
-        
+
 
         }
-        
+
     }
 
     getprojectkeybyid(projectid) {
@@ -764,7 +849,7 @@ class Construction {
         if (myproject.hasOwnProperty("specifications")) {
             specifications = myproject.specifications;
         }
-       
+
         return specifications;
     }
 
@@ -847,7 +932,7 @@ class Construction {
         if (myproject.hasOwnProperty("specifications")) {
             specifications = myproject.specifications;
         }
-       
+
         return specifications;
     }
     getprofileDimension() {
@@ -860,7 +945,7 @@ class Construction {
         }
     }
     getallcsicodes() {
-         
+
         const construction = new Construction();
         const csis = construction.getcsis.call(this)
         return csis;
@@ -1263,7 +1348,7 @@ class Construction {
         }
         return proposals;
     }
-    getproposalkeybyid(projectid,proposalid) {
+    getproposalkeybyid(projectid, proposalid) {
         const construction = new Construction();
         let key = false;
         let myproject = construction.getprojectbyid.call(this, projectid)
@@ -1309,26 +1394,26 @@ class Construction {
         return key;
 
     }
-    getinvoicebyid(projectid,invoiceid) {
+    getinvoicebyid(projectid, invoiceid) {
         const construction = new Construction();
         let invoices = false;
-        let myproject = construction.getprojectbyid.call(this,projectid);
-        if(myproject) {
-            
-        if (myproject.hasOwnProperty("invoices")) {
-            myproject.invoices.myinvoice.map(myinvoice => {
-                if (myinvoice.invoiceid === invoiceid) {
-                    invoices = myinvoice;
-                }
-            })
+        let myproject = construction.getprojectbyid.call(this, projectid);
+        if (myproject) {
+
+            if (myproject.hasOwnProperty("invoices")) {
+                myproject.invoices.myinvoice.map(myinvoice => {
+                    if (myinvoice.invoiceid === invoiceid) {
+                        invoices = myinvoice;
+                    }
+                })
+
+            }
 
         }
-
-    }
         return invoices;
     }
 
-    getinvoicekeybyid(projectid,invoiceid) {
+    getinvoicekeybyid(projectid, invoiceid) {
         const construction = new Construction();
         let key = false;
         let myproject = construction.getprojectbyid.call(this, projectid)
@@ -1345,7 +1430,7 @@ class Construction {
 
     getinvoiceitem(csiid, invoiceid, projectid) {
         const construction = new Construction();
-        let myinvoice = construction.getinvoicebyid.call(this,projectid,invoiceid)
+        let myinvoice = construction.getinvoicebyid.call(this, projectid, invoiceid)
         let invoiceitem = false;
         if (myinvoice.hasOwnProperty("bid")) {
             // eslint-disable-next-line
@@ -1361,7 +1446,7 @@ class Construction {
     }
     getinvoiceitemkey(csiid, invoiceid, projectid) {
         const construction = new Construction();
-        let myinvoice = construction.getinvoicebyid.call(this, projectid,invoiceid)
+        let myinvoice = construction.getinvoicebyid.call(this, projectid, invoiceid)
         let key = false;
         if (myinvoice.hasOwnProperty("bid")) {
             // eslint-disable-next-line
@@ -1664,7 +1749,8 @@ class Construction {
     }
     async saveCompany() {
         const construction = new Construction()
-
+        const checkmanager = construction.checkmanager.call(this)
+        if(checkmanager) {
         let params = construction.getCompanyParams.call(this)
 
         const validate = construction.validateCompany.call(this, params);
@@ -1672,7 +1758,7 @@ class Construction {
             try {
                 console.log("SAVECOMPANY", "PARAMS", params)
                 let response = await SaveCompany(params);
-               // console.log("SAVECOMPANY", "response", response)
+                // console.log("SAVECOMPANY", "response", response)
                 construction.handlecompanyids.call(this, response)
                 if (response.hasOwnProperty("allusers")) {
                     let companys = returnCompanyList(response.allusers);
@@ -1693,6 +1779,9 @@ class Construction {
         } else {
             this.setState({ message: validate.message })
         }
+    } else {
+        alert(`Only managers have access to save company`)
+    }
     }
     getsavecompanyicon() {
         const construction = new Construction();
@@ -1761,7 +1850,7 @@ class Construction {
 
 
     }
-   
+
     showsaveprofile() {
         const styles = MyStylesheet();
         const construction = new Construction();
@@ -1803,10 +1892,10 @@ class Construction {
         const construction = new Construction();
         const myaccounts = construction.getmyaccounts.call(this);
         let myaccount = false;
-        if(myaccounts) {
+        if (myaccounts) {
             // eslint-disable-next-line
-            myaccounts.map(account=> {
-                if(account.stripe === stripe) {
+            myaccounts.map(account => {
+                if (account.stripe === stripe) {
                     myaccount = account;
                 }
             })
@@ -1815,12 +1904,12 @@ class Construction {
         return myaccount;
     }
 
-    checkinvoice(projectid,invoiceid) {
+    checkinvoice(projectid, invoiceid) {
         const construction = new Construction();
-        const myinvoice = construction.getinvoicebyid.call(this,projectid, invoiceid)
+        const myinvoice = construction.getinvoicebyid.call(this, projectid, invoiceid)
         let checkinvoice = true;
-        if(myinvoice) {
-            if(myinvoice.approved) {
+        if (myinvoice) {
+            if (myinvoice.approved) {
                 checkinvoice = false;
             }
         }
@@ -1830,40 +1919,40 @@ class Construction {
 
     checkinvoiceequipmentid(equipmentid) {
         const construction = new Construction();
-        const myequipment = construction.findactualequipmentbyid.call(this,equipmentid);
+        const myequipment = construction.findactualequipmentbyid.call(this, equipmentid);
         let checkinvoice = true;
-        if(myequipment.settlementid) {
-       
+        if (myequipment.settlementid) {
+
             checkinvoice = false;
-        
-    }
-    return checkinvoice;
-        
+
+        }
+        return checkinvoice;
+
     }
 
     checkinvoicematerialid(materialid) {
         const construction = new Construction();
-        const mymaterial = construction.findactualmaterialbyid.call(this,materialid);
+        const mymaterial = construction.findactualmaterialbyid.call(this, materialid);
         let checkinvoice = true;
-        if(mymaterial.settlementid) {
+        if (mymaterial.settlementid) {
             checkinvoice = false;
-        
-    }
+
+        }
         return checkinvoice;
 
     }
 
     checkinvoicelaborid(laborid) {
         const construction = new Construction();
-        const mylabor = construction.findactuallaborbyid.call(this,laborid);
+        const mylabor = construction.findactuallaborbyid.call(this, laborid);
         let checkinvoice = true;
-     
-            if(mylabor.settlementid) {
-                checkinvoice = false;
-            }
+
+        if (mylabor.settlementid) {
+            checkinvoice = false;
+        }
 
         return checkinvoice;
-    }   
+    }
 
 
     handleprojectids(response) {
@@ -1992,25 +2081,25 @@ class Construction {
     updateinvoice(invoiceid) {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
-        const activeproject= construction.getactiveproject.call(this);
+        const activeproject = construction.getactiveproject.call(this);
         const projectid = activeproject.projectid
-       
-        if(myuser) {
-            const myproject = construction.getprojectbyid.call(this,projectid);
-            if(myproject) {
-                const i = construction.getprojectkeybyid.call(this,projectid)
-                const myinvoice = construction.getinvoicebyid.call(this,projectid,invoiceid)
-                if(myinvoice) {
-                    
-                const j = construction.getinvoicekeybyid.call(this,projectid,invoiceid)
-               
-                myuser.company.projects.myproject[i].invoices.myinvoice[j].updated =  UTCTimefromCurrentDate();
-                this.props.reduxUser(myuser)
-                this.setState({render:'render'})
+
+        if (myuser) {
+            const myproject = construction.getprojectbyid.call(this, projectid);
+            if (myproject) {
+                const i = construction.getprojectkeybyid.call(this, projectid)
+                const myinvoice = construction.getinvoicebyid.call(this, projectid, invoiceid)
+                if (myinvoice) {
+
+                    const j = construction.getinvoicekeybyid.call(this, projectid, invoiceid)
+
+                    myuser.company.projects.myproject[i].invoices.myinvoice[j].updated = UTCTimefromCurrentDate();
+                    this.props.reduxUser(myuser)
+                    this.setState({ render: 'render' })
                 }
             }
-        
-    
+
+
         }
 
     }
@@ -2049,496 +2138,496 @@ class Construction {
         }
 
 
-            if (project.hasOwnProperty("actuallabor")) {
-                // eslint-disable-next-line
-                project.actuallabor.mylabor.map(mylabor => {
-                    if (!mylabor.csiid || !mylabor.milestoneid || !mylabor.providerid) {
-                        validate.validate = false;
-                        if (!mylabor.csiid) {
-                            validate.message += `Actual labor ${mylabor.description} is missing CSIID `
-                        }
-                        if (!mylabor.milestoneid) {
-                            validate.message += `Actual labor ${mylabor.description} is missing MilestoneID `
-                        }
-                        if (!mylabor.providerid) {
-                            validate.message += `Actual labor ${mylabor.description} is missing ProviderID `
-                        }
-
+        if (project.hasOwnProperty("actuallabor")) {
+            // eslint-disable-next-line
+            project.actuallabor.mylabor.map(mylabor => {
+                if (!mylabor.csiid || !mylabor.milestoneid || !mylabor.providerid) {
+                    validate.validate = false;
+                    if (!mylabor.csiid) {
+                        validate.message += `Actual labor ${mylabor.description} is missing CSIID `
+                    }
+                    if (!mylabor.milestoneid) {
+                        validate.message += `Actual labor ${mylabor.description} is missing MilestoneID `
+                    }
+                    if (!mylabor.providerid) {
+                        validate.message += `Actual labor ${mylabor.description} is missing ProviderID `
                     }
 
-                    if (!isNumeric(mylabor.profit)) {
-                        validate.validate = false;
-                        validate.message += `Actual labor ${mylabor.description} has non numeric profit `
-                    }
-
-                    if (!isNumeric(mylabor.laborrate)) {
-                        validate.validate = false;
-                        validate.message += `Actual labor ${mylabor.description} has non numeric labor rate `
-                    }
-                })
-            }
-
-            if (project.hasOwnProperty("schedulematerials")) {
-                // eslint-disable-next-line
-                project.schedulematerials.mymaterial.map(mymaterial => {
-                    let schedulematerial = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
-
-
-                    if (!schedulematerial || !mymaterial.mymaterialid || !mymaterial.csiid || !mymaterial.milestoneid) {
-                        validate.validate = false;
-                        if (!mymaterial.mymaterialid) {
-                            validate.message += `Schedule Material is missing materialid `
-                        }
-                        if (!mymaterial.csiid) {
-                            validate.message += `Schedule Material ${schedulematerial.material} is missing csiid `
-                        }
-                        if (!mymaterial.milestoneid) {
-                            validate.message += `Schedule Material ${schedulematerial.material} is missing milestoneid `
-                        }
-
-
-                    }
-                    if (!isNumeric(mymaterial.quantity)) {
-                        validate.validate = false;
-                        validate.message += `Schedule Material ${schedulematerial.material} has a non numeric quantity`
-                    }
-                    if (!isNumeric(mymaterial.unitcost)) {
-                        validate.validate = false;
-                        validate.message += `Schedule Material ${schedulematerial.material} has a non numeric unitcost`
-                    }
-
-                    if (!isNumeric(mymaterial.profit)) {
-                        validate.validate = false;
-                        validate.message += `Schedule Material ${schedulematerial.material} has a non numeric profit`
-                    }
-
-                })
-            }
-
-            if (project.hasOwnProperty("actualmaterials")) {
-                // eslint-disable-next-line
-                project.actualmaterials.mymaterial.map(mymaterial => {
-                    let myactualmaterial = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid);
-                    if (!mymaterial.mymaterialid || !mymaterial.csiid || !mymaterial.milestoneid) {
-                        validate.validate = false;
-                        if (!mymaterial.mymaterialid) {
-
-                            validate.message += `Actual Material is missing materialid `
-                        }
-                        if (!mymaterial.csiid) {
-
-                            validate.message += `Actual Material ${myactualmaterial.material} is missing csiid `
-                        }
-                        if (!mymaterial.milestoneid) {
-                            validate.message += `Actual Material ${myactualmaterial.material} is missing milestoneid `
-                        }
-                    }
-
-                    if (!isNumeric(mymaterial.quantity)) {
-                        validate.validate = false;
-                        validate.message += `Actual Material ${myactualmaterial.material} has a non numeric quantity`
-                    }
-                    if (!isNumeric(mymaterial.unitcost)) {
-                        validate.validate = false;
-                        validate.message += `Actual Material ${myactualmaterial.material} has a non numeric unitcost`
-                    }
-
-                    if (!isNumeric(mymaterial.profit)) {
-                        validate.validate = false;
-                        validate.message += `Actual Material ${myactualmaterial.material} has a non numeric profit`
-                    }
-                })
-            }
-            if (project.hasOwnProperty("scheduleequipment")) {
-                // eslint-disable-next-line
-                project.scheduleequipment.myequipment.map(myequipment => {
-                    let myscheduleequipment = "";
-                    let scheduleequipment = construction.getmyequipmentbyid.call(this, myequipment.myequipmentid);
-                    if (scheduleequipment) {
-                        myscheduleequipment = scheduleequipment.equipment;
-                    }
-                    if (!myequipment.myequipmentid || !myequipment.csiid || !myequipment.milestoneid) {
-                        validate.validate = false;
-                        if (!myequipment.myequipmentid) {
-                            validate.message += `Schedule Equipment is missing Equipment ID `;
-                        }
-                        if (!myequipment.csiid) {
-                            validate.message += `Schedule Equipment ${myscheduleequipment} is missing CSIID `;
-                        }
-
-                        if (!myequipment.milestoneid) {
-                            validate.message += `Schedule Equipment ${myscheduleequipment} is missing MilestoneID `;
-                        }
-
-                    }
-                    if (!isNumeric(myequipment.equipmentrate)) {
-                        validate.validate = false;
-                        validate.message += `Schedule Equipment ${myscheduleequipment}  has a non numeric equipoment rate `;
-                    }
-
-                    if (!isNumeric(myequipment.profit)) {
-                        validate.validate = false;
-                        validate.message += `Schedule Equipment ${myscheduleequipment}  has a non numeric profit `;
-                    }
-
-
-                })
-
-            }
-
-            if (project.hasOwnProperty("actualequipment")) {
-                // eslint-disable-next-line
-                project.actualequipment.myequipment.map(myequipment => {
-                    let myactualequipment = "";
-                    let actualequipment = construction.getmyequipmentbyid.call(this, myequipment.myequipmentid);
-                    if (actualequipment) {
-                        myactualequipment = actualequipment.equipment;
-                    }
-                    if (!myequipment.myequipmentid || !myequipment.csiid || !myequipment.milestoneid) {
-                        validate.validate = false;
-                        if (!myequipment.myequipmentid) {
-                            validate.message += `Actual Equipment is missing Equipment ID `;
-                        }
-                        if (!myequipment.csiid) {
-                            validate.message += `Actual Equipment ${myactualequipment} is missing CSIID `;
-                        }
-
-                        if (!myequipment.milestoneid) {
-                            validate.message += `Actual Equipment ${myactualequipment} is missing MilestoneID `;
-                        }
-
-                    }
-
-                    if (!isNumeric(myequipment.equipmentrate)) {
-                        validate.validate = false;
-                        validate.message += `Actual Equipment ${myactualequipment}  has a non numeric equipoment rate `;
-                    }
-
-                    if (!isNumeric(myequipment.profit)) {
-                        validate.validate = false;
-                        validate.message += `Actual Equipment ${myactualequipment}  has a non numeric profit `;
-                    }
-
-                })
-
-
-            }
-
-            
-            return validate;
-        }
-
-        async savemyproject() {
-            let construction = new Construction();
-            let values = construction.getCompanyParams.call(this);
-            const activeproject = construction.getactiveproject.call(this)
-            let myproject = construction.getprojectbyid.call(this, activeproject.projectid);
-            values.project = myproject;
-            let validatecompany = construction.validateCompany.call(this, values);
-            let validateproject = construction.validateProject.call(this, values.project)
-
-            if (validatecompany.validate && validateproject.validate) {
-                try {
-                    let response = await SaveProject(values)
-                    console.log(response)
-                    construction.handlecompanyids.call(this, response)
-                    construction.handleprojectids.call(this, response)
-                    if (response.hasOwnProperty("allusers")) {
-                        let companys = returnCompanyList(response.allusers);
-                        this.props.reduxAllCompanys(companys)
-                        this.props.reduxAllUsers(response.allusers);
-
-                    }
-                    if (response.hasOwnProperty("myuser")) {
-
-                        this.props.reduxUser(response.myuser)
-                    }
-
-                    let message = "";
-                    if (response.hasOwnProperty("message")) {
-                        let lastupdated = inputUTCStringForLaborID(response.lastupdated)
-                        message = `${response.message} Last updated ${lastupdated}`
-
-                    }
-                    this.setState({ message })
-                } catch (err) {
-                    alert(err)
                 }
 
-            } else {
-                let message = "";
-                message += validatecompany.message;
-                message += validateproject.message;
-                this.setState({ message })
-            }
-
-        }
-        showsaveproject() {
-            const styles = MyStylesheet();
-            const construction = new Construction();
-            const menu = construction.getnavigation.call(this)
-            const saveProfileIcon = () => {
-                if (menu.open) {
-                    return ({ width: 148, height: 30 })
-                } else {
-
-                    return ({ width: 254, height: 52 })
+                if (!isNumeric(mylabor.profit)) {
+                    validate.validate = false;
+                    validate.message += `Actual labor ${mylabor.description} has non numeric profit `
                 }
 
-            }
-            return (<View style={styles.generalFlex, styles.bottomMargin10}>
-                <View style={styles.flex1}>
-
-                    <View style={styles.generalFlex}>
-                        <View style={styles.flex1}>
-                            <Text style={[styles.regularFont, styles.alignCenter]}>{this.state.message}</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.generalFlex}>
-                        <View style={[styles.flex1, styles.alignContentCenter]}>
-                            <TouchableOpacity onPress={() => { construction.savemyproject.call(this) }}>
-                                <Image source={require('./png/saveproject.png')}
-                                    resizeMethod='scale'
-                                    style={saveProfileIcon()}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                </View>
-            </View>)
+                if (!isNumeric(mylabor.laborrate)) {
+                    validate.validate = false;
+                    validate.message += `Actual labor ${mylabor.description} has non numeric labor rate `
+                }
+            })
         }
-        getmilestonebyid(milestoneid) {
-            let construction = new Construction();
-            let milestones = construction.getmilestones.call(this)
-            let milestone = false;
-            if (milestones) {
-                // eslint-disable-next-line
-                milestones.map(mymilestone => {
-                    if (mymilestone.milestoneid === milestoneid) {
-                        milestone = mymilestone;
+
+        if (project.hasOwnProperty("schedulematerials")) {
+            // eslint-disable-next-line
+            project.schedulematerials.mymaterial.map(mymaterial => {
+                let schedulematerial = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
+
+
+                if (!schedulematerial || !mymaterial.mymaterialid || !mymaterial.csiid || !mymaterial.milestoneid) {
+                    validate.validate = false;
+                    if (!mymaterial.mymaterialid) {
+                        validate.message += `Schedule Material is missing materialid `
                     }
-                })
-            }
-            return milestone;
-        }
-      
-        getcsis() {
-            let csis = false;
-            if(this.props.csis) {
-                if(this.props.csis.hasOwnProperty("length")) {
-                    csis = this.props.csis;
-                }
-            }
-            return csis;
-        }
-        getcsibyid(csiid) {
-            let csi = false;
-            let construction = new Construction();
-           const csis = construction.getcsis.call(this)
-           if(csis) {
-                    // eslint-disable-next-line
-                    csis.map(code => {
-                        if (code.csiid === csiid) {
-                            csi = code;
-    
-                        }
-                    })
-                
-                }
-            
-            return csi;
-        }
+                    if (!mymaterial.csiid) {
+                        validate.message += `Schedule Material ${schedulematerial.material} is missing csiid `
+                    }
+                    if (!mymaterial.milestoneid) {
+                        validate.message += `Schedule Material ${schedulematerial.material} is missing milestoneid `
+                    }
 
-        getampmicon() {
-          
-                return ({ width: 57, height: 33 })
-            
-    
-        }
 
-        getmymaterialbyid(materialid) {
-            const construction = new Construction();
-            let company = construction.getcompany.call(this);
-            let material = false;
-            if (company) {
-                if (company.hasOwnProperty("materials")) {
-                    // eslint-disable-next-line
-                    company.materials.mymaterial.map(mymaterial => {
-                        if (mymaterial.materialid === materialid) {
-                            material = mymaterial;
-                        }
-                    })
                 }
-            }
-            return material;
-        }
-        getmymaterials() {
-            const construction = new Construction();
-            const company = construction.getcompany.call(this);
-            let materials = false;
-            if (company.hasOwnProperty("materials")) {
-                materials = company.materials.mymaterial;
-
-            }
-            return materials;
-        }
-        getequipmentcostsbyid(equipmentid) {
-            const construction = new Construction();
-            let equipmentcosts = false
-            let equipment = construction.getmyequipmentbyid.call(this, equipmentid)
-            if (equipment.hasOwnProperty("ownership")) {
-                if (equipment.ownership.hasOwnProperty("cost")) {
-                    // eslint-disable-next-line
-                    equipmentcosts = equipment.ownership.cost;
+                if (!isNumeric(mymaterial.quantity)) {
+                    validate.validate = false;
+                    validate.message += `Schedule Material ${schedulematerial.material} has a non numeric quantity`
+                }
+                if (!isNumeric(mymaterial.unitcost)) {
+                    validate.validate = false;
+                    validate.message += `Schedule Material ${schedulematerial.material} has a non numeric unitcost`
                 }
 
-            }
-            return equipmentcosts;
-        }
-        calculateequipmentratebyid(equipmentid, timein, timeout) {
-
-            const construction = new Construction();
-            const myequipment = construction.getmyequipmentbyid.call(this, equipmentid);
-            let equipmentrate = 0;
-            if (myequipment.ownershipstatus === 'owned') {
-                equipmentrate = construction.calculateequipmentratebyownership.call(this, equipmentid)
-            } else if (myequipment.ownershipstatus === 'rented') {
-                equipmentrate = construction.getequipmentrentalratebyid.call(this, equipmentid, timein, timeout)
-            }
-            return equipmentrate;
-
-        }
-
-        calculateequipmentratebyownership(equipmentid) {
-            const construction = new Construction();
-            const myequipment = construction.getmyequipmentbyid.call(this, equipmentid);
-            const i = (Number(myequipment.ownership.loaninterest) / 100) / 12;
-            const workinghours = Math.round(Number(myequipment.ownership.workinghours) / 12);
-            let equipmentrate = 0;
-
-            const P = () => {
-                let P = 0;
-                const costs = construction.getequipmentcostsbyid.call(this, myequipment.equipmentid)
-                if (costs) {
-                    // eslint-disable-next-line
-                    costs.map(cost => {
-                        let n = calculateTotalMonths(myequipment.ownership.purchasedate, cost.timein);
-                        let F = Number(cost.cost)
-                        P += FutureCostPresent(i, n, F);
-
-                    })
-                }
-                return (P)
-            }
-            const Period = () => {
-                let purchasedate = myequipment.ownership.purchasedate;
-                let saledate = myequipment.ownership.saledate;
-                if (purchasedate && saledate) {
-                    let totalmonths = calculateTotalMonths(purchasedate, saledate)
-                    return (totalmonths)
-                } else {
-                    return 0;
+                if (!isNumeric(mymaterial.profit)) {
+                    validate.validate = false;
+                    validate.message += `Schedule Material ${schedulematerial.material} has a non numeric profit`
                 }
 
-            }
-            const AFactor = () => {
-                const T = Period();
-                const i = Number(myequipment.ownership.loaninterest);
-                console.log(T, i)
-                if (T) {
-                    console.log(AmmortizeFactor(i, T))
-                    return (AmmortizeFactor(i, T))
-                } else {
+            })
+        }
 
-                    return 0;
+        if (project.hasOwnProperty("actualmaterials")) {
+            // eslint-disable-next-line
+            project.actualmaterials.mymaterial.map(mymaterial => {
+                let myactualmaterial = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid);
+                if (!mymaterial.mymaterialid || !mymaterial.csiid || !mymaterial.milestoneid) {
+                    validate.validate = false;
+                    if (!mymaterial.mymaterialid) {
+
+                        validate.message += `Actual Material is missing materialid `
+                    }
+                    if (!mymaterial.csiid) {
+
+                        validate.message += `Actual Material ${myactualmaterial.material} is missing csiid `
+                    }
+                    if (!mymaterial.milestoneid) {
+                        validate.message += `Actual Material ${myactualmaterial.material} is missing milestoneid `
+                    }
                 }
 
-            }
-
-            const totalworkinghours = () => {
-                let annual = Number(myequipment.ownership.workinghours);
-                let years = Period() / 12;
-
-                return (Math.round(annual * years))
-            }
-
-            if (i > 0) {
-                equipmentrate = (P() * AFactor()) / (workinghours);
-            } else {
-                console.log(P(), totalworkinghours(), Period())
-                equipmentrate = P() / (totalworkinghours())
-            }
-
-            return equipmentrate;
-        }
-        getequipmentrentalratebyid(equipmentid, timein, timeout) {
-            const construction = new Construction();
-            const myequipment = construction.getmyequipmentbyid.call(this, equipmentid);
-            const hourlyrate = Number(myequipment.rentalrates.hour);
-            const dailyrate = Number(myequipment.rentalrates.day);
-            const weeklyrate = Number(myequipment.rentalrates.week);
-            const monthlyrate = Number(myequipment.rentalrates.month);
-            const rentalObj = getEquipmentRentalObj(timein, timeout);
-
-            const hours = rentalObj.hours;
-            const days = rentalObj.days;
-            const weeks = rentalObj.weeks;
-            const months = rentalObj.months;
-            let rentalcost = (hourlyrate * hours) + (days * dailyrate) + (weeks * weeklyrate) + (months * monthlyrate);
-            let totalhours = calculatetotalhours(timeout, timein);
-            let rentalrate = rentalcost / totalhours;
-            return rentalrate;
-
-        }
-        gethourlyrate(providerid) {
-            const construction = new Construction()
-            let employee = construction.getemployeebyid.call(this, providerid)
-            let workinghours = Number(employee.workinghours);
-            let hourlyrate = 0;
-            let totalbenefits = 0;
-
-            if (employee.hasOwnProperty("benefits")) {
-                // eslint-disable-next-line
-                employee.benefits.benefit.map(benefit => {
-                    totalbenefits += Number(benefit.amount);
-
-                })
-            }
-
-            if (workinghours && totalbenefits) {
-                hourlyrate = Number(totalbenefits / workinghours)
-            }
-            return hourlyrate;
-
-        }
-
-        getnavigation() {
-
-            if (this.props.hasOwnProperty("navigation")) {
-                return this.props.navigation;
-            } else {
-                return false;
-            }
-
-        }
-        getuser() {
-            let user = false;
-            if (this.props.myusermodel) {
-                if (this.props.myusermodel.hasOwnProperty("providerid")) {
-                    user = this.props.myusermodel;
+                if (!isNumeric(mymaterial.quantity)) {
+                    validate.validate = false;
+                    validate.message += `Actual Material ${myactualmaterial.material} has a non numeric quantity`
+                }
+                if (!isNumeric(mymaterial.unitcost)) {
+                    validate.validate = false;
+                    validate.message += `Actual Material ${myactualmaterial.material} has a non numeric unitcost`
                 }
 
-            }
-            return user;
+                if (!isNumeric(mymaterial.profit)) {
+                    validate.validate = false;
+                    validate.message += `Actual Material ${myactualmaterial.material} has a non numeric profit`
+                }
+            })
         }
-        loginMessage(component) {
-            const styles = MyStylesheet();
-            return (<View>
-                <Text style={[styles.alignCenter, styles.regularFont]}>You need to be logged in to view {component}.</Text>
-            </View>)
+        if (project.hasOwnProperty("scheduleequipment")) {
+            // eslint-disable-next-line
+            project.scheduleequipment.myequipment.map(myequipment => {
+                let myscheduleequipment = "";
+                let scheduleequipment = construction.getmyequipmentbyid.call(this, myequipment.myequipmentid);
+                if (scheduleequipment) {
+                    myscheduleequipment = scheduleequipment.equipment;
+                }
+                if (!myequipment.myequipmentid || !myequipment.csiid || !myequipment.milestoneid) {
+                    validate.validate = false;
+                    if (!myequipment.myequipmentid) {
+                        validate.message += `Schedule Equipment is missing Equipment ID `;
+                    }
+                    if (!myequipment.csiid) {
+                        validate.message += `Schedule Equipment ${myscheduleequipment} is missing CSIID `;
+                    }
+
+                    if (!myequipment.milestoneid) {
+                        validate.message += `Schedule Equipment ${myscheduleequipment} is missing MilestoneID `;
+                    }
+
+                }
+                if (!isNumeric(myequipment.equipmentrate)) {
+                    validate.validate = false;
+                    validate.message += `Schedule Equipment ${myscheduleequipment}  has a non numeric equipoment rate `;
+                }
+
+                if (!isNumeric(myequipment.profit)) {
+                    validate.validate = false;
+                    validate.message += `Schedule Equipment ${myscheduleequipment}  has a non numeric profit `;
+                }
+
+
+            })
+
         }
+
+        if (project.hasOwnProperty("actualequipment")) {
+            // eslint-disable-next-line
+            project.actualequipment.myequipment.map(myequipment => {
+                let myactualequipment = "";
+                let actualequipment = construction.getmyequipmentbyid.call(this, myequipment.myequipmentid);
+                if (actualequipment) {
+                    myactualequipment = actualequipment.equipment;
+                }
+                if (!myequipment.myequipmentid || !myequipment.csiid || !myequipment.milestoneid) {
+                    validate.validate = false;
+                    if (!myequipment.myequipmentid) {
+                        validate.message += `Actual Equipment is missing Equipment ID `;
+                    }
+                    if (!myequipment.csiid) {
+                        validate.message += `Actual Equipment ${myactualequipment} is missing CSIID `;
+                    }
+
+                    if (!myequipment.milestoneid) {
+                        validate.message += `Actual Equipment ${myactualequipment} is missing MilestoneID `;
+                    }
+
+                }
+
+                if (!isNumeric(myequipment.equipmentrate)) {
+                    validate.validate = false;
+                    validate.message += `Actual Equipment ${myactualequipment}  has a non numeric equipoment rate `;
+                }
+
+                if (!isNumeric(myequipment.profit)) {
+                    validate.validate = false;
+                    validate.message += `Actual Equipment ${myactualequipment}  has a non numeric profit `;
+                }
+
+            })
+
+
+        }
+
+
+        return validate;
     }
 
-    export default Construction;
+    async savemyproject() {
+        let construction = new Construction();
+        let values = construction.getCompanyParams.call(this);
+        const activeproject = construction.getactiveproject.call(this)
+        let myproject = construction.getprojectbyid.call(this, activeproject.projectid);
+        values.project = myproject;
+        let validatecompany = construction.validateCompany.call(this, values);
+        let validateproject = construction.validateProject.call(this, values.project)
+
+        if (validatecompany.validate && validateproject.validate) {
+            try {
+                let response = await SaveProject(values)
+                console.log(response)
+                construction.handlecompanyids.call(this, response)
+                construction.handleprojectids.call(this, response)
+                if (response.hasOwnProperty("allusers")) {
+                    let companys = returnCompanyList(response.allusers);
+                    this.props.reduxAllCompanys(companys)
+                    this.props.reduxAllUsers(response.allusers);
+
+                }
+                if (response.hasOwnProperty("myuser")) {
+
+                    this.props.reduxUser(response.myuser)
+                }
+
+                let message = "";
+                if (response.hasOwnProperty("message")) {
+                    let lastupdated = inputUTCStringForLaborID(response.lastupdated)
+                    message = `${response.message} Last updated ${lastupdated}`
+
+                }
+                this.setState({ message })
+            } catch (err) {
+                alert(err)
+            }
+
+        } else {
+            let message = "";
+            message += validatecompany.message;
+            message += validateproject.message;
+            this.setState({ message })
+        }
+
+    }
+    showsaveproject() {
+        const styles = MyStylesheet();
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this)
+        const saveProfileIcon = () => {
+            if (menu.open) {
+                return ({ width: 148, height: 30 })
+            } else {
+
+                return ({ width: 254, height: 52 })
+            }
+
+        }
+        return (<View style={styles.generalFlex, styles.bottomMargin10}>
+            <View style={styles.flex1}>
+
+                <View style={styles.generalFlex}>
+                    <View style={styles.flex1}>
+                        <Text style={[styles.regularFont, styles.alignCenter]}>{this.state.message}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.generalFlex}>
+                    <View style={[styles.flex1, styles.alignContentCenter]}>
+                        <TouchableOpacity onPress={() => { construction.savemyproject.call(this) }}>
+                            <Image source={require('./png/saveproject.png')}
+                                resizeMethod='scale'
+                                style={saveProfileIcon()}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+            </View>
+        </View>)
+    }
+    getmilestonebyid(milestoneid) {
+        let construction = new Construction();
+        let milestones = construction.getmilestones.call(this)
+        let milestone = false;
+        if (milestones) {
+            // eslint-disable-next-line
+            milestones.map(mymilestone => {
+                if (mymilestone.milestoneid === milestoneid) {
+                    milestone = mymilestone;
+                }
+            })
+        }
+        return milestone;
+    }
+
+    getcsis() {
+        let csis = false;
+        if (this.props.csis) {
+            if (this.props.csis.hasOwnProperty("length")) {
+                csis = this.props.csis;
+            }
+        }
+        return csis;
+    }
+    getcsibyid(csiid) {
+        let csi = false;
+        let construction = new Construction();
+        const csis = construction.getcsis.call(this)
+        if (csis) {
+            // eslint-disable-next-line
+            csis.map(code => {
+                if (code.csiid === csiid) {
+                    csi = code;
+
+                }
+            })
+
+        }
+
+        return csi;
+    }
+
+    getampmicon() {
+
+        return ({ width: 57, height: 33 })
+
+
+    }
+
+    getmymaterialbyid(materialid) {
+        const construction = new Construction();
+        let company = construction.getcompany.call(this);
+        let material = false;
+        if (company) {
+            if (company.hasOwnProperty("materials")) {
+                // eslint-disable-next-line
+                company.materials.mymaterial.map(mymaterial => {
+                    if (mymaterial.materialid === materialid) {
+                        material = mymaterial;
+                    }
+                })
+            }
+        }
+        return material;
+    }
+    getmymaterials() {
+        const construction = new Construction();
+        const company = construction.getcompany.call(this);
+        let materials = false;
+        if (company.hasOwnProperty("materials")) {
+            materials = company.materials.mymaterial;
+
+        }
+        return materials;
+    }
+    getequipmentcostsbyid(equipmentid) {
+        const construction = new Construction();
+        let equipmentcosts = false
+        let equipment = construction.getmyequipmentbyid.call(this, equipmentid)
+        if (equipment.hasOwnProperty("ownership")) {
+            if (equipment.ownership.hasOwnProperty("cost")) {
+                // eslint-disable-next-line
+                equipmentcosts = equipment.ownership.cost;
+            }
+
+        }
+        return equipmentcosts;
+    }
+    calculateequipmentratebyid(equipmentid, timein, timeout) {
+
+        const construction = new Construction();
+        const myequipment = construction.getmyequipmentbyid.call(this, equipmentid);
+        let equipmentrate = 0;
+        if (myequipment.ownershipstatus === 'owned') {
+            equipmentrate = construction.calculateequipmentratebyownership.call(this, equipmentid)
+        } else if (myequipment.ownershipstatus === 'rented') {
+            equipmentrate = construction.getequipmentrentalratebyid.call(this, equipmentid, timein, timeout)
+        }
+        return equipmentrate;
+
+    }
+
+    calculateequipmentratebyownership(equipmentid) {
+        const construction = new Construction();
+        const myequipment = construction.getmyequipmentbyid.call(this, equipmentid);
+        const i = (Number(myequipment.ownership.loaninterest) / 100) / 12;
+        const workinghours = Math.round(Number(myequipment.ownership.workinghours) / 12);
+        let equipmentrate = 0;
+
+        const P = () => {
+            let P = 0;
+            const costs = construction.getequipmentcostsbyid.call(this, myequipment.equipmentid)
+            if (costs) {
+                // eslint-disable-next-line
+                costs.map(cost => {
+                    let n = calculateTotalMonths(myequipment.ownership.purchasedate, cost.timein);
+                    let F = Number(cost.cost)
+                    P += FutureCostPresent(i, n, F);
+
+                })
+            }
+            return (P)
+        }
+        const Period = () => {
+            let purchasedate = myequipment.ownership.purchasedate;
+            let saledate = myequipment.ownership.saledate;
+            if (purchasedate && saledate) {
+                let totalmonths = calculateTotalMonths(purchasedate, saledate)
+                return (totalmonths)
+            } else {
+                return 0;
+            }
+
+        }
+        const AFactor = () => {
+            const T = Period();
+            const i = Number(myequipment.ownership.loaninterest);
+            console.log(T, i)
+            if (T) {
+                console.log(AmmortizeFactor(i, T))
+                return (AmmortizeFactor(i, T))
+            } else {
+
+                return 0;
+            }
+
+        }
+
+        const totalworkinghours = () => {
+            let annual = Number(myequipment.ownership.workinghours);
+            let years = Period() / 12;
+
+            return (Math.round(annual * years))
+        }
+
+        if (i > 0) {
+            equipmentrate = (P() * AFactor()) / (workinghours);
+        } else {
+            console.log(P(), totalworkinghours(), Period())
+            equipmentrate = P() / (totalworkinghours())
+        }
+
+        return equipmentrate;
+    }
+    getequipmentrentalratebyid(equipmentid, timein, timeout) {
+        const construction = new Construction();
+        const myequipment = construction.getmyequipmentbyid.call(this, equipmentid);
+        const hourlyrate = Number(myequipment.rentalrates.hour);
+        const dailyrate = Number(myequipment.rentalrates.day);
+        const weeklyrate = Number(myequipment.rentalrates.week);
+        const monthlyrate = Number(myequipment.rentalrates.month);
+        const rentalObj = getEquipmentRentalObj(timein, timeout);
+
+        const hours = rentalObj.hours;
+        const days = rentalObj.days;
+        const weeks = rentalObj.weeks;
+        const months = rentalObj.months;
+        let rentalcost = (hourlyrate * hours) + (days * dailyrate) + (weeks * weeklyrate) + (months * monthlyrate);
+        let totalhours = calculatetotalhours(timeout, timein);
+        let rentalrate = rentalcost / totalhours;
+        return rentalrate;
+
+    }
+    gethourlyrate(providerid) {
+        const construction = new Construction()
+        let employee = construction.getemployeebyid.call(this, providerid)
+        let workinghours = Number(employee.workinghours);
+        let hourlyrate = 0;
+        let totalbenefits = 0;
+
+        if (employee.hasOwnProperty("benefits")) {
+            // eslint-disable-next-line
+            employee.benefits.benefit.map(benefit => {
+                totalbenefits += Number(benefit.amount);
+
+            })
+        }
+
+        if (workinghours && totalbenefits) {
+            hourlyrate = Number(totalbenefits / workinghours)
+        }
+        return hourlyrate;
+
+    }
+
+    getnavigation() {
+
+        if (this.props.hasOwnProperty("navigation")) {
+            return this.props.navigation;
+        } else {
+            return false;
+        }
+
+    }
+    getuser() {
+        let user = false;
+        if (this.props.myusermodel) {
+            if (this.props.myusermodel.hasOwnProperty("providerid")) {
+                user = this.props.myusermodel;
+            }
+
+        }
+        return user;
+    }
+    loginMessage(component) {
+        const styles = MyStylesheet();
+        return (<View>
+            <Text style={[styles.alignCenter, styles.regularFont]}>You need to be logged in to view {component}.</Text>
+        </View>)
+    }
+}
+
+export default Construction;

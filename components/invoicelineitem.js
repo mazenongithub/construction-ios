@@ -249,6 +249,8 @@ class InvoiceLineItem {
         const regularFont = construction.getRegularFont.call(this)
         const headerFont = construction.getHeaderFont.call(this)
         if(myuser) {
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
         return (
             <View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
@@ -296,6 +298,9 @@ class InvoiceLineItem {
                 </View>
             </View>
         )
+    } else {
+        return(<Text style={[regularFont]}> Only Managers can view invoices line item</Text>)
+    }
         } else {
             return(construction.loginMessage.call(this,"Invoice Line Item"))
         }

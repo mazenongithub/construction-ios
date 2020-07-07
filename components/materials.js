@@ -12,18 +12,18 @@ import MakeID from './makeids'
 class Materials extends Component {
     constructor(props) {
         super(props)
-        this.state = this.state = { render: '', accountname:'', activematerialid: '', materialid: '', material: '', accountid: '', unit: '', unitcost: '', message: '' }
+        this.state = this.state = { render: '', accountname: '', activematerialid: '', materialid: '', material: '', accountid: '', unit: '', unitcost: '', message: '' }
     }
 
-    
+
     makematerialactive(materialid) {
         const construction = new Construction();
-        const material = construction.getmymaterialbyid.call(this,materialid);
+        const material = construction.getmymaterialbyid.call(this, materialid);
         const accountid = material.accountid;
-        const account = construction.getaccountbyid.call(this,accountid)
+        const account = construction.getaccountbyid.call(this, accountid)
         const accountname = account.accountname;
         if (this.state.activematerialid === materialid) {
-            this.setState({ activematerialid: false, accountname:''})
+            this.setState({ activematerialid: false, accountname: '' })
         } else {
             this.setState({ activematerialid: materialid, accountname })
         }
@@ -48,27 +48,33 @@ class Materials extends Component {
         const makeID = new MakeID();
         let myuser = construction.getuser.call(this)
         if (myuser) {
-            if (this.state.activematerialid) {
-                let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
-                myuser.company.materials.mymaterial[i].material = material;
-                this.props.reduxUser(myuser);
-                this.setState({ render: 'render', material: '' })
+            const checkmanager = construction.checkmanager.call(this);
+            if (checkmanager) {
+                if (this.state.activematerialid) {
+                    let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
+                    myuser.company.materials.mymaterial[i].material = material;
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render', material: '' })
 
+
+                } else {
+                    let materialid = makeID.materialid.call(this)
+                    let accountid = this.state.accountid;
+                    let unit = this.state.unit;
+                    let unitcost = this.state.unitcost;
+                    let newMaterial = CreateMaterial(materialid, material, accountid, unit, unitcost)
+                    if (myuser.company.hasOwnProperty("materials")) {
+                        myuser.company.materials.mymaterial.push(newMaterial)
+                    } else {
+                        let materials = { mymaterial: [newMaterial] }
+                        myuser.company.materials = materials;
+                    }
+                    this.props.reduxUser(myuser)
+                    this.setState({ activematerialid: newMaterial.materialid })
+                }
 
             } else {
-                let materialid = makeID.materialid.call(this)
-                let accountid = this.state.accountid;
-                let unit = this.state.unit;
-                let unitcost = this.state.unitcost;
-                let newMaterial = CreateMaterial(materialid, material, accountid, unit, unitcost)
-                if (myuser.company.hasOwnProperty("materials")) {
-                    myuser.company.materials.mymaterial.push(newMaterial)
-                } else {
-                    let materials = { mymaterial: [newMaterial] }
-                    myuser.company.materials = materials;
-                }
-                this.props.reduxUser(myuser)
-                this.setState({ activematerialid: newMaterial.materialid })
+                alert(`Only Managers can update materials`)
             }
         }
     }
@@ -90,27 +96,32 @@ class Materials extends Component {
         const makeID = new MakeID();
         let myuser = construction.getuser.call(this)
         if (myuser) {
-            if (this.state.activematerialid) {
-                let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
-                myuser.company.materials.mymaterial[i].unit = unit;
-                this.props.reduxUser(myuser);
-                this.setState({ render: 'render', material: '' })
+            const checkmanager = construction.checkmanager.call(this);
+            if (checkmanager) {
+                if (this.state.activematerialid) {
+                    let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
+                    myuser.company.materials.mymaterial[i].unit = unit;
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render', material: '' })
 
 
-            } else {
-                let materialid = makeID.materialid.call(this)
-                let accountid = this.state.accountid;
-                let material = this.state.material;
-                let unitcost = this.state.unitcost;
-                let newMaterial = CreateMaterial(materialid, material, accountid, unit, unitcost)
-                if (myuser.company.hasOwnProperty("materials")) {
-                    myuser.company.materials.mymaterial.push(newMaterial)
                 } else {
-                    let materials = { mymaterial: [newMaterial] }
-                    myuser.company.materials = materials;
+                    let materialid = makeID.materialid.call(this)
+                    let accountid = this.state.accountid;
+                    let material = this.state.material;
+                    let unitcost = this.state.unitcost;
+                    let newMaterial = CreateMaterial(materialid, material, accountid, unit, unitcost)
+                    if (myuser.company.hasOwnProperty("materials")) {
+                        myuser.company.materials.mymaterial.push(newMaterial)
+                    } else {
+                        let materials = { mymaterial: [newMaterial] }
+                        myuser.company.materials = materials;
+                    }
+                    this.props.reduxUser(myuser)
+                    this.setState({ activematerialid: newMaterial.materialid })
                 }
-                this.props.reduxUser(myuser)
-                this.setState({ activematerialid: newMaterial.materialid })
+            } else {
+                alert(`Only Managers can update unit `)
             }
         }
     }
@@ -128,37 +139,42 @@ class Materials extends Component {
     }
 
     handleunitcost(unitcost) {
-        if(isNumeric(unitcost)) {
-        const construction = new Construction();
-        const makeID = new MakeID();
-        let myuser = construction.getuser.call(this)
-        if (myuser) {
-            if (this.state.activematerialid) {
-                let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
-                myuser.company.materials.mymaterial[i].unitcost = unitcost;
-                this.props.reduxUser(myuser);
-                this.setState({ render: 'render', material: '' })
+        if (isNumeric(unitcost)) {
+            const construction = new Construction();
+            const makeID = new MakeID();
+            let myuser = construction.getuser.call(this)
+            if (myuser) {
+                const checkmanager = construction.checkmanager.call(this);
+                if (checkmanager) {
+                    if (this.state.activematerialid) {
+                        let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
+                        myuser.company.materials.mymaterial[i].unitcost = unitcost;
+                        this.props.reduxUser(myuser);
+                        this.setState({ render: 'render', material: '' })
 
 
-            } else {
-                let materialid = makeID.materialid.call(this)
-                let accountid = this.state.accountid;
-                let material = this.state.material;
-                let unit = this.state.unit;
-                let newMaterial = CreateMaterial(materialid, material, accountid, unit, unitcost)
-                if (myuser.company.hasOwnProperty("materials")) {
-                    myuser.company.materials.mymaterial.push(newMaterial)
+                    } else {
+                        let materialid = makeID.materialid.call(this)
+                        let accountid = this.state.accountid;
+                        let material = this.state.material;
+                        let unit = this.state.unit;
+                        let newMaterial = CreateMaterial(materialid, material, accountid, unit, unitcost)
+                        if (myuser.company.hasOwnProperty("materials")) {
+                            myuser.company.materials.mymaterial.push(newMaterial)
+                        } else {
+                            let materials = { mymaterial: [newMaterial] }
+                            myuser.company.materials = materials;
+                        }
+                        this.props.reduxUser(myuser)
+                        this.setState({ activematerialid: newMaterial.materialid })
+                    }
                 } else {
-                    let materials = { mymaterial: [newMaterial] }
-                    myuser.company.materials = materials;
+                    alert(`Only Managers can update unit cost`)
                 }
-                this.props.reduxUser(myuser)
-                this.setState({ activematerialid: newMaterial.materialid })
             }
+        } else {
+            alert(`Unit Cost should be a number `)
         }
-    } else {
-        alert(`Unit Cost should be a number `)
-    }
     }
 
     getaccountid() {
@@ -177,9 +193,11 @@ class Materials extends Component {
         const construction = new Construction();
         const makeID = new MakeID();
         let myuser = construction.getuser.call(this)
-        const account = construction.getaccountbyid.call(this,accountid)
+        const account = construction.getaccountbyid.call(this, accountid)
         const accountname = account.accountname;
         if (myuser) {
+            const checkmanager = construction.checkmanager.call(this);
+            if(checkmanager) {
             if (this.state.activematerialid) {
                 let i = construction.getmaterialkeybyid.call(this, this.state.activematerialid)
                 myuser.company.materials.mymaterial[i].accountid = accountid;
@@ -202,6 +220,10 @@ class Materials extends Component {
                 this.props.reduxUser(myuser)
                 this.setState({ activematerialid: newMaterial.materialid, accountname })
             }
+
+        } else {
+            alert(`Only Managers can update material account id `)
+        }
         }
     }
     validatematerial(material) {
@@ -219,40 +241,45 @@ class Materials extends Component {
                         if (mymaterial.mymaterialid === materialid) {
                             validate = false;
                             validatemessage += `Could not delete material ${material.material}, exists inside schedule materials Project ID ${myproject.title}. `
-    
+
                         }
                     })
-    
+
                 }
-    
+
                 if (myproject.hasOwnProperty("actualmaterials")) {
                     // eslint-disable-next-line
                     myproject.actualmaterials.mymaterial.map(mymaterial => {
                         if (mymaterial.mymaterialid === materialid) {
                             validate = false;
                             validatemessage += `Could not delete material ${material.material}, exists inside actual materials Project ID ${myproject.title}. `
-    
+
                         }
                     })
-    
+
                 }
             })
         }
         return { validate, validatemessage }
     }
-    
+
     confirmremovematerial(material) {
         const construction = new Construction();
-            const validate = this.validatematerial(material);
-            if (validate.validate) {
-                let myuser = construction.getuser.call(this);
-                const i = construction.getmaterialkeybyid.call(this, material.materialid);
-                myuser.company.materials.mymaterial.splice(i, 1);
-                this.props.reduxUser(myuser);
-                this.setState({ activematerialid: false, message: '' })
+        const validate = this.validatematerial(material);
+        if (validate.validate) {
+            let myuser = construction.getuser.call(this);
+            const checkmanager = construction.checkmanager.call(this);
+            if(checkmanager) {
+            const i = construction.getmaterialkeybyid.call(this, material.materialid);
+            myuser.company.materials.mymaterial.splice(i, 1);
+            this.props.reduxUser(myuser);
+            this.setState({ activematerialid: false, message: '' })
             } else {
-                this.setState({ message: validate.validatemessage })
+                alert(`Only Managers can remove materials`)
             }
+        } else {
+            this.setState({ message: validate.validatemessage })
+        }
     }
     removematerial(material) {
         Alert.alert(
@@ -271,25 +298,31 @@ class Materials extends Component {
         const removeIconSize = construction.getremoveicon.call(this)
         const account = construction.getaccountbyid.call(this, mymaterial.accountid)
         const styles = MyStylesheet();
-        const regularFont = construction.getRegularFont.call(this)
-   const activeBackground = () => {
-       if(this.state.activematerialid === mymaterial.materialid) {
-        return (styles.activeBackground)
-       } else {
-        return;
-       }
-   }
+        const regularFont = construction.getRegularFont.call(this);
+        const checkmanager = construction.checkmanager.call(this)
+        const remove = () => {
+            if(checkmanager) {
+                return( <TouchableOpacity onPress={() => { this.removematerial(mymaterial) }}>
+                <Image source={require('./png/removeIcon.png')}
+                    style={removeIconSize}
+                    resizeMethod='scale'
+                />
+            </TouchableOpacity>)
+            }
+        }
+        const activeBackground = () => {
+            if (this.state.activematerialid === mymaterial.materialid) {
+                return (styles.activeBackground)
+            } else {
+                return;
+            }
+        }
         if (menu.open) {
             return (
                 <View style={[styles.generalFlex, styles.bottomMargin10]} key={mymaterial.materialid}>
                     <View style={[styles.flex1, styles.flexDirection]}>
                         <Text style={[regularFont, activeBackground()]} onPress={() => { this.makematerialactive(mymaterial.materialid) }}>{mymaterial.material}  {mymaterial.unitcost}/{mymaterial.unit} Account:{account.accountname}</Text>
-                        <TouchableOpacity onPress={()=>{this.removematerial(mymaterial)}}>
-                        <Image source={require('./png/removeIcon.png')}
-                            style={removeIconSize}
-                            resizeMethod='scale'
-                        />
-                        </TouchableOpacity>
+                       {remove()}
 
                     </View>
                 </View>)
@@ -299,12 +332,12 @@ class Materials extends Component {
                     <Text style={[regularFont, activeBackground()]} onPress={() => { this.makematerialactive(mymaterial.materialid) }}> {mymaterial.material}  {mymaterial.unitcost}/{mymaterial.unit} Account:{account.accountname}</Text>
                 </View>
                 <View style={[styles.flex1]}>
-                <TouchableOpacity onPress={()=>{this.removematerial(mymaterial)}}>
-                    <Image source={require('./png/removeIcon.png')}
-                        style={removeIconSize}
-                        resizeMethod='scale'
-                    />
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { this.removematerial(mymaterial) }}>
+                        <Image source={require('./png/removeIcon.png')}
+                            style={removeIconSize}
+                            resizeMethod='scale'
+                        />
+                    </TouchableOpacity>
 
                 </View>
             </View>)
@@ -329,8 +362,8 @@ class Materials extends Component {
         const myuser = construction.getuser.call(this)
         const regularFont = construction.getRegularFont.call(this)
         const headerFont = construction.getHeaderFont.call(this)
-        if(myuser) {
-            return(  <View style={[styles.generalFlex]}>
+        if (myuser) {
+            return (<View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
@@ -374,9 +407,9 @@ class Materials extends Component {
                 </View>
             </View>)
         } else {
-    
-            return(construction.loginMessage.call(this,"Materials"))
-          
+
+            return (construction.loginMessage.call(this, "Materials"))
+
 
         }
     }

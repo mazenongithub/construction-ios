@@ -381,8 +381,11 @@ class Bid {
         const styles = MyStylesheet();
         const bid = new Bid();
         const myuser = construction.getuser.call(this);
-        const headerFont = construction.getHeaderFont.call(this)
+        const headerFont = construction.getHeaderFont.call(this);
+       
         if(myuser) {
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
         return (
             <View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
@@ -396,6 +399,9 @@ class Bid {
                 </View>
             </View>
         )
+            } else {
+                return(<Text style={[regularFont]}> Only Managers can view bid</Text>)
+            }
         } else {
             return(construction.loginMessage.call(this,"Bid"))
         }

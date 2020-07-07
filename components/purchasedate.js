@@ -9,8 +9,11 @@ class PurchaseDate {
 
 
     handleyear(year) {
-        this.setState({ purchasedateyear: year })
         const construction = new Construction();
+        const checkmanager = construction.checkmanager.call(this);
+        if(checkmanager) {
+        this.setState({ purchasedateyear: year })
+        
         const myuser = construction.getuser.call(this)
         if (myuser) {
 
@@ -24,7 +27,7 @@ class PurchaseDate {
                             const myequipment = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid);
                             if (myequipment) {
 
-                                const i = construction.getmyequipmentbyid.call(this,  this.state.activeequipmentid)
+                                const i = construction.getequipmentkeybyid.call(this,  this.state.activeequipmentid)
                                 let day = this.state.purchasedateday;
                                 let month = this.state.purchasedatemonth;
                                 const timein = `${year}-${month}-${day}`
@@ -47,9 +50,15 @@ class PurchaseDate {
 
             
         }
+    } else {
+        alert(`Only Managers can modify purchase date`)
+    }
     }
 
     handleday(day) {
+        const construction = new Construction();
+        const checkmanager = construction.checkmanager.call(this);
+        if(checkmanager) {
         day = day.toString();
         this.setState({ purchasedateday: day })
         const construction = new Construction();
@@ -89,11 +98,17 @@ class PurchaseDate {
 
             
         }
+    } else {
+        alert(`Only Managers can modify purchase date`)
+    }
     }
 
     handlemonth(month) {
-        this.setState({ purchasedatemonth: month })
         const construction = new Construction();
+        const checkmanager = construction.checkmanager.call(this);
+        if(checkmanager) {
+        this.setState({ purchasedatemonth: month })
+       
         const myuser = construction.getuser.call(this)
         if (myuser) {
 
@@ -133,6 +148,9 @@ class PurchaseDate {
 
             
         }
+    } else {
+        alert(`Only Managers can modify purchasedate`)
+    }
     }
 
 

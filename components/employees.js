@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
@@ -36,6 +36,8 @@ class Employees extends Component {
         const construction = new Construction()
         let myuser = construction.getuser.call(this);
         if (myuser) {
+            const checkmanager = construction.checkmanager.call(this);
+            if(checkmanager) {
             let employee = construction.getemployeebyid.call(this, this.state.activeemployeeid)
             if (employee) {
                 let i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid)
@@ -43,6 +45,10 @@ class Employees extends Component {
                 this.props.reduxUser(myuser)
                 this.setState({ render: 'render' })
             }
+
+        } else {
+            alert(`Only Managers can change working hours `)
+        }
         }
 
     }
@@ -53,6 +59,8 @@ class Employees extends Component {
         let myuser = construction.getuser.call(this);
         const makeID = new MakeID();
         if (myuser) {
+            const checkmanager = construction.checkmanager.call(this);
+            if(checkmanager) {
             if (this.state.activeemployeeid) {
                 const employee = construction.getemployeebyid.call(this, this.state.activeemployeeid)
                 let i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid)
@@ -79,6 +87,10 @@ class Employees extends Component {
                 }
             }
 
+        } else {
+            alert(`Only Managers can update benefits`)
+        }
+
         }
 
     }
@@ -103,7 +115,10 @@ class Employees extends Component {
         let myuser = construction.getuser.call(this);
         const makeID = new MakeID();
         if (myuser) {
+            const checkmanager = construction.checkmanager.call(this);
+            if(checkmanager) {
             if (this.state.activeemployeeid) {
+
                 const employee = construction.getemployeebyid.call(this, this.state.activeemployeeid)
                 let i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid)
                 if (this.state.activebenefitid) {
@@ -129,7 +144,10 @@ class Employees extends Component {
                 }
             }
 
+        } else {
+            alert(`Only managers can modify amount `)
         }
+    }
 
     } else {
         alert(`Benefit amount should be numeric`)
@@ -174,6 +192,8 @@ class Employees extends Component {
         const account = construction.getaccountbyid.call(this,accountid)
         const accountname = account.accountname;
         if (myuser) {
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
             if (this.state.activeemployeeid) {
                 const employee = construction.getemployeebyid.call(this, this.state.activeemployeeid)
                 let i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid)
@@ -200,6 +220,10 @@ class Employees extends Component {
                 }
             }
 
+        } else {
+            alert(`Only Managers can modify accountid`)
+        }
+
         }
 
     }
@@ -225,7 +249,7 @@ class Employees extends Component {
         const styles = MyStylesheet();
         const removeIconSize = construction.getremoveicon.call(this)
         const profileDimension = construction.getprofileDimension.call(this)
-        const myemployee = construction.getemployeebyproviderid.call(this, employee.providerid)
+        const myemployee = construction.getemployeebyid.call(this, employee.providerid)
         const menu = construction.getnavigation.call(this)
         const regularFont = construction.getRegularFont.call(this)
         const activeBackground = () => {
@@ -282,35 +306,117 @@ showmyemployees() {
     const construction = new Construction();
     const employees = construction.getmyemployees.call(this)
     let myemployee = [];
+    const checkmanager = construction.checkmanager.call(this);
+    const myuser = construction.getuser.call(this)
     if (employees) {
         employees.map(employee => {
+            if(checkmanager || myuser.providerid === employee.providerid ) {
             myemployee.push(this.showemployee(employee))
+            }
         })
     }
     return myemployee;
 }
+
+handleactive(type) {
+
+    const construction = new Construction();
+    const myuser = construction.getuser.call(this)
+    const checkmanager = construction.checkmanager.call(this)
+    if (checkmanager) {
+        if (myuser) {
+            if (this.state.activeemployeeid) {
+                const employee = construction.getemployeebyid.call(this, this.state.activeemployeeid)
+                if (employee) {
+                    const i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid);
+                    switch (type) {
+                        case "not-active":
+                            if (employee.manager) {
+                                const validate = construction.validateremovemanager.call(this, this.state.activeemployeeid)
+                                if (validate) {
+                                    if (myuser.providerid !== this.state.activeemployeeid) {
+                                        myuser.company.office.employees.employee[i].active = 'not-active';
+                                        this.props.reduxUser(myuser);
+                                        this.setState({ render: 'render' })
+                                    } else {
+                                        alert(`You cannot make yourself unactive, you won't be able to undo this `)
+                                    }
+                                } else {
+                                    alert(`There needs to be atleast one active manager in the company `)
+                                }
+
+                            }
+                            else {
+                                myuser.company.office.employees.employee[i].active = 'not-active';
+                                this.props.reduxUser(myuser);
+                                this.setState({ render: 'render' })
+                            }
+                            break;
+                        case "active":
+                            myuser.company.office.employees.employee[i].active = 'active';
+                            this.props.reduxUser(myuser);
+                            this.setState({ render: 'render' })
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+    } else {
+        alert(`Only managers can access this function `)
+    }
+}
+
+
 handlemanager(type) {
     const construction = new Construction();
     const myuser = construction.getuser.call(this);
-    if (myuser) {
-        if (this.state.activeemployeeid) {
-            const i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid);
-            switch (type) {
-                case "check":
-                    myuser.company.office.employees.employee[i].manager = '';
-                    this.props.reduxUser(myuser);
-                    this.setState({ render: 'render' })
-                    break;
-                case "empty":
-                    myuser.company.office.employees.employee[i].manager = 'manager';
-                    this.props.reduxUser(myuser);
-                    this.setState({ render: 'render' })
-                    break;
-                default:
-                    break;
-            }
+    const checkmanager = construction.checkmanager.call(this);
+    if (checkmanager) {
+        if (myuser) {
+            if (this.state.activeemployeeid) {
+                const i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid);
+                switch (type) {
+                    case "check":
+                        if (construction.validateremovemanager.call(this, this.state.activeemployeeid)) {
 
+                            if (myuser.providerid !== this.state.activeemployeeid) {
+
+
+                                myuser.company.office.employees.employee[i].manager = '';
+                                myuser.company.office.employees.employee[i].active = 'not-active';
+                                this.props.reduxUser(myuser);
+                                this.setState({ render: 'render' })
+
+
+                            } else {
+
+                                alert(`You cannot unset yourself as Manager, you won't be able to undo this `)
+
+                            }
+                        } else {
+                            alert(`There needs to be atleast one manager in your company `)
+                        }
+                        break;
+                    case "empty":
+                        myuser.company.office.employees.employee[i].manager = 'manager';
+                        myuser.company.office.employees.employee[i].active = 'active';
+                        this.props.reduxUser(myuser);
+                        this.setState({ render: 'render' })
+                        break;
+                    default:
+                        break;
+                }
+
+            }
         }
+
+    } else {
+        alert(`Only Managers can access this function `)
     }
 }
 makebenefitactive(benefitid) {
@@ -327,6 +433,48 @@ makebenefitactive(benefitid) {
         this.setState({ activebenefitid: benefitid, accountname})
     }
 }
+
+confirmremovebeneftbyid(benefit) {
+    Alert.alert(
+        'Remove Benefit',
+        `Are you sure you want to remove ${benefit.benefit}?`,
+        [
+            { text: 'Cancel', onPress: () => console.log('Cancel Benefit '), style: 'cancel' },
+            { text: 'OK', onPress: () => { this.removebenefitbyid(benefit) } },
+        ],
+        { cancelable: false }
+    )
+}
+
+removebenefitbyid(benefit) {
+ 
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        if (myuser) {
+            if(this.state.activeemployeeid) {
+            const myemployee = construction.getemployeebyid.call(this,this.state.activeemployeeid)
+                if(myemployee) {
+            const i = construction.getemployeekeybyid.call(this, this.state.activeemployeeid)
+                    const mybenefit = construction.getbenefitbyid.call(this,myemployee.providerid, benefit.benefitid);
+                    if(mybenefit) {
+            const j = construction.getbenefitkeybyid.call(this,myemployee.providerid,benefit.benefitid)
+            myuser.company.office.employees.employee[i].benefits.benefit.splice(j, 1)
+            if (myuser.company.office.employees.employee[i].benefits.benefit.length === 0) {
+                delete myuser.company.office.employees.employee[i].benefits.benefit
+                delete myuser.company.office.employees.employee[i].benefits;
+            }
+
+        }
+            this.setState({ activebenefitid: false })
+
+        
+
+        }
+
+        }
+        }
+    
+}
 showemployeebenefit(benefit) {
     const construction = new Construction();
     const menu = construction.getnavigation.call(this)
@@ -334,28 +482,39 @@ showemployeebenefit(benefit) {
     const account = construction.getaccountbyid.call(this, benefit.accountid)
     const regularFont = construction.getRegularFont.call(this)
     const styles = MyStylesheet();
+    const checkmanager = construction.checkmanager.call(this)
+    const activebackground = () => {
+        if(this.state.activebenefitid === benefit.benefitid) {
+            return styles.activeBackground;
+        }
+    }
+    const remove = () => {
+        if(checkmanager) {
+            return( 
+            <TouchableOpacity onPress={()=>{this.confirmremovebeneftbyid(benefit)}}>
+            <Image source={require('./png/removeIcon.png')}
+            style={removeIconSize}
+            resizeMethod='scale'
+        />
+        </TouchableOpacity>)
+        }
+    }
     if (menu.open) {
         return (
             <View style={[styles.generalFlex, styles.bottomMargin10]} key={benefit.benefitid}>
                 <View style={[styles.flex1, styles.flexDirection]}>
-                    <Text style={[regularFont]} onPress={() => { this.makebenefitactive(benefit.benefitid) }}>{benefit.benefit}  Account: {account.accountname} Amount: {benefit.amount}</Text>
-                    <Image source={require('./png/removeIcon.png')}
-                        style={removeIconSize}
-                        resizeMethod='scale'
-                    />
+                    <Text style={[regularFont, activebackground()]} onPress={() => { this.makebenefitactive(benefit.benefitid) }}>{benefit.benefit}  Account: {account.accountname} Amount: {benefit.amount}</Text>
+                   {remove()}
 
                 </View>
             </View>)
     } else {
         return (<View style={[styles.generalFlex]} key={benefit.benefitid}>
             <View style={[styles.flex4]}>
-                <Text style={[regularFont]}> {benefit.benefit}  Account:  {account.account} {account.accountname} Amount: {benefit.amount}</Text>
+                <Text style={[regularFont, activebackground()]}  onPress={() => { this.makebenefitactive(benefit.benefitid) }}> {benefit.benefit}  Account:  {account.account} {account.accountname} Amount: {benefit.amount}</Text>
             </View>
             <View style={[styles.flex1]}>
-                <Image source={require('./png/removeIcon.png')}
-                    style={removeIconSize}
-                    resizeMethod='scale'
-                />
+                {remove()}
 
             </View>
         </View>)
@@ -395,6 +554,33 @@ render() {
         return ({ width: 112, height: 76 })
 
     }
+    const active = () => {
+        if (this.state.activeemployeeid) {
+            let employeeid = this.state.activeemployeeid;
+            const employee = construction.getemployeebyid.call(this, employeeid);
+            if (employee) {
+                if (employee.active === 'active') {
+                    return (
+                        <TouchableOpacity onPress={() => { this.handleactive("not-active") }}>
+                            <Image source={require('./png/managercheck.png')}
+                                style={checkIcon()}
+                                resizeMethod='scale'
+                            />
+                        </TouchableOpacity>)
+                } else {
+                    return (
+                        <TouchableOpacity onPress={() => { this.handleactive("active") }}>
+                            <Image source={require('./png/emptybox.png')}
+                                style={checkIcon()}
+                                resizeMethod='scale'
+                            />
+                        </TouchableOpacity>)
+                }
+    
+            }
+        }
+    }
+
     const manager = () => {
         if (this.state.activeemployeeid) {
             let employeeid = this.state.activeemployeeid;
@@ -422,7 +608,7 @@ render() {
         }
     }
     const workinghours = () => {
-        if (menu.open) {
+        
             return (
                 <View style={[styles.generalFlex]}>
                     <View style={[styles.flex1]}>
@@ -437,10 +623,33 @@ render() {
 
                         </View>
 
-                        <View style={[styles.generalFlex]}>
+                      
+
+                    </View>
+
+                </View>
+            )
+
+    }
+
+    const activemenu = () => {
+        if (menu.open) {
+            return (
+                <View style={[styles.generalFlex]}>
+                    <View style={[styles.flex1]}>
+
+                        <View style={[styles.generalFlex, styles.bottomMargin15]}>
                             <View style={[styles.flex1, styles.alignContentCenter]}>
-                                <Text style={[regularFont]}>Manager</Text>
+                            <Text style={[regularFont, styles.alignCenter]}>Manager</Text>
                                 {manager()}
+                            </View>
+
+                        </View>
+
+                        <View style={[styles.generalFlex, styles.bottomMargin15]}>
+                            <View style={[styles.flex1, styles.alignContentCenter]}>
+                                <Text style={[regularFont]}>Active</Text>
+                                {active()}
                             </View>
 
                         </View>
@@ -455,16 +664,15 @@ render() {
 
                 <View style={[styles.generalFlex]}>
                     <View style={[styles.flex1]}>
-                        <Text style={[regularFont]}>Annual Working Hours</Text>
-                        <TextInput style={[regularFont, styles.defaultInput]}
-                            value={this.getworkinghours()}
-                            onChangeText={text => { this.handleworkinghours(text) }}
-                        />
+                    <Text style={[regularFont, styles.alignCenter]}>Manager</Text>
+                        {manager()}
                     </View>
 
                     <View style={[styles.flex1, styles.alignContentCenter]}>
-                        <Text style={[regularFont, styles.alignCenter]}>Manager</Text>
-                        {manager()}
+                       
+
+                        <Text style={[regularFont]}>Active</Text>
+                                {active()}
                     </View>
 
                 </View>
@@ -474,13 +682,16 @@ render() {
 
         }
     }
+
     const hourlyrate = () => {
         const construction = new Construction();
+        
         let hourlyrate = 0;
         if(this.state.activeemployeeid) {
-            const myuser = construction.getemployeebyproviderid.call(this,this.state.activeemployeeid)
+            const employee = construction.getemployeebyid.call(this,this.state.activeemployeeid)
+          
             hourlyrate = construction.gethourlyrate.call(this,this.state.activeemployeeid)
-            return(<Text style={[regularFont, styles.alignCenter]}>{myuser.firstname} {myuser.lastname}'s hourly rate ${hourlyrate.toFixed(2)}</Text>)
+            return(<Text style={[regularFont, styles.alignCenter]}>{employee.firstname} {employee.lastname}'s hourly rate ${hourlyrate.toFixed(2)}</Text>)
         }
     }
 
@@ -498,6 +709,7 @@ render() {
                         </View>
 
                         {workinghours()}
+                        {activemenu()}
 
                         <View style={[styles.generalFlex, styles.bottomMargin10]}>
                             <View style={[styles.flex1]}>
@@ -568,7 +780,12 @@ render() {
         </View>)
     }
     if(myuser) {
+        const checkactive = construction.checkactive.call(this)
+        if(checkactive) {
         return(Employee())
+        } else {
+            return(<Text style={[regularFont]}>You have to be active to view Employee Component </Text>)
+        }
     } else {
         return (construction.loginMessage.call(this,"employees"))
     }

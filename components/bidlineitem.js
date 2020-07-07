@@ -249,6 +249,8 @@ class BidLineItem {
         const headerFont = construction.getHeaderFont.call(this)
         const regularFont = construction.getRegularFont.call(this);
         if(myuser) {
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
         return (
             <View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
@@ -296,6 +298,9 @@ class BidLineItem {
                 </View>
             </View>
         )
+            } else {
+                return(<Text style={[regularFont]}> Only Managers can view bid line item</Text>)
+            }
         } else {
             return(construction.loginMessage.call(this,"Bid Line Item"))
         }

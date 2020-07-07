@@ -809,6 +809,8 @@ class Invoices {
 
         if (myuser) {
 
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
 
             return (<View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
@@ -837,6 +839,10 @@ class Invoices {
                     {construction.showsaveproject.call(this)}
                 </View>
             </View>)
+
+            } else {
+                return(<Text style={[regularFont]}> Only Managers can view invoices </Text>)
+            }
 
         } else {
             return (construction.loginMessage.call(this, "Invoices"))

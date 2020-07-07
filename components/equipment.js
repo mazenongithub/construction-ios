@@ -19,14 +19,14 @@ class Equipment extends Component {
     }
     componentDidMount() {
         this.reset()
-        
+
     }
     reset() {
 
         this.purchasedatedefault();
         this.saledatedefault();
         this.equipmentdatedefault()
-        this.setState({accountname:'', material:'', equipment:''})
+        this.setState({ accountname: '', material: '', equipment: '' })
     }
 
     saledatedefault() {
@@ -114,8 +114,8 @@ class Equipment extends Component {
             const myequipment = construction.getmyequipmentbyid.call(this, equipmentid)
             if (myequipment) {
                 let accountname = "";
-                const account = construction.getaccountbyid.call(this,myequipment.accountid)
-                if(account) {
+                const account = construction.getaccountbyid.call(this, myequipment.accountid)
+                if (account) {
                     accountname = account.accountname;
                 }
                 const purchasedateyear = myequipment.ownership.purchasedate.substring(0, 4)
@@ -172,20 +172,25 @@ class Equipment extends Component {
 
         const myuser = construction.getuser.call(this)
         const validate = this.checkremoveequipment(equipment.equipmentid);
+        const checkmanager = construction.checkmanager.call(this)
+        if (checkmanager) {
+            if (validate.validate) {
+                const i = construction.getequipmentkeybyid.call(this, equipment.equipmentid)
+                myuser.company.equipment.myequipment.splice(i, 1);
+                if (myuser.company.equipment.myequipment.length === 0) {
+                    delete myuser.company.equipment.myequipment
+                    delete myuser.company.equipment
+                }
+                this.props.reduxUser(myuser);
+                this.setState({ render: 'render', activeequipmentid: false })
 
-        if (validate.validate) {
-            const i = construction.getequipmentkeybyid.call(this, equipment.equipmentid)
-            myuser.company.equipment.myequipment.splice(i, 1);
-            if (myuser.company.equipment.myequipment.length === 0) {
-                delete myuser.company.equipment.myequipment
-                delete myuser.company.equipment
+
+            } else {
+                this.setState({ message: validate.message })
             }
-            this.props.reduxUser(myuser);
-            this.setState({ render: 'render', activeequipmentid: false })
-
 
         } else {
-            this.setState({ message: validate.message })
+            alert(`Only managers can remove equipment `)
         }
 
     }
@@ -208,7 +213,8 @@ class Equipment extends Component {
         const removeIconSize = construction.getremoveicon.call(this)
         const account = construction.getaccountbyid.call(this, equipment.accountid)
         const styles = MyStylesheet();
-        const regularFont = construction.getRegularFont.call(this)
+        const regularFont = construction.getRegularFont.call(this);
+        const checkmanager = construction.checkmanager.call(this)
         const activeBackground = () => {
             if (this.state.activeequipmentid === equipment.equipmentid) {
                 return styles.activeBackground;
@@ -216,23 +222,28 @@ class Equipment extends Component {
                 return;
             }
         }
+        const remove = () => {
+            if (checkmanager) {
+                return (<TouchableOpacity onPress={() => { this.removeequipment(equipment) }}>
+                    <Image source={require('./png/removeIcon.png')}
+                        style={removeIconSize}
+                        resizeMethod='scale'
+                    />
+                </TouchableOpacity>)
+            }
+        }
 
-        
-            return (<View style={[styles.generalFlex, styles.bottomMargin10]} key={equipment.equipmentid} onPress={() => { this.makeequipmentactive(equipment.equipmentid) }}>
-                <View style={[styles.flex3]}>
-                    <Text style={[regularFont, activeBackground()]} onPress={() => { this.makeequipmentactive(equipment.equipmentid) }}> {equipment.equipment}  Account: {account.accountname} {equipment.ownershipstatus}</Text>
-                </View>
-                <View style={[styles.flex1]}>
-                    <TouchableOpacity onPress={() => { this.removeequipment(equipment) }}>
-                        <Image source={require('./png/removeIcon.png')}
-                            style={removeIconSize}
-                            resizeMethod='scale'
-                        />
-                    </TouchableOpacity>
 
-                </View>
-            </View>)
-        
+        return (<View style={[styles.generalFlex, styles.bottomMargin10]} key={equipment.equipmentid} onPress={() => { this.makeequipmentactive(equipment.equipmentid) }}>
+            <View style={[styles.flex3]}>
+                <Text style={[regularFont, activeBackground()]} onPress={() => { this.makeequipmentactive(equipment.equipmentid) }}> {equipment.equipment}  Account: {account.accountname} {equipment.ownershipstatus}</Text>
+            </View>
+            <View style={[styles.flex1]}>
+                {remove()}
+
+            </View>
+        </View>)
+
     }
 
     showequipmentids() {
@@ -315,11 +326,17 @@ class Equipment extends Component {
         const construction = new Construction();
         let myuser = construction.getuser.call(this);
         if (myuser) {
-            if (this.state.activeequipmentid) {
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
-                myuser.company.equipment.myequipment[i].ownership.workinghours = workinghours;
-                this.props.reduxUser(myuser)
-                this.setState({ render: 'render' })
+            const checkmanager = construction.checkmanager.call(this);
+            if (checkmanager) {
+                if (this.state.activeequipmentid) {
+                    let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                    myuser.company.equipment.myequipment[i].ownership.workinghours = workinghours;
+                    this.props.reduxUser(myuser)
+                    this.setState({ render: 'render' })
+                }
+
+            } else {
+                alert(`Only Managers can update equipment workinghours `)
             }
 
         }
@@ -385,11 +402,17 @@ class Equipment extends Component {
         const construction = new Construction();
         let myuser = construction.getuser.call(this);
         if (myuser) {
-            if (this.state.activeequipmentid) {
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
-                myuser.company.equipment.myequipment[i].ownership.loaninterest = loaninterest;
-                this.props.reduxUser(myuser)
-                this.setState({ render: 'render' })
+            const checkmanager = construction.checkmanager.call(this);
+            if (checkmanager) {
+                if (this.state.activeequipmentid) {
+                    let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                    myuser.company.equipment.myequipment[i].ownership.loaninterest = loaninterest;
+                    this.props.reduxUser(myuser)
+                    this.setState({ render: 'render' })
+                }
+
+            } else {
+                alert(`Only Managers can modify equipment loan interest`)
             }
 
         }
@@ -488,7 +511,7 @@ class Equipment extends Component {
     }
     showequipmentcostids() {
         const construction = new Construction();
-        
+
         const costs = construction.getequipmentcostsbyid.call(this, this.state.activeequipmentid);
         let costids = [];
         if (costs) {
@@ -513,13 +536,30 @@ class Equipment extends Component {
     confirmremoveequipmentcost(cost) {
 
         const construction = new Construction();
-        const i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
-        const j = construction.getequipmentcostskeybyid.call(this, this.state.activeequipmentid, cost.costid)
+
         const myuser = construction.getuser.call(this);
         if (myuser) {
-            myuser.company.equipment.myequipment[i].ownership.cost.splice(j, 1);
-            this.props.reduxUser(myuser)
-            this.setState({ render: 'render', activecostid: false })
+            const checkmanager = construction.checkmanager.call(this)
+            if (checkmanager) {
+                if (this.state.activeequipmentid) {
+                    const equipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid);
+                    if (equipment) {
+                        const i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                        const mycost = construction.getequipmentcostbyid.call(this, equipment.equipmentid, cost.costid)
+                        if (mycost) {
+                            const j = construction.getequipmentcostskeybyid.call(this, this.state.activeequipmentid, cost.costid)
+                            myuser.company.equipment.myequipment[i].ownership.cost.splice(j, 1);
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render', activecostid: false })
+                        }
+                    }
+
+                }
+
+            } else {
+                alert(`Only Managers can remove equipment costs`)
+            }
+
         }
 
     }
@@ -531,15 +571,15 @@ class Equipment extends Component {
             const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
             if (myequipment) {
                 if (this.state.activecostid === costid) {
-                 
-                    this.setState({ activecostid: false, equipmentdateday:'', equipmentdatemonth:'', equipmentdateyear:'' })
+
+                    this.setState({ activecostid: false, equipmentdateday: '', equipmentdatemonth: '', equipmentdateyear: '' })
                 } else {
                     const cost = construction.getcostbyid.call(this, myequipment.equipmentid, costid)
-                    if(cost) {
-                    const equipmentdateyear = cost.timein.substring(0, 4)
-                    const equipmentdatemonth = cost.timein.substring(5, 7);
-                    const equipmentdateday = cost.timein.substring(8, 10);
-                    this.setState({ activecostid: costid, equipmentdateday, equipmentdatemonth, equipmentdateyear })
+                    if (cost) {
+                        const equipmentdateyear = cost.timein.substring(0, 4)
+                        const equipmentdatemonth = cost.timein.substring(5, 7);
+                        const equipmentdateday = cost.timein.substring(8, 10);
+                        this.setState({ activecostid: costid, equipmentdateday, equipmentdatemonth, equipmentdateyear })
 
                     }
                 }
@@ -562,48 +602,55 @@ class Equipment extends Component {
 
     }
     handlecost(cost) {
-        if(isNumeric(cost)) {
         const construction = new Construction();
-        let myuser = construction.getuser.call(this);
-        const makeID = new MakeID();
-        if (myuser) {
-            if (this.state.activeequipmentid) {
+        const checkmanager = construction.checkmanager.call(this);
+        if (checkmanager) {
+            if (isNumeric(cost)) {
 
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                let myuser = construction.getuser.call(this);
+                const makeID = new MakeID();
+                if (myuser) {
+                    if (this.state.activeequipmentid) {
 
-                if (this.state.activecostid) {
+                        let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
 
-                    let j = construction.getequipmentcostskeybyid.call(this, this.state.activeequipmentid, this.state.activecostid)
+                        if (this.state.activecostid) {
 
-                    myuser.company.equipment.myequipment[i].ownership.cost[j].cost = cost;
-                    this.props.reduxUser(myuser)
-                    this.setState({ render: 'render' })
+                            let j = construction.getequipmentcostskeybyid.call(this, this.state.activeequipmentid, this.state.activecostid)
 
-                } else {
+                            myuser.company.equipment.myequipment[i].ownership.cost[j].cost = cost;
+                            this.props.reduxUser(myuser)
+                            this.setState({ render: 'render' })
 
-                    let costid = makeID.costid.call(this);
-                    let datein = DateStringfromObj(this.state.equipmentdate)
-                    let detail = "";
-                    let newcost = CreateCostID(costid, cost, detail, datein)
-                    let equipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
+                        } else {
 
-                    if (equipment.ownership.hasOwnProperty("cost")) {
-                        myuser.company.equipment.myequipment[i].ownership.cost.push(newcost)
-                    } else {
+                            let costid = makeID.costid.call(this);
+                            let datein = DateStringfromObj(this.state.equipmentdate)
+                            let detail = "";
+                            let newcost = CreateCostID(costid, cost, detail, datein)
+                            let equipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
 
-                        myuser.company.equipment.myequipment[i].ownership.cost = [newcost]
+                            if (equipment.ownership.hasOwnProperty("cost")) {
+                                myuser.company.equipment.myequipment[i].ownership.cost.push(newcost)
+                            } else {
+
+                                myuser.company.equipment.myequipment[i].ownership.cost = [newcost]
+                            }
+
+                            this.props.reduxUser(myuser)
+                            this.setState({ activecostid: costid, render: 'render' })
+
+                        }
+
                     }
-
-                    this.props.reduxUser(myuser)
-                    this.setState({ activecostid: costid, render: 'render' })
-
                 }
-
+            } else {
+                alert(`Cost should be numeric`)
             }
+
+        } else {
+            alert(`Only Managers can update equipment costs `)
         }
-    } else {
-        alert(`Cost should be numeric`)
-    }
 
     }
 
@@ -621,42 +668,47 @@ class Equipment extends Component {
     }
     handledetail(detail) {
         const construction = new Construction();
-        let myuser = construction.getuser.call(this);
-        const makeID = new MakeID();
-        if (myuser) {
-            if (this.state.activeequipmentid) {
+        const checkmanager = construction.checkmanager.call(this);
+        if (checkmanager) {
+            let myuser = construction.getuser.call(this);
+            const makeID = new MakeID();
+            if (myuser) {
+                if (this.state.activeequipmentid) {
 
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                    let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
 
-                if (this.state.activecostid) {
+                    if (this.state.activecostid) {
 
-                    let j = construction.getequipmentcostskeybyid.call(this, this.state.activeequipmentid, this.state.activecostid)
+                        let j = construction.getequipmentcostskeybyid.call(this, this.state.activeequipmentid, this.state.activecostid)
 
-                    myuser.company.equipment.myequipment[i].ownership.cost[j].detail = detail;
-                    this.props.reduxUser(myuser)
-                    this.setState({ render: 'render' })
+                        myuser.company.equipment.myequipment[i].ownership.cost[j].detail = detail;
+                        this.props.reduxUser(myuser)
+                        this.setState({ render: 'render' })
 
-                } else {
-
-                    let costid = makeID.costid.call(this);
-                    let datein = DateStringfromObj(this.state.equipmentdate)
-                    let cost = this.state.cost;
-                    let newcost = CreateCostID(costid, cost, detail, datein)
-                    let equipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
-
-                    if (equipment.ownership.hasOwnProperty("cost")) {
-                        myuser.company.equipment.myequipment[i].ownership.cost.push(newcost)
                     } else {
 
-                        myuser.company.equipment.myequipment[i].ownership.cost = [newcost]
+                        let costid = makeID.costid.call(this);
+                        let datein = DateStringfromObj(this.state.equipmentdate)
+                        let cost = this.state.cost;
+                        let newcost = CreateCostID(costid, cost, detail, datein)
+                        let equipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
+
+                        if (equipment.ownership.hasOwnProperty("cost")) {
+                            myuser.company.equipment.myequipment[i].ownership.cost.push(newcost)
+                        } else {
+
+                            myuser.company.equipment.myequipment[i].ownership.cost = [newcost]
+                        }
+
+                        this.props.reduxUser(myuser)
+                        this.setState({ activecostid: costid, render: 'render' })
+
                     }
 
-                    this.props.reduxUser(myuser)
-                    this.setState({ activecostid: costid, render: 'render' })
-
                 }
-
             }
+        } else {
+            alert(`Only Managers can update equipment details `)
         }
 
     }
@@ -768,19 +820,19 @@ class Equipment extends Component {
         const regularFont = construction.getRegularFont.call(this);
         const headerFont = construction.getHeaderFont.call(this);
         const equipmentrate = () => {
-            let rate = construction.calculateequipmentratebyid.call(this,this.state.activeequipmentid);
-            const equipment = construction.getmyequipmentbyid.call(this,this.state.activeequipmentid)
-            if(rate) {
+            let rate = construction.calculateequipmentratebyid.call(this, this.state.activeequipmentid);
+            const equipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
+            if (rate) {
                 rate = Number(rate.toFixed(2))
-                return(
-                <View style={[styles.generalFlex]}>
-                    <View style={[styles.flex1]}>
-                       <Text style={[styles.regularFont]}>{equipment.equipment} is ${rate} dollars per working hour </Text>
+                return (
+                    <View style={[styles.generalFlex]}>
+                        <View style={[styles.flex1]}>
+                            <Text style={[styles.regularFont]}>{equipment.equipment} is ${rate} dollars per working hour </Text>
+                        </View>
                     </View>
-                </View>
                 )
-           }
-        
+            }
+
         }
         if (this.state.activeequipmentid) {
             const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
@@ -995,6 +1047,7 @@ class Equipment extends Component {
         const construction = new Construction();
         const styles = MyStylesheet();
         const regularFont = construction.getRegularFont.call(this)
+        const headerFont = construction.getHeaderFont.call(this)
         if (this.state.activeequipmentid) {
             const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
             if (myequipment) {
@@ -1073,7 +1126,7 @@ class Equipment extends Component {
         const construction = new Construction();
         if (this.state.activeequipmentid) {
             const myequipment = construction.getmyequipmentbyid.call(this, this.state.activeequipmentid)
-    
+
             return (myequipment.accountid)
         } else {
             return (this.state.accountid)
@@ -1084,30 +1137,36 @@ class Equipment extends Component {
         const construction = new Construction();
         let myuser = construction.getuser.call(this);
         const makeID = new MakeID();
-        const account = construction.getaccountbyid.call(this,accountid)
+        const account = construction.getaccountbyid.call(this, accountid)
         const accountname = account.accountname;
         if (myuser) {
-            if (this.state.activeequipmentid) {
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
-                myuser.company.equipment.myequipment[i].accountid = accountid;
-                this.props.reduxUser(myuser)
-                this.setState({ accountname})
+            const checkmanager = construction.checkmanager.call(this)
+            if (checkmanager) {
+                if (this.state.activeequipmentid) {
+                    let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                    myuser.company.equipment.myequipment[i].accountid = accountid;
+                    this.props.reduxUser(myuser)
+                    this.setState({ accountname })
+
+                } else {
+                    this.setState({ equipment })
+                    let equipmentid = makeID.equipmentid.call(this);
+                    let ownership = this.state.ownership;
+                    let equipment = this.state.equipment
+                    let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
+                    if (myuser.company.hasOwnProperty("equipment")) {
+                        myuser.company.equipment.myequipment.push(newEquipment);
+                    } else {
+                        let equipment = { myequipment: [newEquipment] };
+                        myuser.company.equipment = equipment;
+
+                    }
+                    this.props.reduxUser(myuser);
+                    this.setState({ activeequipmentid: equipmentid, accountname })
+                }
 
             } else {
-                this.setState({ equipment })
-                let equipmentid = makeID.equipmentid.call(this);
-                let ownership = this.state.ownership;
-                let equipment = this.state.equipment
-                let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
-                if (myuser.company.hasOwnProperty("equipment")) {
-                    myuser.company.equipment.myequipment.push(newEquipment);
-                } else {
-                    let equipment = { myequipment: [newEquipment] };
-                    myuser.company.equipment = equipment;
-
-                }
-                this.props.reduxUser(myuser);
-                this.setState({ activeequipmentid: equipmentid, accountname })
+                alert(`Only Managers can update equipment account`)
             }
 
         }
@@ -1118,27 +1177,33 @@ class Equipment extends Component {
         let myuser = construction.getuser.call(this);
         const makeID = new MakeID();
         if (myuser) {
-            if (this.state.activeequipmentid) {
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
-                myuser.company.equipment.myequipment[i].equipment = equipment;
-                this.props.reduxUser(myuser)
-                this.setState({ render: 'render' })
+            const checkmanager = construction.checkmanager.call(this)
+            if (checkmanager) {
+                if (this.state.activeequipmentid) {
+                    let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                    myuser.company.equipment.myequipment[i].equipment = equipment;
+                    this.props.reduxUser(myuser)
+                    this.setState({ render: 'render' })
+
+                } else {
+                    this.setState({ equipment })
+                    let equipmentid = makeID.equipmentid.call(this);
+                    let ownership = "";
+                    let accountid = this.state.accountid;
+                    let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
+                    if (myuser.company.hasOwnProperty("equipment")) {
+                        myuser.company.equipment.myequipment.push(newEquipment);
+                    } else {
+                        let equipment = { myequipment: [newEquipment] };
+                        myuser.company.equipment = equipment;
+
+                    }
+                    this.props.reduxUser(myuser);
+                    this.setState({ activeequipmentid: equipmentid })
+                }
 
             } else {
-                this.setState({ equipment })
-                let equipmentid = makeID.equipmentid.call(this);
-                let ownership = "";
-                let accountid = this.state.accountid;
-                let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
-                if (myuser.company.hasOwnProperty("equipment")) {
-                    myuser.company.equipment.myequipment.push(newEquipment);
-                } else {
-                    let equipment = { myequipment: [newEquipment] };
-                    myuser.company.equipment = equipment;
-
-                }
-                this.props.reduxUser(myuser);
-                this.setState({ activeequipmentid: equipmentid })
+                alert(`Only Managers can create equipment `)
             }
 
         }
@@ -1149,32 +1214,41 @@ class Equipment extends Component {
         let myuser = construction.getuser.call(this);
         const makeID = new MakeID();
         if (myuser) {
-            if (this.state.activeequipmentid) {
-                let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
-                myuser.company.equipment.myequipment[i].ownershipstatus = ownership;
-                let newOwnership = CreateOwnwership(DateStringfromObj(this.state.purchasedate),this.state.loaninterest,DateStringfromObj(this.state.saledate),this.state.resalevalue)
-                myuser.company.equipment.myequipment[i].ownership = newOwnership;
-                
-                this.props.reduxUser(myuser)
-                this.setState({ render: 'render' })
+            const checkmanager = construction.checkmanager.call(this)
+            if (checkmanager) {
+                let purchasedate = `${this.state.purchasedateyear}-${this.state.purchasedatemonth}-${this.state.purchasedateday}`
+                let saledate = `${this.state.saledateyear}-${this.state.saledatemonth}-${this.state.saledateday}`
+                if (this.state.activeequipmentid) {
+                    let i = construction.getequipmentkeybyid.call(this, this.state.activeequipmentid)
+                    myuser.company.equipment.myequipment[i].ownershipstatus = ownership;
+
+                    let newOwnership = CreateOwnwership(purchasedate, this.state.loaninterest, saledate, this.state.resalevalue)
+                    myuser.company.equipment.myequipment[i].ownership = newOwnership;
+
+                    this.props.reduxUser(myuser)
+                    this.setState({ render: 'render' })
+
+                } else {
+                    this.setState({ equipment })
+                    let equipmentid = makeID.equipmentid.call(this);
+                    let equipment = this.state.equipment;
+                    let accountid = this.state.accountid;
+                    let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
+                    let newOwnership = CreateOwnwership(purchasedate, this.state.loaninterest, saledate, this.state.resalevalue)
+                    newEquipment.ownership = newOwnership;
+                    if (myuser.company.hasOwnProperty("equipment")) {
+                        myuser.company.equipment.myequipment.push(newEquipment);
+                    } else {
+                        let equipment = { myequipment: [newEquipment] };
+                        myuser.company.equipment = equipment;
+
+                    }
+                    this.props.reduxUser(myuser);
+                    this.setState({ activeequipmentid: equipmentid })
+                }
 
             } else {
-                this.setState({ equipment })
-                let equipmentid = makeID.equipmentid.call(this);
-                let equipment = this.state.equipment;
-                let accountid = this.state.accountid;
-                let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
-                let newOwnership = CreateOwnwership(DateStringfromObj(this.state.purchasedate),this.state.loaninterest,DateStringfromObj(this.state.saledate),this.state.resalevalue)
-                newEquipment.ownership = newOwnership;
-                if (myuser.company.hasOwnProperty("equipment")) {
-                    myuser.company.equipment.myequipment.push(newEquipment);
-                } else {
-                    let equipment = { myequipment: [newEquipment] };
-                    myuser.company.equipment = equipment;
-
-                }
-                this.props.reduxUser(myuser);
-                this.setState({ activeequipmentid: equipmentid })
+                alert(`Only Managers can update equipment`)
             }
 
         }
@@ -1218,7 +1292,7 @@ class Equipment extends Component {
         const regularFont = construction.getRegularFont.call(this)
         const headerFont = construction.getHeaderFont.call(this)
         const Equipment = () => {
-            return(<View style={[styles.generalFlex]}>
+            return (<View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
@@ -1254,9 +1328,14 @@ class Equipment extends Component {
                 </View>
             </View>)
         }
-        
+
         if (myuser) {
+            const checkmanager = construction.checkmanager.call(this);
+            if(checkmanager) {
             return (Equipment())
+            } else {
+                return(<Text style={{...regularFont}}>Only Managers can view Equipment component</Text>)
+            }
         } else {
             return (construction.loginMessage.call(this, "Equipment"))
         }

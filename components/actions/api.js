@@ -1,5 +1,24 @@
 import EnvironmentalVariables from '../functions/enviornmentalvariables'
 
+export async function LoadAllUsers() {
+    const variables = new EnvironmentalVariables();
+    const serverAPI = variables.getvariables.call(this).serverAPI;
+    let APIURL = `${serverAPI}/construction/loadallusers`
+    return fetch(APIURL, { credentials: 'include' }).then(resp => {
+    if (!resp.ok) {
+    if (resp.status >= 400 && resp.status < 500) {
+    return resp.json().then(data => {
+    throw data.message
+    })
+    }
+    else {
+    let err = 'Request failed or Server is not responding' ;
+    throw err;
+    }
+    }
+    return resp.json();
+    })
+    }
 
 export async function LoadCSIs() {
     const variables = new EnvironmentalVariables();
@@ -16,7 +35,7 @@ export async function LoadCSIs() {
                 })
             }
             else {
-                let err = { errorMessage: 'Please try again later, server is not responding' };
+                let err =  'No network connection or the Server is not responding';
                 throw err;
             }
         }
@@ -35,11 +54,11 @@ export async function StripeDashboard(providerid, stripe) {
         if (!resp.ok) {
             if (resp.status >= 400 && resp.status < 500) {
                 return resp.json().then(data => {
-                    throw data;
+                    throw data.message
                 })
             }
             else {
-                let err = { errorMessage: 'Please try again later, server is not responding' };
+                let err =  'No network connection or the Server is not responding';
                 throw err;
             }
         }
@@ -62,12 +81,11 @@ export async function UploadProfileImage(formdata,providerid) {
             if (!resp.ok) {
                 if (resp.status >= 400 && resp.status < 500) {
                     return resp.json().then(data => {
-                        let err = { errorMessage: data.message };
-                        throw err;
+                        throw data.message
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }
@@ -93,7 +111,7 @@ export async function CheckUserLogin() {
                 })
             }
             else {
-                let err = { errorMessage: 'Please try again later, server is not responding' };
+                let err =  'No network connection or the Server is not responding!' ;
                 throw err;
             }
         }
@@ -113,12 +131,11 @@ export async function LogoutUser(providerid) {
         if (!resp.ok) {
             if (resp.status >= 400 && resp.status < 500) {
                 return resp.json().then(data => {
-                    let err = { errorMessage: data.message };
-                    throw err;
+                    throw data.message
                 })
             }
             else {
-                let err = { errorMessage: 'Please try again later, server is not responding' };
+                let err =  'No network connection or the Server is not responding';
                 throw err;
             }
         }
@@ -127,29 +144,7 @@ export async function LogoutUser(providerid) {
     })
 }
 
-export async function LoadAllUsers() {
 
-    let APIURL = `https://civilengineer.io/construction/api/loadallusers.php`
-    console.log(APIURL)
-
-    return fetch(APIURL, { credentials: 'include' }).then(resp => {
-
-        if (!resp.ok) {
-            if (resp.status >= 400 && resp.status < 500) {
-                return resp.json().then(data => {
-                    let err = { errorMessage: data.message };
-                    throw err;
-                })
-            }
-            else {
-                let err = { errorMessage: 'Please try again later, server is not responding' };
-                throw err;
-            }
-        }
-
-        return resp.json();
-    })
-}
 
 
 export async function RegisterNewCompany(values) {
@@ -172,12 +167,11 @@ export async function RegisterNewCompany(values) {
             if (!resp.ok) {
                 if (resp.status >= 400 && resp.status < 500) {
                     return resp.json().then(data => {
-                        let err = { errorMessage: data.message };
-                        throw err;
+                       throw data.message
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }
@@ -192,6 +186,7 @@ export async function ClientLogin(values) {
     const serverAPI = variables.getvariables.call(this).serverAPI;
 
     let APIURL = `${serverAPI}/construction/clientlogin`;
+    console.log(APIURL)
     return fetch(APIURL, {
         method: 'post',
         credentials: 'include',
@@ -211,7 +206,7 @@ export async function ClientLogin(values) {
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }
@@ -232,16 +227,10 @@ export async function ValidateCompanyID(url) {
         .then(resp => {
 
             if (!resp.ok) {
-                if (resp.status >= 400 && resp.status < 500) {
-                    return resp.json().then(data => {
-                        let err = { errorMessage: data.message };
-                        throw err;
-                    })
-                }
-                else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+              
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
-                }
+                
             }
 
             return resp.json();
@@ -255,16 +244,10 @@ export async function CheckProviderID(profile) {
         .then(resp => {
 
             if (!resp.ok) {
-                if (resp.status >= 400 && resp.status < 500) {
-                    return resp.json().then(data => {
-                        let err = { errorMessage: data.message };
-                        throw err;
-                    })
-                }
-                else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+               
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
-                }
+                
             }
 
             return resp.json();
@@ -283,16 +266,10 @@ export async function CheckEmailAddress(emailaddress) {
         .then(resp => {
 
             if (!resp.ok) {
-                if (resp.status >= 400 && resp.status < 500) {
-                    return resp.json().then(data => {
-                        let err = { errorMessage: data.message };
-                        throw err;
-                    })
-                }
-                else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+               
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
-                }
+                
             }
 
             return resp.json();
@@ -326,7 +303,7 @@ export async function SaveCompany(values) {
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }
@@ -362,7 +339,7 @@ export async function SaveProject(values) {
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }
@@ -397,7 +374,7 @@ export async function SaveProfile(values) {
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }
@@ -426,12 +403,11 @@ export async function AddExistingCompany(values) {
             if (!resp.ok) {
                 if (resp.status >= 400 && resp.status < 500) {
                     return resp.json().then(data => {
-                        let err = { errorMessage: data.message };
-                        throw err;
+                        throw data.message
                     })
                 }
                 else {
-                    let err = { errorMessage: 'Please try again later, server is not responding' };
+                    let err =  'No network connection or the Server is not responding';
                     throw err;
                 }
             }

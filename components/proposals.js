@@ -609,7 +609,8 @@ class Proposals {
         const proposals = new Proposals();
         const myuser = construction.getuser.call(this)
         const regularFont = construction.getRegularFont.call(this)
-        const headerFont = construction.getHeaderFont.call(this)
+        const headerFont = construction.getHeaderFont.call(this);
+       
         const proposalIcon = () => {
             if (menu.open) {
                 return ({ width: 169, height: 36 })
@@ -666,6 +667,8 @@ class Proposals {
         }
 
         if(myuser){
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
 
         return (<View style={[styles.generalFlex]}>
             <View style={[styles.flex1]}>
@@ -694,6 +697,9 @@ class Proposals {
                 {construction.showsaveproject.call(this)}
             </View>
         </View>)
+            } else {
+                return(<Text style={[regularFont]}>Only Managers can view proposals</Text>)
+            }
 
         } else {
             return(construction.loginMessage("Proposals"))

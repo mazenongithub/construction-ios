@@ -176,7 +176,7 @@ class Schedule extends Component {
         const construction = new Construction();
         const makeid = new MakeID();
         const myuser = construction.getuser.call(this);
-        const myemployee = construction.getemployeebyproviderid.call(this, providerid)
+        const myemployee = construction.getemployeebyid.call(this, providerid)
         const employee = `${myemployee.firstname} ${myemployee.lastname}`
         if (myuser) {
             const activeparams = construction.getactiveproject.call(this)
@@ -837,7 +837,7 @@ class Schedule extends Component {
                 const mylabor = construction.getschedulelaborbyid.call(this, projectid, laborid)
 
                 if (mylabor) {
-                    const myemployee = construction.getemployeebyproviderid.call(this, mylabor.providerid)
+                    const myemployee = construction.getemployeebyid.call(this, mylabor.providerid)
                     const employee = `${myemployee.firstname} ${myemployee.lastname}`
 
                     const timeinmonth = getMonthfromTimein(mylabor.timein);
@@ -883,7 +883,7 @@ class Schedule extends Component {
         const removeIcon = construction.getremoveicon.call(this)
         const regularFont = construction.getRegularFont.call(this);
         const csi = construction.getcsibyid.call(this, labor.csiid);
-        let employee = construction.getemployeebyproviderid.call(this, labor.providerid)
+        let employee = construction.getemployeebyid.call(this, labor.providerid)
         let hourlyrate = labor.laborrate;
         const activeparams = construction.getactiveproject.call(this)
         const project = construction.getprojectbyid.call(this, activeparams.projectid)
@@ -936,18 +936,26 @@ class Schedule extends Component {
     showlaborids() {
         const construction = new Construction();
         const activeparams = construction.getactiveproject.call(this)
-        const project = construction.getprojectbyid.call(this, activeparams.projectid)
+        const checkmanager = construction.checkmanager.call(this)
         let laborids = [];
-        if (project) {
-            const projectid = project.projectid;
-            const labors = construction.getschedulelabor.call(this, projectid)
-            if (labors) {
-                // eslint-disable-next-line
-                labors.map(labor => {
-                    laborids.push(this.showlaborid(labor))
+        const myuser = construction.getuser.call(this);
+        if (myuser) {
+            const project = construction.getprojectbyid.call(this, activeparams.projectid);
+            if (project) {
+                const projectid = project.projectid;
+                const labors = construction.getschedulelabor.call(this, projectid)
+                if (labors) {
+                    // eslint-disable-next-line
+                    labors.map(labor => {
+                        if (labor.providerid === myuser.providerid || checkmanager) {
+                            laborids.push(this.showlaborid(labor))
+
+                        }
 
 
-                })
+                    })
+                }
+
             }
 
         }

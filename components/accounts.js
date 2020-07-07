@@ -89,7 +89,10 @@ class Accounts {
         let validate = accounts.validateDeleteAccount.call(this, account);
         if (validate.deleteaccount) {
             const myuser = construction.getuser.call(this);
+            
             if (myuser) {
+                const checkmanager = construction.checkmanager.call(this);
+                if(checkmanager) {
                 const i = construction.getaccountkeybyid.call(this, account.accountid)
                 myuser.company.office.accounts.account.splice(i, 1);
                 if (myuser.company.office.accounts.account.length === 0) {
@@ -99,7 +102,10 @@ class Accounts {
 
 
 
+            } else {
+                alert(`Only Managers can remove account`)
             }
+        }
 
         } else {
             const message = validate.deletemessage;
@@ -128,11 +134,24 @@ class Accounts {
         const removeIconSize = construction.getremoveicon.call(this)
         const regularFont = construction.getRegularFont.call(this)
         const styles = MyStylesheet();
+        const checkmanager = construction.checkmanager.call(this)
         const activeBackground = () => {
             if (account.accountid === this.state.activeaccountid) {
                 return (styles.activeBackground)
             } else {
                 return;
+            }
+        }
+
+        const remove = () => {
+            if(checkmanager) {
+                return(<TouchableOpacity onPress={() => { accounts.removeaccount.call(this, account) }}>
+                <Image source={require('./png/removeIcon.png')}
+                    style={removeIconSize}
+                    resizeMethod='scale'
+                />
+            </TouchableOpacity>
+)
             }
         }
 
@@ -146,13 +165,7 @@ class Accounts {
                             <Text style={[regularFont, activeBackground()]} onPress={() => { accounts.makeaccountactive.call(this, account.accountid) }}> {account.accountname}</Text>
                         </View>
                         <View style={[styles.flex1]}>
-                            <TouchableOpacity onPress={() => { accounts.removeaccount.call(this, account) }}>
-                                <Image source={require('./png/removeIcon.png')}
-                                    style={removeIconSize}
-                                    resizeMethod='scale'
-                                />
-                            </TouchableOpacity>
-
+                            {remove()}
                         </View>
                     </View>
 
@@ -172,7 +185,8 @@ class Accounts {
         let myuser = construction.getuser.call(this);
         const makeID = new MakeID();
         if (myuser) {
-
+            const checkmanager = construction.checkmanager.call(this)
+            if(checkmanager) {
             if (this.state.activeaccountid) {
 
                 let i = construction.getaccountkeybyid.call(this, this.state.activeaccountid)
@@ -200,6 +214,9 @@ class Accounts {
                 this.setState({ activeaccountid: accountid })
 
             }
+        } else {
+            alert(`Only Managers can update accounts`)
+        }
         }
     }
     getaccountname() {
@@ -218,14 +235,16 @@ class Accounts {
         const styles = MyStylesheet();
         const myuser = construction.getuser.call(this)
         const headerFont = construction.getHeaderFont.call(this)
-        const regularFont = construction.getRegularFont.call(this)
+        const regularFont = construction.getRegularFont.call(this);
+        const checkmanager = construction.checkmanager.call(this)
         const Account = () => {
             return (<View style={[styles.generalFlex]}>
                 <View style={[styles.flex1]}>
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[headerFont, styles.alignCenter]}>/{mycompany.url}/accounts</Text>
+                            <Text style={[headerFont, styles.alignCenter, styles.boldFont]}>/{mycompany.url}</Text>
+                            <Text style={[headerFont, styles.alignCenter, styles.boldFont]}>/accounts</Text>
                         </View>
                     </View>
 
@@ -247,7 +266,11 @@ class Accounts {
             </View>)
         }
         if (myuser) {
+            if(checkmanager) {
             return (Account())
+            } else {
+                return (<Text style={[regularFont]}>You have to be a Manager to view Accounts</Text>)
+            }
         } else {
             return (construction.loginMessage.call(this, "Employees"))
         }

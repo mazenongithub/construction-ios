@@ -10,11 +10,16 @@ class EmployeeID {
         const construction = new Construction();
         const myemployees = construction.getmyemployees.call(this)
         const search = this.state.employee;
+        const checkmanager = construction.checkmanager.call(this)
         let results = [];
         let myusers = [];
+        const myuser = construction.getuser.call(this)
+        if(myuser) {
+
         if(myemployees) {
             myemployees.map(myemployee=> {
-                myusers.push(construction.getemployeebyproviderid.call(this,myemployee.providerid))
+                if(checkmanager || myemployee.providerid === myuser.providerid )
+                myusers.push(construction.getemployeebyid.call(this,myemployee.providerid))
             })
         }
         if(myusers.length>0 && search) {
@@ -28,6 +33,7 @@ class EmployeeID {
 
             
         }
+    }
         return results;
     }
     showsearchids(myuser) {
@@ -49,7 +55,7 @@ class EmployeeID {
             const regularFont = construction.getRegularFont.call(this)
             const activeemployee = () => {
                 const myemployeeid = this.getemployeeid();
-                const myuser = construction.getemployeebyproviderid.call(this, myemployeeid)
+                const myuser = construction.getemployeebyid.call(this, myemployeeid)
                 if(myuser) {
                     return(<Text style={[styles.activeBackground,regularFont]}>{myuser.firstname} {myuser.lastname}</Text>)
                 }
