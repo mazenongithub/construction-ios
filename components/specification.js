@@ -147,6 +147,8 @@ class Specification {
         const projectid = activeproject.projectid;
         const myproject = construction.getprojectbyid.call(this, projectid);
         const specification = new Specification();
+        if(myuser) {
+            if(checkactive) {
         if (myproject) {
             const csiid = activeproject.specifications.csiid;
             const csi = construction.getcsibyid.call(this, csiid)
@@ -178,6 +180,14 @@ class Specification {
             )
 
         }
+
+    } else {
+        return(<Text style={[regularFont]}>You have to be active to view Specifications</Text>) 
+    }
+
+    } else {
+        return(<Text style={[regularFont]}>You have to be logged in to view Specification</Text>)
+    }
 
 
 

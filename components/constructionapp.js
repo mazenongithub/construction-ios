@@ -40,7 +40,7 @@ class ConstructionApp extends Component {
         this.state = {
             activeimage: 'main_slide', message: '', render: '', width: 0, height: 0, open: true, activeproposalid: false, activeinvoiceid: false, message: '', profile: '',
             profilecheck: '', emailaddress: '', emailaddresscheck: false, firstname: '', lastname: '', clientid: '', client: '', updated: new Date(), approved: '',
-            password: '', passwordcheck: false
+            password: '', passwordcheck: false, showlabor:true,showmaterials:true,showequipment:true
         }
         this.updatedimesions = this.updatedimesions.bind(this)
     }
@@ -599,9 +599,11 @@ class ConstructionApp extends Component {
 
             const closed_3 = () => {
                 if (myuser) {
-                    return (<Text style={[styles.alignCenter, headerFont]} onPress={() => { this.logoutuser() }}>  /logout </Text>)
+                    return (  <View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}><Text style={[styles.alignCenter, headerFont]} onPress={() => { this.logoutuser() }}>  /logout </Text></View>)
                 } else {
-                    return (<Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text>)
+                    return ( <View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}>
+                                <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text>
+                            </View>)
                 }
 
             }
@@ -617,7 +619,10 @@ class ConstructionApp extends Component {
                         </View>)
                    }
                 } else {
-                    return (<Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text>)
+                    return (
+                        <View style={[styles.minHeight30, styles.showBorder, styles.navContainer]}> 
+                        <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text></View>
+                    )
                 }
 
             }
@@ -723,9 +728,9 @@ class ConstructionApp extends Component {
                             {open_2()}
 
                         </View>
-                        <View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}>
+                      
                             {closed_3()}
-                        </View>
+                       
 
                     </View>)
                 }

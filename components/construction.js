@@ -1903,6 +1903,16 @@ class Construction {
         }
         return myaccount;
     }
+    getcheckicon(){
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this)
+        if(menu.open) {
+            return ({ width: 33, height: 19 })
+        } else {
+            return ({ width: 112, height: 76 })
+        }
+       
+    }
 
     checkinvoice(projectid, invoiceid) {
         const construction = new Construction();

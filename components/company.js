@@ -6,11 +6,17 @@ import { MyStylesheet } from './styles';
 import Construction from './construction';
 import { returnCompanyList, CreateCompany, validateCompanyID } from './functions';
 import { RegisterNewCompany, ValidateCompanyID,AddExistingCompany } from './actions/api'
-import { thisTypeAnnotation } from '@babel/types';
+
 class Company extends Component {
     constructor(props) {
         super(props)
         this.state = { render: '', url: '', company: '', urlcheck: true, message: '' }
+    }
+
+    componentDidMount() {
+        if(!this.props.allusers.hasOwnProperty("length")) {
+            construction.loadallusers.call(this)
+            }
     }
     handleurl(url) {
         url = url.toLowerCase();
@@ -332,9 +338,7 @@ class Company extends Component {
         const mycompany = construction.getcompany.call(this)
         const regularFont = construction.getRegularFont.call(this)
         const headerFont = construction.getHeaderFont.call(this)
-        if(!this.props.allusers.hasOwnProperty("length")) {
-            construction.loadallusers.call(this)
-            }
+       
         const registerIcon = () => {
             if (menu.open) {
                 return ({ width: 174, height: 34 })
