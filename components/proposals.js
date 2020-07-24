@@ -330,7 +330,7 @@ class Proposals {
                     <View style={[styles.flex2, styles.flexDirection]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}> {employee.firstname} {employee.lastname} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)} CSI {csi.csi}-{csi.title}  Total Hours {totalhours.toFixed(2)} Hrs at  $</Text>
                         <TextInput value={laborrate} onChangeText={text => { proposals.handlelaborrate.call(this, text, item.laborid) }} style={[regularFont, styles.defaultInput, styles.smallField]} />
-                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                     </View>
                     <View style={[styles.flex1]}>
                         <Text style={[regularFont]}>Profit</Text>
@@ -345,7 +345,7 @@ class Proposals {
                     <View style={[styles.flex3, styles.flexDirection]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>{employee.firstname} {employee.lastname} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)} CSI {csi.csi}-{csi.title}  Total Hours {totalhours.toFixed(2)} Hrs at  $</Text>
                         <TextInput value={laborrate} onChangeText={text => { proposals.handlelaborrate.call(this, text, item.laborid) }} style={[regularFont, styles.defaultInput, styles.smallField]} />
-                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {profit} = ${Number(amount * profit).toFixed(2)} </Text>
+                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)} </Text>
                     </View>
                     <View style={[styles.flex1]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>Profit</Text>
@@ -379,7 +379,7 @@ class Proposals {
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>{myequipment.equipment} CSI: {csi.csi} - {csi.title} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)}
                             Total Hours:{totalhours.toFixed(2)} x $</Text>
                         <TextInput style={[regularFont, styles.smallField, styles.defaultInput]} value={equipmentrate} onChangeText={text => { proposals.handleequipmentrate.call(this, text, item.equipmentid) }} />
-                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= {amount} x {`${Number(1 + profit).toFixed(2)}`} = ${Number(amount * (1 + profit)).toFixed(2)}</Text>
+                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= {amount} x {`${+Number(1 + profit).toFixed(4)}`} = ${Number(amount * (1 + profit)).toFixed(2)}</Text>
                     </View>
                     <View style={[styles.flex1]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>Profit</Text>
@@ -395,7 +395,7 @@ class Proposals {
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>{myequipment.equipment} CSI: {csi.csi} - {csi.title} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)}
                             Total Hours:{totalhours.toFixed(2)} x $</Text>
                         <TextInput style={[regularFont, styles.smallField, styles.defaultInput]} value={equipmentrate} onChangeText={text => { proposals.handleequipmentrate.call(this, text, item.equipmentid) }} />
-                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= {amount} x {`${Number(1 + profit).toFixed(2)}`} = ${Number(amount * (1 + profit)).toFixed(2)}</Text>
+                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= {amount} x {`${+Number(1 + profit).toFixed(4)}`} = ${Number(amount * (1 + profit)).toFixed(2)}</Text>
                     </View>
                     <View style={[styles.flex1]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>Profit</Text>
@@ -436,7 +436,7 @@ class Proposals {
                         <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { proposals.handlematerialunitcost.call(this, text, item.materialid) }} />
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>=  / </Text>
                         <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { proposals.handlematerialunit.call(this, text, item.materialid) }} />
-                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                     </View>
                     <View style={[styles.flex1]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>Profit</Text>
@@ -455,7 +455,7 @@ class Proposals {
                         <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { proposals.handlematerialunitcost.call(this, text, item.materialid) }} />
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>=  / </Text>
                         <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { proposals.handlematerialunitcost.call(this, text, item.materialid) }} />
-                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                        <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                     </View>
                     <View style={[styles.flex1]}>
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>Profit</Text>

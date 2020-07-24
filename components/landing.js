@@ -12,7 +12,7 @@ class Landing {
             {
                 imageid: 'main_slide',
                 uri: require('../slides/main_slide.png'),
-                capt: 'Construction Management by CivilEngineer.io. The best App for service providing companies in the IStore. Start when you create your company. See the Slideshow and then Join',
+                capt: 'Construction Management by CivilEngineer.io. This app does Construction Management and Project Management. Free Project Engineering Service by Joining.  See the Slideshow, then Join',
                 title: 'Construction Management'
 
             },
@@ -139,6 +139,44 @@ class Landing {
                 title: 'Actual Cost Item'
 
             },
+         
+            {
+                imageid: 'proposals',
+                uri: require('../slides/proposals.png'),
+                capt: 'Create a proposal. Attach your scheduled pay items to it by clicking on the item. Adjust your profit factor. ',
+                title: 'Proposals'
+
+            },
+          
+            {
+                imageid: 'viewproposal',
+                uri: require('../slides/viewproposal.png'),
+                capt: 'View proposal component is the proposal. You can adjust the quantity and unit to produce unit prices. Profit is calculated from the payitems. When you change it this adjusts the profit for each item. ',
+                title: 'View Proposal'
+
+            },
+            {
+                imageid: 'invoices',
+                uri: require('../slides/invoices.png'),
+                capt: 'Create an Invoice. Add your actual pay items by touching it when the invoice id is active. Adjust your profit factors',
+                title: 'Invoice'
+
+            },
+           
+            {
+                imageid: 'viewinvoice',
+                uri: require('../slides/viewinvoice.png'),
+                capt: 'View Invoice is the invoice. It shows the payment and transfer status while the invoice is being settled. Adjusting the profit for invoice item adjusts the profit for each pay item',
+                title: 'View Invoice'
+
+            },
+            {
+                imageid: 'lem',
+                uri: require('../slides/lem.png'),
+                capt: 'Labor, Equipment, and Material breakdown for each pay item. This should be done for both schedule and actual',
+                title: 'Labor, Equipment, Materials'
+
+            },
             {
                 imageid: 'specification',
                 uri: require('../slides/specification.png'),
@@ -152,37 +190,7 @@ class Landing {
                 capt: 'Engineers provider quantity take-off schedule for the Project for Bid',
                 title: 'Cost Estimate'
 
-            },
-         
-            {
-                imageid: 'proposals',
-                uri: require('../slides/proposal.png'),
-                capt: 'Create a Proposal to Send to the PM for authorization. Adjust your schedule pay items inside of the proposal components',
-                title: 'Proposals'
-
-            },
-          
-            {
-                imageid: 'viewproposal',
-                uri: require('../slides/viewproposal.png'),
-                capt: 'View proposal component is the proposal. You can adjust the quantity and unit to produce unit prices. Profit is calculated from the payitems. When you change it this adjusts the profit for each item. ',
-                title: 'View Proposal'
-
-            },
-            {
-                imageid: 'lem',
-                uri: require('../slides/lem.png'),
-                capt: 'Labor, Equipment, and Material breakdown for each pay item. This should be done for both schedule and actual',
-                title: 'Labor, Equipment, Materials'
-
-            },
-            {
-                imageid: 'viewinvoice',
-                uri: require('../slides/viewinvoice.png'),
-                capt: 'View Invoice is the invoice. It shows the payment and transfer status while the invoice is being settled. Adjusting the profit for invoice item adjusts the profit for each pay item',
-                title: 'View Invoice'
-
-            },
+            }
            
 
         ];

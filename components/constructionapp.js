@@ -40,7 +40,7 @@ class ConstructionApp extends Component {
         this.state = {
             activeimage: 'main_slide', message: '', render: '', width: 0, height: 0, open: true, activeproposalid: false, activeinvoiceid: false, message: '', profile: '',
             profilecheck: '', emailaddress: '', emailaddresscheck: false, firstname: '', lastname: '', clientid: '', client: '', updated: new Date(), approved: '',
-            password: '', passwordcheck: false, showlabor:true,showmaterials:true,showequipment:true
+            password: '', passwordcheck: false, showlabor:true,showmaterials:true,showequipment:true,showactuallabor:true, showactualmaterials:true, showactualequipment:true
         }
         this.updatedimesions = this.updatedimesions.bind(this)
     }

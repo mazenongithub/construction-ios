@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native'
 import Construction from './construction'
 import { MyStylesheet } from './styles'
-import { calculatetotalhours, inputUTCStringForLaborID, inputUTCStringForMaterialIDWithTime, CreateInvoice, inputDateObjOutputAdjString, isNumeric, UTCTimefromCurrentDate } from './functions'
+import { calculatetotalhours, inputUTCStringForLaborID, inputUTCStringForMaterialIDWithTime, CreateInvoice, inputDateObjOutputAdjString, isNumeric, UTCTimefromCurrentDate, UTCStringFormatDateforProposal } from './functions'
 import MakeID from './makeids';
 class Invoices {
 
@@ -123,22 +123,22 @@ class Invoices {
             const activeproject = construction.getactiveproject.call(this)
             const projectid = activeproject.projectid;
             if (myuser) {
-                const myproject = construction.getprojectbyid.call(this,projectid)
-                if(myproject) {
-                let i = construction.getprojectkeybyid.call(this, projectid);
-                const mymaterial = construction.getactualmaterialsbyid.call(this,projectid,materialid)
-                if(mymaterial) {
-                let j = construction.getactualmaterialskeybyid.call(this, projectid, materialid)
-                myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].quantity = quantity;
-                this.props.reduxUser(myuser)
-                if(mymaterial.invoiceid) {
-                    construction.updateinvoice.call(this,mymaterial.invoiceid)
+                const myproject = construction.getprojectbyid.call(this, projectid)
+                if (myproject) {
+                    let i = construction.getprojectkeybyid.call(this, projectid);
+                    const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, materialid)
+                    if (mymaterial) {
+                        let j = construction.getactualmaterialskeybyid.call(this, projectid, materialid)
+                        myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].quantity = quantity;
+                        this.props.reduxUser(myuser)
+                        if (mymaterial.invoiceid) {
+                            construction.updateinvoice.call(this, mymaterial.invoiceid)
 
-                } else {
-                this.setState({ render: 'render' })
-                }
+                        } else {
+                            this.setState({ render: 'render' })
+                        }
 
-                }
+                    }
 
                 }
             }
@@ -146,7 +146,7 @@ class Invoices {
             alert(`Quantity should be numeric`)
         }
     }
-    
+
     handlematerialunitcost(unitcost, materialid) {
         if (isNumeric(unitcost)) {
             const construction = new Construction();
@@ -265,7 +265,7 @@ class Invoices {
 
                 let result = checkinvoiceitem(item);
                 let j = false;
-                let l = construction.getinvoicekeybyid.call(this,activeproject.projectid,invoiceid)
+                let l = construction.getinvoicekeybyid.call(this, activeproject.projectid, invoiceid)
                 if (result === 'add') {
 
                     if (item.hasOwnProperty("laborid")) {
@@ -300,7 +300,7 @@ class Invoices {
                     } else if (item.hasOwnProperty("materialid")) {
                         j = construction.getactualmaterialskeybyid.call(this, activeproject.projectid, item.materialid)
                         myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].invoiceid = ""
-                        myuser.company.projects.myproject[i].invoices.myinvoice[l].updated = UTCTimefromCurrentDate(); 
+                        myuser.company.projects.myproject[i].invoices.myinvoice[l].updated = UTCTimefromCurrentDate();
                         this.props.reduxUser(myuser);
                         this.setState({ render: 'render' })
                     } else if (item.hasOwnProperty("equipmentid")) {
@@ -349,7 +349,7 @@ class Invoices {
                         <View style={[styles.flex2, styles.flexDirection]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}> {employee.firstname} {employee.lastname} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)} CSI {csi.csi}-{csi.title}  Total Hours {totalhours.toFixed(2)} Hrs at  $</Text>
                             <TextInput value={laborrate} onChangeText={text => { invoices.handlelaborrate.call(this, text, item.laborid) }} style={[regularFont, styles.defaultInput, styles.smallField]} />
-                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
@@ -364,7 +364,7 @@ class Invoices {
                         <View style={[styles.flex3, styles.flexDirection]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>{employee.firstname} {employee.lastname} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)} CSI {csi.csi}-{csi.title}  Total Hours {totalhours.toFixed(2)} Hrs at  $</Text>
                             <TextInput value={laborrate} onChangeText={text => { invoices.handlelaborrate.call(this, text, item.laborid) }} style={[regularFont, styles.defaultInput, styles.smallField]} />
-                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {profit} = ${Number(amount * profit).toFixed(2)} </Text>
+                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)}  x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)} </Text>
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
@@ -384,7 +384,7 @@ class Invoices {
                         <View style={[styles.flex2, styles.flexDirection]}>
                             <Text style={[regularFont]}> {employee.firstname} {employee.lastname} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)} CSI {csi.csi}-{csi.title}  Total Hours {totalhours.toFixed(2)} Hrs at  $</Text>
                             <Text style={[regularFont, styles.smallField]}>{laborrate}</Text>
-                            <Text style={[regularFont]}>= ${amount.toFixed(2)}  x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]}>= ${amount.toFixed(2)}  x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]}>Profit</Text>
@@ -399,7 +399,7 @@ class Invoices {
                         <View style={[styles.flex3, styles.flexDirection]}>
                             <Text style={[regularFont]}> {employee.firstname} {employee.lastname} TimeIn{inputUTCStringForLaborID(item.timein)}  TimeOut {inputUTCStringForLaborID(item.timeout)} CSI {csi.csi}-{csi.title}  Total Hours {totalhours.toFixed(2)} Hrs at  $</Text>
                             <Text style={[regularFont, styles.smallField]}>{laborrate}</Text>
-                            <Text style={[regularFont]}>= ${amount.toFixed(2)}  x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]}>= ${amount.toFixed(2)}  x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]}>Profit</Text>
@@ -533,11 +533,11 @@ class Invoices {
                             <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { invoices.handlematerialunitcost.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>=  / </Text>
                             <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { invoices.handlematerialunit.call(this, text, item.materialid) }} />
-                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
-                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handlematerialprofit.call(this,text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handlematerialprofit.call(this, text, item.materialid) }} />
                         </View>
 
                     </View>
@@ -552,11 +552,11 @@ class Invoices {
                             <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { invoices.handlematerialunitcost.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>=  / </Text>
                             <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { invoices.handlematerialunit.call(this, text, item.materialid) }} />
-                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]}>Profit</Text>
-                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handlematerialprofit.call(this,text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handlematerialprofit.call(this, text, item.materialid) }} />
                         </View>
 
                     </View>
@@ -574,7 +574,7 @@ class Invoices {
                             <Text style={[regularFont, styles.smallField]}>{item.unitcost}</Text>
                             <Text style={[regularFont]}>=  / </Text>
                             <Text style={[regularFont, styles.smallField]}>{item.unit}</Text>
-                            <Text style={[regularFont]}>= ${amount.toFixed(2)} x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
 
                         </View>
                         <View style={[styles.flex1]}>
@@ -594,7 +594,7 @@ class Invoices {
                             <Text style={[regularFont, styles.smallField]}>{item.unitcost}</Text>
                             <Text style={[regularFont]}>=  / </Text>
                             <Text style={[regularFont, styles.smallField]}>{item.unit}</Text>
-                            <Text style={[regularFont]}>= ${amount.toFixed(2)} x {profit} = ${Number(amount * profit).toFixed(2)}</Text>
+                            <Text style={[regularFont]}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
 
                         </View>
                         <View style={[styles.flex1]}>
@@ -619,14 +619,20 @@ class Invoices {
             // eslint-disable-next-line
             payitems.map(item => {
                 if (item.hasOwnProperty("laborid")) {
+                    if(this.state.showactuallabor) {
                     items.push(invoices.showlaboritem.call(this, item))
+                    }
                 }
                 if (item.hasOwnProperty("materialid")) {
+                    if(this.state.showactualmaterials) {
                     items.push(invoices.showmaterialitem.call(this, item))
+                    }
 
                 }
                 if (item.hasOwnProperty("equipmentid")) {
+                    if(this.state.showactualequipment) {
                     items.push(invoices.showequipmentitem.call(this, item))
+                    }
 
                 }
 
@@ -661,54 +667,50 @@ class Invoices {
         }
 
     }
-    showinvoiceid(invoice) {
-        const construction = new Construction()
-        const menu = construction.getnavigation.call(this)
+    showinvoiceid(myinvoice) {
         const styles = MyStylesheet();
+        const construction = new Construction();
+        const regularFont = construction.getRegularFont.call(this)
+        const invoiceid = myinvoice.invoiceid;
+        const getplusicon = construction.getPlusIcon.call(this)
+        const getminusicon = construction.getMinusIcon.call(this)
+        const checkButton = construction.getcheckicon.call(this)
         const invoices = new Invoices();
-        const headerFont = construction.getHeaderFont.call(this)
-        const invoicecheck = () => {
-            if (menu.open) {
-                return ({ width: 58, height: 30 })
+        const checkicon = (invoiceid) => {
+    
+            if (this.state.activeinvoiceid === invoiceid) {
+                return (
+                    <TouchableOpacity style={{ ...checkButton, ...styles.addRightMargin }} onPress={() => { invoices.makeinvoiceactive.call(this, invoiceid) }}>
+                        <Image source={require('./png/redminus.png')}
+                            resizeMethod='scale'
+                            style={getminusicon}
+                        />
+                    </TouchableOpacity>)
             } else {
-                return ({ width: 85, height: 44 })
+                return (
+                    <TouchableOpacity style={{ ...checkButton, ...styles.addRightMargin }} onPress={() => { invoices.makeinvoiceactive.call(this, invoiceid) }}>
+                        <Image source={require('./png/redplus.png')}
+                            resizeMethod='scale'
+                            style={getplusicon} />
+                    </TouchableOpacity>)
             }
         }
-        const handleinvoicecheck = () => {
-            if (this.state.activeinvoiceid === invoice.invoiceid) {
-                return (<Image source={require('./png/proposalcheck.png')}
-                    resizeMethod='scale'
-                    style={invoicecheck()}
-                />)
-            } else {
-                return;
-            }
+        let updateinfo = "";
+        if (myinvoice.updated) {
+            updateinfo = `Updated ${UTCStringFormatDateforProposal(myinvoice.updated)}`
         }
-        if (menu.open) {
-            return (
-                <View style={[styles.generalFlex, styles.bottomMargin10]} key={invoice.invoiceid}>
-                    <View style={[styles.flex3, styles.alignContentCenter]}>
-                        {handleinvoicecheck()}
-                    </View>
-                    <View style={[styles.flex4]}>
-                        <Text style={[headerFont, styles.alignCenter]} onPress={() => { invoices.makeinvoiceactive.call(this, invoice.invoiceid) }}>InvoiceID {invoice.invoiceid} </Text>
-                    </View>
-                </View>
-            )
-        } else {
-            return (
-                <View style={[styles.generalFlex, styles.bottomMargin10]} key={invoice.invoiceid}>
-                    <View style={[styles.flex1, styles.alignContentCenter]}>
-                        {handleinvoicecheck()}
-                    </View>
-                    <View style={[styles.flex2]}>
-                        <Text style={[headerFont]} onPress={() => { invoices.makeinvoiceactive.call(this, invoice.invoiceid) }}>InvoiceID {invoice.invoiceid} </Text>
-                    </View>
-                </View>
-            )
-
-        }
-
+    
+        return (<View style={{ ...styles.generalFlex, ...styles.generalFont, ...regularFont, ...styles.marginLeft60 }} key={myinvoice.invoiceid}>
+            <View style={{ ...styles.flex1 }} onPress={() => { invoices.makeinvoiceactive.call(this, invoiceid) }}>
+                {checkicon(myinvoice.invoiceid)}
+    
+            </View>
+            <View style={{ ...styles.flex5 }}>
+                <Text style={{ ...regularFont, ...styles.generalFont, ...invoices.activebackground.call(this, myinvoice.invoiceid) }} onPress={() => { invoices.makeinvoiceactive.call(this, invoiceid) }}>Invoice ID: {myinvoice.invoiceid} {updateinfo}</Text>
+            </View>
+        </View>)
+    
+    
     }
     getinvoiceids() {
         const construction = new Construction();
@@ -751,6 +753,9 @@ class Invoices {
         const myuser = construction.getuser.call(this)
         const headerFont = construction.getHeaderFont.call(this)
         const regularFont = construction.getRegularFont.call(this)
+        const getminusicon = construction.getMinusIcon.call(this)
+        const proposalIcon = construction.getPlusIcon.call(this)
+        const checkIcon = construction.getcheckicon.call(this)
         const invoiceIcon = () => {
             if (menu.open) {
                 return ({ width: 180, height: 36 })
@@ -759,89 +764,133 @@ class Invoices {
             }
         }
 
-        const LEM = () => {
-            if (menu.open) {
-                return (
-                    <View style={[styles.generalFlex]}>
-                        <View style={[styles.flex1]}>
-
-                            <View style={[styles.generalFlex]}>
-                                <View style={[styles.flex1, styles.showBorder]}>
-                                    <Text style={[regularFont, styles.alignCenter, styles.minHeight30]}>Labor</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.generalFlex]}>
-                                <View style={[styles.flex1, styles.showBorder]}>
-                                    <Text style={[regularFont, styles.alignCenter, styles.minHeight30]}>Equipment</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.generalFlex]}>
-                                <View style={[styles.flex1, styles.showBorder]}>
-                                    <Text style={[regularFont, styles.alignCenter, styles.minHeight30]}>Materials</Text>
-                                </View>
-                            </View>
-
-                        </View>
-                    </View>
-                )
-            } else {
-                return (
-
-
-                    <View style={[styles.generalFlex]}>
-                        <View style={[styles.flex1, styles.showBorder]}>
-                            <Text style={[regularFont, styles.alignCenter, styles.minHeight30]}>Labor</Text>
-                        </View>
-                        <View style={[styles.flex1, styles.showBorder]}>
-                            <Text style={[regularFont, styles.alignCenter, styles.minHeight30]}> Equipment </Text>
-                        </View>
-                        <View style={[styles.flex1, styles.showBorder]}>
-                            <Text style={[regularFont, styles.alignCenter, styles.minHeight30]}>Materials</Text>
-                        </View>
-                    </View>
-
-                )
-            }
+ 
+        const CheckedBox = () => {
+            return (
+                <Image source={require('./png/managercheck.png')}
+                    style={checkIcon}
+                    resizeMethod='scale'
+                />)
         }
+
+        const EmptyBox = () => {
+
+            return (<Image source={require('./png/emptybox.png')}
+                style={checkIcon}
+                resizeMethod='scale'
+            />)
+
+        }
+        const laboricon = () => {
+            if (this.state.showactuallabor) {
+                return (<View style={{ ...styles.generalContainer }}>
+                    <TouchableOpacity style={{ ...styles.generalButton }} onPress={() => { this.setState({ showactuallabor:false }) }}>{CheckedBox()}</TouchableOpacity>
+                </View>)
+
+            } else {
+                return (<View style={{ ...styles.generalContainer }}>
+                    <TouchableOpacity style={{ ...styles.generalButton }} onPress={() => { this.setState({ showactuallabor:true }) }}>{EmptyBox()}</TouchableOpacity>
+                </View>)
+            }
+
+        }
+        const materialicon = () => {
+            if (this.state.showactualmaterials) {
+                return (<View style={{ ...styles.generalContainer }}>
+                    <TouchableOpacity style={{ ...styles.generalButton }} onPress={() => { this.setState({ showactualmaterials:false }) }}>{CheckedBox()}</TouchableOpacity>
+                </View>)
+            } else {
+                return (<View style={{ ...styles.generalContainer }}>
+                    <TouchableOpacity style={{ ...styles.generalButton }} onPress={() => { this.setState({ showactualmaterials:true }) }}>{EmptyBox()}</TouchableOpacity>
+                </View>)
+            }
+
+
+        }
+
+        const equipmenticon = () => {
+            if (this.state.showactualequipment) {
+                return (<View style={{ ...styles.generalContainer }} >
+                    <TouchableOpacity style={{ ...styles.generalButton }} onPress={() => { this.setState({ showactualequipment:false }) }}>{CheckedBox()}</TouchableOpacity>
+                </View>)
+
+            } else {
+                return (<View style={{ ...styles.generalContainer }}>
+                    <TouchableOpacity style={{ ...styles.generalButton }} onPress={() => { this.setState({ showactualequipment:true }) }}>{EmptyBox()}</TouchableOpacity>
+                </View>)
+            }
+
+        }
+
 
 
         if (myuser) {
 
             const checkmanager = construction.checkmanager.call(this)
-            if(checkmanager) {
+            if (checkmanager) {
 
-            return (<View style={[styles.generalFlex]}>
-                <View style={[styles.flex1]}>
+                return (<View style={[styles.generalFlex]}>
+                    <View style={[styles.flex1]}>
 
-                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
-                        <View style={[styles.flex1]}>
-                            <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{project.title}/invoices</Text>
+                        <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                            <View style={[styles.flex1]}>
+                                <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/invoices</Text>
+                                <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{project.title}</Text>
+                            </View>
                         </View>
-                    </View>
 
-                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
-                        <View style={[styles.flex1, styles.alignContentCenter]}>
-                            <TouchableOpacity onPress={() => { invoices.createnewinvoice.call(this) }}>
-                                <Image source={require('./png/createinvoice.png')}
+                        <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                            <View style={[styles.flex1]}>
+                                <TouchableOpacity  onPress={() => { invoices.createnewinvoice.call(this) }}>
+                                    <Image source={require('./png/redplus.png')}
+                                        resizeMethod='scale'
+                                        style={proposalIcon}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[styles.flex5]}>
+                                <Text style={{ ...styles.generalFont, ...regularFont }}>Create New Invoice</Text>
+                            </View>
+                        </View>
+
+                   
+                        <View style={{ ...styles.generalFlex, ...styles.marginLeft30 }}>
+                            <View style={{ ...styles.flex1, ...styles.generalFont }}>
+                                <Image source={require('./png/redminus.png')}
                                     resizeMethod='scale'
-                                    style={invoiceIcon()}
+                                    style={getminusicon}
                                 />
-                            </TouchableOpacity>
+                            </View>
+                            <View style={{ ...styles.flex5 }}>
+                                <Text style={{ ...styles.generalFont, ...regularFont }}>My Invoices</Text>
+                            </View>
                         </View>
-                    </View>
 
-                    {invoices.getinvoiceids.call(this)}
-                    {LEM()}
-                    {invoices.showallpayitems.call(this)}
-                    {invoices.handleinvoicelink.call(this)}
-                    {construction.showsaveproject.call(this)}
-                </View>
-            </View>)
+                        {invoices.getinvoiceids.call(this)}
+
+                        <View style={{ ...styles.generalFlex, ...styles.bottomMargin10 }}>
+                            <View style={{ ...styles.flex1 }}>
+                                <Text style={{ ...regularFont, ...styles.generalFont }}>Labor</Text>
+                                {laboricon()}
+                            </View>
+                            <View style={{ ...styles.flex1 }}>
+                                <Text style={{ ...regularFont, ...styles.generalFont }}>Equipment</Text>
+                                {equipmenticon()}
+                            </View>
+                            <View style={{ ...styles.flex1 }}>
+                                <Text style={{ ...regularFont, ...styles.generalFont }}>Materials</Text>
+                                {materialicon()}
+                            </View>
+                        </View>
+                       
+                        {invoices.showallpayitems.call(this)}
+                        {invoices.handleinvoicelink.call(this)}
+                        {construction.showsaveproject.call(this)}
+                    </View>
+                </View>)
 
             } else {
-                return(<Text style={[regularFont]}> Only Managers can view invoices </Text>)
+                return (<Text style={[regularFont]}> Only Managers can view invoices </Text>)
             }
 
         } else {
