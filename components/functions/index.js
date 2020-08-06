@@ -1,26 +1,26 @@
 export function validateMinutes(min) {
     const reg_ex = /^[0-5][0-9]$/;
-return(reg_ex.test(min));
+    return (reg_ex.test(min));
 }
-export function  validateYear(year) {
+export function validateYear(year) {
     const reg_ex = /^[12][0-9]{3}$/;
-return(reg_ex.test(year));
+    return (reg_ex.test(year));
 }
 export function validateDate(date) {
     const reg_ex = /^(0?[1-9]|[12][0-9]|3[01])$/;
-return(reg_ex.test(date));
+    return (reg_ex.test(date));
 
 }
 export function validateMonth(mon) {
-const reg_ex = /^0[1-9]|1[0-2]$/;
-return(reg_ex.test(mon))
+    const reg_ex = /^0[1-9]|1[0-2]$/;
+    return (reg_ex.test(mon))
 }
 
 export function getYearfromTimein(timein) {
     //let timein ='2020-05-13 20:00:00'
-timein = timein.replace(/-/g, '/');
-const newDate = new Date(`${timein} UTC`)
-return newDate.getFullYear();
+    timein = timein.replace(/-/g, '/');
+    const newDate = new Date(`${timein} UTC`)
+    return newDate.getFullYear();
 
 }
 
@@ -69,7 +69,7 @@ export function check_30_date(dateobj) {
 }
 
 
-export function check_29_feb_leapyear_date(dateobj)  {
+export function check_29_feb_leapyear_date(dateobj) {
 
     let month = dateobj.getMonth();
 
@@ -107,7 +107,7 @@ export function check_30_time(timein) {
 }
 
 
-export function check_29_feb_leapyear_time(timein)  {
+export function check_29_feb_leapyear_time(timein) {
     const dateobj = new Date(`${timein.replace(/-/g, '/')} UTC`)
     let month = dateobj.getMonth();
 
@@ -173,6 +173,190 @@ export function getDayString(day) {
             return;
     }
 }
+export function getDayfromDateString(date) {
+    let dates = date.split('-')
+    return dates[2]
+
+}
+
+export function getDayofWeek(firstday) {
+
+    switch (firstday) {
+        case 0:
+            return "Sun";
+        case 1:
+            return "Mon";
+        case 2:
+            return "Tues";
+        case 3:
+            return "Weds";
+        case 4:
+            return "Thurs";
+        case 5:
+            return "Fri";
+        case 6:
+            return "Sat";
+        default:
+            return;
+    }
+}
+
+export function dateStringfromobj(datein) {
+    let month = datein.getMonth() + 1;
+    if (month < 10) {
+        month = `0${month}`
+    }
+    let day = datein.getDate();
+    if (day < 10) {
+        day = `0${day}`
+    }
+    let year = datein.getFullYear();
+    return `${year}-${month}-${day}`
+
+}
+
+export function getScheduleDates(datestring) {
+    //const datestring = `2020-04-14`
+    const offset = getOffsetDate(datestring)
+    const newDate = new Date(`${datestring.replace(/-/g, '/')} 00:00:00${offset}`)
+    const day = newDate.getDay();
+    const dayofweek = getDayofWeek(day)
+    console.log(datestring, dayofweek)
+    let day_1 = "";
+    let day_2 = "";
+    let day_3 = "";
+    let day_4 = "";
+    let day_5 = "";
+    let day_6 = "";
+    let day_7 = "";
+    switch (dayofweek) {
+        case "Mon":
+            day_7 = dateStringfromobj(new Date(newDate.getTime() + (6 * 1000 * 24 * 60 * 60)))
+            day_6 = dateStringfromobj(new Date(newDate.getTime() + (5 * 1000 * 24 * 60 * 60)))
+            day_5 = dateStringfromobj(new Date(newDate.getTime() + (4 * 1000 * 24 * 60 * 60)))
+            day_4 = dateStringfromobj(new Date(newDate.getTime() + (3 * 1000 * 24 * 60 * 60)))
+            day_3 = dateStringfromobj(new Date(newDate.getTime() + (2 * 1000 * 24 * 60 * 60)))
+            day_2 = dateStringfromobj(new Date(newDate.getTime() + (1 * 1000 * 24 * 60 * 60)))
+            day_1 = dateStringfromobj(new Date(newDate.getTime()))
+            break;
+        case "Tues":
+            day_7 = dateStringfromobj(new Date(newDate.getTime() + (5 * 1000 * 24 * 60 * 60)))
+            day_6 = dateStringfromobj(new Date(newDate.getTime() + (4 * 1000 * 24 * 60 * 60)))
+            day_5 = dateStringfromobj(new Date(newDate.getTime() + (3 * 1000 * 24 * 60 * 60)))
+            day_4 = dateStringfromobj(new Date(newDate.getTime() + (2 * 1000 * 24 * 60 * 60)))
+            day_3 = dateStringfromobj(new Date(newDate.getTime() + (1 * 1000 * 24 * 60 * 60)))
+            day_2 = dateStringfromobj(new Date(newDate.getTime()))
+            day_1 = dateStringfromobj(new Date(newDate.getTime() - (1 * 1000 * 24 * 60 * 60)))
+
+            break;
+        case "Weds":
+            day_7 = dateStringfromobj(new Date(newDate.getTime() + (4 * 1000 * 24 * 60 * 60)))
+            day_6 = dateStringfromobj(new Date(newDate.getTime() + (3 * 1000 * 24 * 60 * 60)))
+            day_5 = dateStringfromobj(new Date(newDate.getTime() + (2 * 1000 * 24 * 60 * 60)))
+            day_4 = dateStringfromobj(new Date(newDate.getTime() + (1 * 1000 * 24 * 60 * 60)))
+            day_3 = dateStringfromobj(new Date(newDate.getTime()))
+            day_2 = dateStringfromobj(new Date(newDate.getTime() - (1 * 1000 * 24 * 60 * 60)))
+            day_1 = dateStringfromobj(new Date(newDate.getTime() - (2 * 1000 * 24 * 60 * 60)))
+            break;
+        case "Thurs":
+            day_7 = dateStringfromobj(new Date(newDate.getTime() + (3 * 1000 * 24 * 60 * 60)))
+            day_6 = dateStringfromobj(new Date(newDate.getTime() + (2 * 1000 * 24 * 60 * 60)))
+            day_5 = dateStringfromobj(new Date(newDate.getTime() + (1 * 1000 * 24 * 60 * 60)))
+            day_4 = dateStringfromobj(new Date(newDate.getTime()))
+            day_3 = dateStringfromobj(new Date(newDate.getTime() - (1 * 1000 * 24 * 60 * 60)))
+            day_2 = dateStringfromobj(new Date(newDate.getTime() - (2 * 1000 * 24 * 60 * 60)))
+            day_1 = dateStringfromobj(new Date(newDate.getTime() - (3 * 1000 * 24 * 60 * 60)))
+            break;
+        case "Fri":
+            day_7 = dateStringfromobj(new Date(newDate.getTime() + (2 * 1000 * 24 * 60 * 60)))
+            day_6 = dateStringfromobj(new Date(newDate.getTime() + (1 * 1000 * 24 * 60 * 60)))
+            day_5 = dateStringfromobj(new Date(newDate.getTime()))
+            day_4 = dateStringfromobj(new Date(newDate.getTime() - (1 * 1000 * 24 * 60 * 60)))
+            day_3 = dateStringfromobj(new Date(newDate.getTime() - (2 * 1000 * 24 * 60 * 60)))
+            day_2 = dateStringfromobj(new Date(newDate.getTime() - (3 * 1000 * 24 * 60 * 60)))
+            day_1 = dateStringfromobj(new Date(newDate.getTime() - (4 * 1000 * 24 * 60 * 60)))
+            break;
+        case "Sat":
+            day_7 = dateStringfromobj(new Date(newDate.getTime() + (1 * 1000 * 24 * 60 * 60)))
+            day_6 = dateStringfromobj(new Date(newDate.getTime()))
+            day_5 = dateStringfromobj(new Date(newDate.getTime() - (1 * 1000 * 24 * 60 * 60)))
+            day_4 = dateStringfromobj(new Date(newDate.getTime() - (2 * 1000 * 24 * 60 * 60)))
+            day_3 = dateStringfromobj(new Date(newDate.getTime() - (3 * 1000 * 24 * 60 * 60)))
+            day_2 = dateStringfromobj(new Date(newDate.getTime() - (4 * 1000 * 24 * 60 * 60)))
+            day_1 = dateStringfromobj(new Date(newDate.getTime() - (5 * 1000 * 24 * 60 * 60)))
+            break;
+        case "Sun":
+            day_7 = dateStringfromobj(newDate);
+            day_6 = dateStringfromobj(new Date(newDate.getTime() - (1 * 1000 * 24 * 60 * 60)))
+            day_5 = dateStringfromobj(new Date(newDate.getTime() - (2 * 1000 * 24 * 60 * 60)))
+            day_4 = dateStringfromobj(new Date(newDate.getTime() - (3 * 1000 * 24 * 60 * 60)))
+            day_3 = dateStringfromobj(new Date(newDate.getTime() - (4 * 1000 * 24 * 60 * 60)))
+            day_2 = dateStringfromobj(new Date(newDate.getTime() - (5 * 1000 * 24 * 60 * 60)))
+            day_1 = dateStringfromobj(new Date(newDate.getTime() - (6 * 1000 * 24 * 60 * 60)))
+            break;
+        default:
+            break;
+    }
+
+    return { day_1, day_2, day_3, day_4, day_5, day_6, day_7 }
+}
+
+export function getOffsetDate(timein) {
+    let datein = new Date(`${timein.replace(/-/g, '/')} 00:00:00 UTC`)
+    let offset = datein.getTimezoneOffset() / 60
+    let sym = "+";
+    if (offset > 0) {
+        sym = "-";
+    }
+    if (Math.abs(offset) < 10) {
+        offset = `0${offset}`
+    }
+    return (`${sym}${offset}:00`)
+}
+
+export function initfromtimeout(timeout) {
+    //let timeout= '2020-04-21 01:24:32'
+    const dateout = new Date(`${timeout.replace(/-/g, '/')} UTC`)
+    const hoursout = dateout.getHours();
+    const minutesout = dateout.getMinutes();
+    const heightout = hoursout * 100 - (minutesout / 60) * 100;
+    const init = heightout
+    return (init)
+}
+
+
+export function scheduleBox(timein, timeout) {
+    const datein = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    const dateout = new Date(`${timeout.replace(/-/g, '/')} UTC`)
+
+    const hoursin = datein.getHours();
+    const minutesin = datein.getMinutes();
+    const heightin = hoursin * 100 + (minutesin / 60) * 100;
+
+    const hoursout = dateout.getHours();
+    const minutesout = dateout.getMinutes();
+    const heightout = hoursout * 100 + (minutesout / 60) * 100;
+
+    const height = heightout - heightin
+    const init = heightin
+    return { height, init }
+}
+
+export function dateStringFromUTCTime(timein) {
+    //const timein = `2020-04-19 16:00:00`
+    let mydate = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    const year = mydate.getFullYear();
+    let month = mydate.getMonth() + 1;
+    if (month < 10) {
+        month = `0${month}`
+    }
+    let day = mydate.getDate();
+    if (day < 10) {
+        day = `0${day}`
+    }
+    return (`${year}-${month}-${day}`)
+}
+
 export function UTCStringFormatDateforProposal(timeout) {
 
 
@@ -283,15 +467,15 @@ export function validatePassword(val) {
 }
 
 export function returnCompanyList(allusers) {
-  
+
     let companys = [];
 
     if (allusers.hasOwnProperty("myuser")) {
         // eslint-disable-next-line
         allusers.myuser.map(myuser => {
-          
+
             if (myuser.hasOwnProperty("company")) {
-              
+
                 let checkcompany = true;
                 let companyid = myuser.company.companyid;
                 if (companys.length > 0) {
@@ -316,7 +500,7 @@ export function returnCompanyList(allusers) {
 }
 export function getOffset(timein) {
     let datein = new Date(`${timein.replace(/-/g, '/')} 00:00:00`)
-let offset = datein.getTimezoneOffset() / 60;
+    let offset = datein.getTimezoneOffset() / 60;
 
     let sym = "+";
     if (offset > 0) {
@@ -325,7 +509,7 @@ let offset = datein.getTimezoneOffset() / 60;
     if (Math.abs(offset) < 10) {
         offset = `0${offset}`
     }
- return(`${sym}${offset}:00`)
+    return (`${sym}${offset}:00`)
 
 }
 
@@ -353,15 +537,13 @@ export function calculatetotalhours(timeout, timein) {
 }
 export function inputUTCStringForLaborID(timein) {
 
-    let datein = new Date(`${timein.replace(/-/g, '/')}-00:00`)
+    let datein = new Date(`${timein.replace(/-/g, '/')} UTC`)
     let hours = datein.getHours();
+    console.log("hours" , hours, timein)
     let ampm
     if (hours > 12) {
         hours = hours - 12;
         ampm = "PM"
-    }
-    else if (hours < 12) {
-        ampm = "AM"
     }
     else if (hours === 0) {
         hours = 12;
@@ -369,6 +551,9 @@ export function inputUTCStringForLaborID(timein) {
     }
     else if (hours === 12) {
         ampm = "PM"
+    }
+    else if (hours < 12) {
+        ampm = "AM"
     }
     let minutes = datein.getMinutes();
     if (minutes < 10) {
@@ -444,8 +629,8 @@ export function validateEmail(value) {
     }
     return errmsg;
 }
-export function CreateOwnwership(purchasedate,loaninterest,saledate, resalevalue) {
-    return ({purchasedate, loaninterest,saledate, resalevalue})
+export function CreateOwnwership(purchasedate, loaninterest, saledate, resalevalue) {
+    return ({ purchasedate, loaninterest, saledate, resalevalue })
 }
 export function CreateRentalRate(month, week, day, hour) {
     return ({ month, week, day, hour })
@@ -552,121 +737,125 @@ export function sortpart(b, a) {
 
 export function getMinutesfromTimein(timein) {
     //let timein ='2020-05-13 20:00:00'
-timein = timein.replace(/-/g, '/');
-const newDate = new Date(`${timein} UTC`)
-let  minutes = newDate.getMinutes();
-if(minutes < 10) {
- minutes =`0${minutes}` 
-}
-return(minutes);
+    timein = timein.replace(/-/g, '/');
+    const newDate = new Date(`${timein} UTC`)
+    let minutes = newDate.getMinutes();
+    if (minutes < 10) {
+        minutes = `0${minutes}`
+    }
+    return (minutes);
 }
 
 export function getHoursfromTimein(timein) {
     //let timein ='2020-05-13 20:00:00'
-timein = timein.replace(/-/g, '/');
-const newDate = new Date(`${timein} UTC`)
-let hours = newDate.getHours();
-if(hours > 12) {
-  hours = hours - 12;
- 
-}
-if(hours < 10) {
- hours =`0${hours}` 
-}
-return(hours);
+    timein = timein.replace(/-/g, '/');
+    const newDate = new Date(`${timein} UTC`)
+    let hours = newDate.getHours();
+    if (hours > 12) {
+        hours = hours - 12;
+
+    } else if (hours === 0) {
+        hours = 12;
+    }
+    if (hours < 10) {
+        hours = `0${hours}`
+    }
+    return (hours);
 
 }
 
 export function getDayfromTimein(timein) {
     //let timein ='2020-05-13 20:00:00'
-     timein = timein.replace(/-/g, '/');
-     const newDate = new Date(`${timein} UTC`)
-     let date = newDate.getDate();
-     if(date <10) {
-     date = `0${date}`
-       
-     }
-     return date;
- }
+    timein = timein.replace(/-/g, '/');
+    const newDate = new Date(`${timein} UTC`)
+    let date = newDate.getDate();
+    if (date < 10) {
+        date = `0${date}`
 
- export function makeTimeString(year,month,day,hours,minutes,time) {
+    }
+    return date;
+}
+
+export function makeTimeString(year, month, day, hours, minutes, time) {
     return `${year}-${month}-${day} ${hours}:${minutes} ${time}`
 }
 
 
 export function UTCTimeStringfromTime(timein) {
     //let timein = '2020-06-02 04:01 pm'
-    const time = timein.substring(17,19)
-    let hours = timein.substring(11,13);
-    if(time === 'pm') {
-     hours = Number(hours) + 12
+    const time = timein.substring(17, 19)
+    let hours = timein.substring(11, 13);
+    if (time === 'pm' && hours !== '12') {
+        hours = Number(hours) + 12
+    } else if (time === 'am' && hours === '12') {
+        hours = '00'
     }
     const sym = () => {
-      let myoffset = new Date().getTimezoneOffset()/60
-      let sym = "+";
-      if(myoffset > 0) {
-        sym = "-"
-      }
-      return sym;
-      
+        let myoffset = new Date().getTimezoneOffset() / 60
+        let sym = "+";
+        if (myoffset > 0) {
+            sym = "-"
+        }
+        return sym;
+
     }
     const extraoffset = () => {
-     let myoffset = (new Date().getTimezoneOffset()/60)*2
-    
-      if(myoffset <10) {
-        myoffset =`0${myoffset}`
-      }
-      return myoffset;
+        let myoffset = (new Date().getTimezoneOffset() / 60) * 2
+
+        if (myoffset < 10) {
+            myoffset = `0${myoffset}`
+        }
+        return myoffset;
     }
-    let minutes = timein.substring(14,16)
-    let year = timein.substring(0,4)
-    let month = timein.substring(5,7);
-    let day = timein.substring(8,10)
-    
+    let minutes = timein.substring(14, 16)
+    let year = timein.substring(0, 4)
+    let month = timein.substring(5, 7);
+    let day = timein.substring(8, 10)
+
     timein = `${year}/${month}/${day} ${hours}:${minutes}:00${sym()}${extraoffset()}:00`
     const newDate = new Date(timein)
     hours = newDate.getHours();
-    if(hours < 10) {
-      hours = `0${hours}`
+    if (hours < 10) {
+        hours = `0${hours}`
     }
     minutes = newDate.getMinutes();
-    if(minutes<10) {
-      minutes = `0${minutes}`
+    if (minutes < 10) {
+        minutes = `0${minutes}`
     }
     year = newDate.getFullYear();
     day = newDate.getDate();
-    if(day < 10) {
-      day=`0${day}`
+    if (day < 10) {
+        day = `0${day}`
     }
-    month = newDate.getMonth()+1;
-    if(month<10) {
-     month = `0${month}`
+    month = newDate.getMonth() + 1;
+    if (month < 10) {
+        month = `0${month}`
     }
-   return( `${year}-${month}-${day} ${hours}:${minutes}:00`);
+    return (`${year}-${month}-${day} ${hours}:${minutes}:00`);
 }
 
 
- export function getAMPMfromTimeIn(timein) {
+export function getAMPMfromTimeIn(timein) {
     //let timein ='2020-05-13 20:00:00'
     timein = timein.replace(/-/g, '/');
     const newDate = new Date(`${timein} UTC`)
     let hours = newDate.getHours();
     let ampm = "";
-    if(hours > 12) {
-      ampm ='pm'
-     
+    if (hours > 12) {
+        ampm = 'pm'
+
     } else {
-      ampm='am'
+        ampm = 'am'
     }
-    
-    return(ampm); 
+
+    return (ampm);
 }
 
 export function getMonthfromTimein(timein) {
     console.log(timein)
     timein = timein.replace(/-/g, '/');
     const newDate = new Date(`${timein} UTC`)
-     let month = newDate.getMonth() + 1;
+    let month = newDate.getMonth() + 1;
     if (month < 10) {
         month = `0${month}`
 
@@ -676,7 +865,7 @@ export function getMonthfromTimein(timein) {
 }
 
 export function CreateEquipment(equipmentid, equipment, ownershipstatus, accountid) {
-    return ({ equipmentid, equipment, ownershipstatus, accountid})
+    return ({ equipmentid, equipment, ownershipstatus, accountid })
 }
 export function makeID(length) {
     let result = '';
@@ -689,7 +878,7 @@ export function makeID(length) {
 }
 export function monthstring(month) {
 
-    
+
     switch (month) {
         case 0:
             return ("January");
@@ -738,7 +927,7 @@ export function CreateInvoice(invoiceid, providerid, updated, approved) {
     return ({ invoiceid, providerid, updated, approved })
 }
 export function CreateMaterial(materialid, material, accountid, unit, unitcost) {
-    return ({ materialid, material, accountid, unit, unitcost})
+    return ({ materialid, material, accountid, unit, unitcost })
 }
 export function CreateUser(providerid, client, clientid, firstname, lastname, emailaddress, phonenumber, profileurl, profile) {
     return ({ providerid, client, clientid, firstname, lastname, emailaddress, phonenumber, profileurl, profile })
@@ -959,119 +1148,119 @@ export function ProfitForMaterial(item) {
 export function DateStringfromObj(dateobj) {
 
     let year = dateobj.getFullYear();
-    let month = dateobj.getMonth()+1;
+    let month = dateobj.getMonth() + 1;
     let day = dateobj.getDate();
-    if(month <10) {
-     month=`0${month}`
+    if (month < 10) {
+        month = `0${month}`
     }
-    if(day<10) {
-     day=`0${day}`
+    if (day < 10) {
+        day = `0${day}`
     }
-    return(`${year}-${month}-${day}`)
-    }
-    
-    export function DateObjfromString(start) {
-        //let start = '2019-08-09'
+    return (`${year}-${month}-${day}`)
+}
+
+export function DateObjfromString(start) {
+    //let start = '2019-08-09'
     let offset = getOffset(start)
-    return(new Date(`${start.replace(/-/g,'/')} 00:00:00${offset}`))
-    
-    }
+    return (new Date(`${start.replace(/-/g, '/')} 00:00:00${offset}`))
+
+}
 export function isNumeric(val) {
- 
-        if(val) {
-          return(!isNaN(val))
-        } else {
-         return(true);
-        }
-        
-      
+
+    if (val) {
+        return (!isNaN(val))
+    } else {
+        return (true);
+    }
+
+
 }
 
 export function DateObjfromTimeString(timein) {
 
     let offset = getOffset(timein)
-    return(new Date(`${timein.replace(/-/g,'/')}${offset}`))
-    }
-    export function DateobjfromUTCString(timein) {
-  
-        return(new Date(`${timein.replace(/-/g,'/')} UTC`))
-        }
-    export function inputDateObjOutputAdjString(datein) {
+    return (new Date(`${timein.replace(/-/g, '/')}${offset}`))
+}
+export function DateobjfromUTCString(timein) {
 
-        let offset = datein.getTimezoneOffset() / 60
-        let sym = "-";
-        if (offset < 0) {
-            sym = "+";
-            offset = -offset;
-        }
-        if (offset < 10) {
-            offset = `0${offset}`
-        }
-        let year = datein.getFullYear();
-    
-    
-        let month = datein.getMonth() + 1;
-        let day = datein.getDate();
-        let hours = datein.getHours();
-        let minutes = datein.getMinutes();
-        if (month < 10) {
-            month = `0${month}`
-        }
-        if (day < 10) {
-            day = `0${day}`
-        }
-        if (hours < 10) {
-            hours = `0${hours}`
-        }
-        if (minutes < 10) {
-            minutes = `0${minutes}`
-        }
-        let newDate = new Date(`${year}/${month}/${day} ${hours}:${minutes}:00${sym}${2 * offset}:00`)
-    
-        hours = newDate.getHours()
-        month = newDate.getMonth() + 1;
-        day = newDate.getDate();
-        minutes = newDate.getMinutes();
-        year = newDate.getFullYear();
-        if (month < 10) {
-            month = `0${month}`
-        }
-        if (day < 10) {
-            day = `0${day}`
-        }
-        if (hours < 10) {
-            hours = `0${hours}`
-        }
-        if (minutes < 10) {
-            minutes = `0${minutes}`
-        }
-      
-        return (`${year}-${month}-${day} ${hours}:${minutes}:00`)
+    return (new Date(`${timein.replace(/-/g, '/')} UTC`))
+}
+export function inputDateObjOutputAdjString(datein) {
+
+    let offset = datein.getTimezoneOffset() / 60
+    let sym = "-";
+    if (offset < 0) {
+        sym = "+";
+        offset = -offset;
     }
+    if (offset < 10) {
+        offset = `0${offset}`
+    }
+    let year = datein.getFullYear();
+
+
+    let month = datein.getMonth() + 1;
+    let day = datein.getDate();
+    let hours = datein.getHours();
+    let minutes = datein.getMinutes();
+    if (month < 10) {
+        month = `0${month}`
+    }
+    if (day < 10) {
+        day = `0${day}`
+    }
+    if (hours < 10) {
+        hours = `0${hours}`
+    }
+    if (minutes < 10) {
+        minutes = `0${minutes}`
+    }
+    let newDate = new Date(`${year}/${month}/${day} ${hours}:${minutes}:00${sym}${2 * offset}:00`)
+
+    hours = newDate.getHours()
+    month = newDate.getMonth() + 1;
+    day = newDate.getDate();
+    minutes = newDate.getMinutes();
+    year = newDate.getFullYear();
+    if (month < 10) {
+        month = `0${month}`
+    }
+    if (day < 10) {
+        day = `0${day}`
+    }
+    if (hours < 10) {
+        hours = `0${hours}`
+    }
+    if (minutes < 10) {
+        minutes = `0${minutes}`
+    }
+
+    return (`${year}-${month}-${day} ${hours}:${minutes}:00`)
+}
 export function timeStringfromDateObj(newDate) {
 
     let hours = newDate.getHours();
     let year = newDate.getFullYear();
-    let day =newDate.getDate();
-    if(day<10) {
-     day=`0${day}`
+    let day = newDate.getDate();
+    if (day < 10) {
+        day = `0${day}`
     }
-    if(hours<10) {
-     hours=`0${hours}`
+    if (hours < 10) {
+        hours = `0${hours}`
     }
     let minutes = newDate.getMinutes();
-    if(minutes<10) {
-     minutes=`0${minutes}`
+    if (minutes < 10) {
+        minutes = `0${minutes}`
     }
     let seconds = newDate.getSeconds();
-    if(seconds<10) {
-     seconds=`0${seconds}`
+    if (seconds < 10) {
+        seconds = `0${seconds}`
     }
-    let month = newDate.getMonth()+1;
-    if(month <10) {
-     month =`0${month}`
+    let month = newDate.getMonth() + 1;
+    if (month < 10) {
+        month = `0${month}`
     }
-    
-             
-    return(`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`)
-    }
+
+
+    return (`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`)
+}

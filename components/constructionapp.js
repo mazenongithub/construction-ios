@@ -32,6 +32,7 @@ import BidLineItem from './bidlineitem'
 import Landing from './landing';
 import ViewAccount from './viewaccount';
 import CostEstimate from './costestimate';
+import MySchedule from './myschedule'
 
 
 class ConstructionApp extends Component {
@@ -40,7 +41,7 @@ class ConstructionApp extends Component {
         this.state = {
             activeimage: 'main_slide', message: '', render: '', width: 0, height: 0, open: true, activeproposalid: false, activeinvoiceid: false, message: '', profile: '',
             profilecheck: '', emailaddress: '', emailaddresscheck: false, firstname: '', lastname: '', clientid: '', client: '', updated: new Date(), approved: '',
-            password: '', passwordcheck: false, showlabor:true,showmaterials:true,showequipment:true,showactuallabor:true, showactualmaterials:true, showactualequipment:true
+            password: '', passwordcheck: false, showlabor: true, showmaterials: true, showequipment: true, showactuallabor: true, showactualmaterials: true, showactualequipment: true
         }
         this.updatedimesions = this.updatedimesions.bind(this)
     }
@@ -146,6 +147,7 @@ class ConstructionApp extends Component {
         const specification = new Specification();
         const costestimate = new CostEstimate();
 
+
         switch (menu.main) {
             case 'register':
                 return (register.showregister.call(this));
@@ -167,6 +169,9 @@ class ConstructionApp extends Component {
                 break;
             case 'materials':
                 return (<Materials update={this.updatestate.bind(this)} />);
+                break;
+            case 'viewschedule':
+                return (<MySchedule update={this.updatestate.bind(this)} />);
                 break;
             case 'accounts':
                 return (accounts.showaccounts.call(this));
@@ -294,6 +299,20 @@ class ConstructionApp extends Component {
         this.setState({ render: 'render' })
     }
 
+    handleviewschedule(providerid) {
+        const construction = new Construction();
+        let menu = construction.getnavigation.call(this);
+        menu.main = "viewschedule";
+        let myproject = construction.getactiveproject.call(this)
+        if(myproject) {
+        myproject.employeeid = providerid;
+        } else {
+            myproject = {employeeid:providerid}
+        }
+        this.props.reduxProject(myproject)
+        this.props.reduxNavigation(menu)
+        this.setState({ render: 'render' })
+    }
 
     handleviewproposal(proposalid) {
         const construction = new Construction();
@@ -496,7 +515,7 @@ class ConstructionApp extends Component {
         const myuser = construction.getuser.call(this)
         const menu = construction.getnavigation.call(this)
         const headerFont = construction.getHeaderFont.call(this);
-        const checkmanager =construction.checkmanager.call(this);
+        const checkmanager = construction.checkmanager.call(this);
         const regularFont = construction.getRegularFont.call(this);
         const checkactive = construction.checkactive.call(this)
         const getWidth = () => {
@@ -541,21 +560,21 @@ class ConstructionApp extends Component {
                 }
 
             }
-            const accounts =() => {
-                if(checkmanager) {
-                    return( <Text style={[styles.alignCenter, regularFont]} onPress={() => this.handleaccounts()}>  /accounts</Text>)
+            const accounts = () => {
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => this.handleaccounts()}>  /accounts</Text>)
                 }
             }
 
-            const equipment =() => {
-                if(checkmanager) {
-                    return( <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleequipment() }}>  /equipment</Text>)
+            const equipment = () => {
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleequipment() }}>  /equipment</Text>)
                 }
             }
 
-            const materials =() => {
-                if(checkmanager) {
-                    return(    <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlematerials() }}>  /materials</Text>)
+            const materials = () => {
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlematerials() }}>  /materials</Text>)
                 }
             }
             const companylinks = () => {
@@ -566,21 +585,22 @@ class ConstructionApp extends Component {
                         return (
                             <View>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleemployees() }}>  /employees</Text>
-                               {accounts()}
-                               {equipment()}
-                               {materials()}
+                                {accounts()}
+                                {equipment()}
+                                {materials()}
+                                <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleviewschedule(myuser.profile) }}>  /viewschedule</Text>
                             </View>)
                     }
                 }
             }
             const company = () => {
-                if(myuser) {
-                if(myuser.hasOwnProperty("company")) {
-                    return(`/${myuser.company.url}`)
-                } else {
-                    return ("company")
+                if (myuser) {
+                    if (myuser.hasOwnProperty("company")) {
+                        return (`/${myuser.company.url}`)
+                    } else {
+                        return ("company")
+                    }
                 }
-            }
             }
             const open_2 = () => {
                 if (myuser) {
@@ -599,11 +619,11 @@ class ConstructionApp extends Component {
 
             const closed_3 = () => {
                 if (myuser) {
-                    return (  <View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}><Text style={[styles.alignCenter, headerFont]} onPress={() => { this.logoutuser() }}>  /logout </Text></View>)
+                    return (<View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}><Text style={[styles.alignCenter, headerFont]} onPress={() => { this.logoutuser() }}>  /logout </Text></View>)
                 } else {
-                    return ( <View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}>
-                                <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text>
-                            </View>)
+                    return (<View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}>
+                        <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text>
+                    </View>)
                 }
 
             }
@@ -611,17 +631,17 @@ class ConstructionApp extends Component {
 
             const open_3 = () => {
                 if (myuser) {
-                   if(checkactive) {
-                    return (
-                        <View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.alignCenter, headerFont, styles.margin5]}>
-                            <Text style={[styles.alignCenter, headerFont]}>  /projects  </Text>
-                            {this.getprojectlinks()}
-                        </View>)
-                   }
+                    if (checkactive) {
+                        return (
+                            <View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.alignCenter, headerFont, styles.margin5]}>
+                                <Text style={[styles.alignCenter, headerFont]}>  /projects  </Text>
+                                {this.getprojectlinks()}
+                            </View>)
+                    }
                 } else {
                     return (
-                        <View style={[styles.minHeight30, styles.showBorder, styles.navContainer]}> 
-                        <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text></View>
+                        <View style={[styles.minHeight30, styles.showBorder, styles.navContainer]}>
+                            <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.handlelogin() }}>/login</Text></View>
                     )
                 }
 
@@ -644,26 +664,26 @@ class ConstructionApp extends Component {
                 }
             }
             const proposals = () => {
-                if(checkmanager) {
-                    return( <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleproposals() }}> /proposals</Text>)
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleproposals() }}> /proposals</Text>)
                 }
             }
 
             const bidschedule = () => {
-                if(checkmanager) {
-                    return(    <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebidschedule() }}> /bidschedule</Text>)
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebidschedule() }}> /bidschedule</Text>)
                 }
             }
 
             const invoices = () => {
-                if(checkmanager) {
-                    return( <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleinvoices() }}>/invoices</Text>)
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleinvoices() }}>/invoices</Text>)
                 }
             }
 
             const bid = () => {
-                if(checkmanager) {
-                    return(<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebid() }}>/bid</Text>)
+                if (checkmanager) {
+                    return (<Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlebid() }}>/bid</Text>)
                 }
             }
             const open_6 = () => {
@@ -677,13 +697,13 @@ class ConstructionApp extends Component {
                                 <Text style={[styles.alignCenter, headerFont]} onPress={() => { this.makeprojectactive(myproject.projectid) }}>/{myproject.title}</Text>
 
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleschedule() }}>/schedule</Text>
-                               {proposals()}
-                               {bidschedule()}
-                             
+                                {proposals()}
+                                {bidschedule()}
+
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handleactual() }}>/actual</Text>
-                               {invoices()}
-                               {bid()}
-                               
+                                {invoices()}
+                                {bid()}
+
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlespecifications() }}>/specifications</Text>
                                 <Text style={[styles.alignCenter, regularFont]} onPress={() => { this.handlecostestimate() }}>/estimate</Text>
                             </View>)
@@ -702,9 +722,9 @@ class ConstructionApp extends Component {
                         <View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.alignCenter, headerFont, styles.margin5, styles.paddingTopBottom10]}>
                             {open_2()}
                         </View>
-                        
-                            {open_3()}
-                     
+
+                        {open_3()}
+
                         {open_6()}
                         {open_4()}
 
@@ -728,9 +748,9 @@ class ConstructionApp extends Component {
                             {open_2()}
 
                         </View>
-                      
-                            {closed_3()}
-                       
+
+                        {closed_3()}
+
 
                     </View>)
                 }

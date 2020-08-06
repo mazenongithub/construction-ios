@@ -7,11 +7,13 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 class CalenderTimeOut {
 
     handleday(day) {
+        if(day) {
         const timeout = new TimeOut();
         if (day < 10) {
             day = `0${day}`
         }
         timeout.handleday.call(this, day);
+    }
     }
 
     showicon() {
@@ -54,6 +56,7 @@ class CalenderTimeOut {
             let minutes = this.state.timeoutminutes;
             let timeout = makeTimeString(year, month, day, hours, minutes, time);
             timeout = UTCTimeStringfromTime(timeout)
+            console.log("showlabel", timeout)
             const newDate = new Date(`${timeout.replace(/-/g, '/')} UTC`)
             month = monthstring(newDate.getMonth());
             const date = newDate.getDate();
@@ -1154,134 +1157,134 @@ class CalenderTimeOut {
 
                     <View style={{ ...styles.generalFlex }}>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_1()) }} onClick={() => { calendertimeout.handleday.call(this, cell_1()) }}>{cell_1()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_1()) }} onPress={() => { calendertimeout.handleday.call(this, cell_1()) }}>{cell_1()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_2()) }} onClick={() => { calendertimeout.handleday.call(this, cell_2()) }}>{cell_2()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_2()) }} onPress={() => { calendertimeout.handleday.call(this, cell_2()) }}>{cell_2()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_3()) }} onClick={() => { calendertimeout.handleday.call(this, cell_3()) }}>{cell_3()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_3()) }} onPress={() => { calendertimeout.handleday.call(this, cell_3()) }}>{cell_3()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_4()) }} onClick={() => { calendertimeout.handleday.call(this, cell_4()) }}>{cell_4()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_4()) }} onPress={() => { calendertimeout.handleday.call(this, cell_4()) }}>{cell_4()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_5()) }} onClick={() => { calendertimeout.handleday.call(this, cell_5()) }}>{cell_5()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_5()) }} onPress={() => { calendertimeout.handleday.call(this, cell_5()) }}>{cell_5()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_6()) }} onClick={() => { calendertimeout.handleday.call(this, cell_6()) }}>{cell_6()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_6()) }} onPress={() => { calendertimeout.handleday.call(this, cell_6()) }}>{cell_6()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_7()) }} onClick={() => { calendertimeout.handleday.call(this, cell_7()) }}>{cell_7()}</Text>
-                        </View>
-                    </View>
-
-
-                    <View style={{ ...styles.generalFlex }}>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_8()) }} onClick={() => { calendertimeout.handleday.call(this, cell_8()) }}>{cell_8()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_9()) }} onClick={() => { calendertimeout.handleday.call(this, cell_9()) }}>{cell_9()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_10()) }} onClick={() => { calendertimeout.handleday.call(this, cell_10()) }}>{cell_10()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_11()) }} onClick={() => { calendertimeout.handleday.call(this, cell_11()) }}>{cell_11()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_12()) }} onClick={() => { calendertimeout.handleday.call(this, cell_12()) }}>{cell_12()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_13()) }} onClick={() => { calendertimeout.handleday.call(this, cell_13()) }}>{cell_13()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_14()) }} onClick={() => { calendertimeout.handleday.call(this, cell_14()) }}>{cell_14()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_7()) }} onPress={() => { calendertimeout.handleday.call(this, cell_7()) }}>{cell_7()}</Text>
                         </View>
                     </View>
 
 
                     <View style={{ ...styles.generalFlex }}>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_15()) }} onClick={() => { calendertimeout.handleday.call(this, cell_15()) }}>{cell_15()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_8()) }} onPress={() => { calendertimeout.handleday.call(this, cell_8()) }}>{cell_8()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_16()) }} onClick={() => { calendertimeout.handleday.call(this, cell_16()) }}>{cell_16()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_9()) }} onPress={() => { calendertimeout.handleday.call(this, cell_9()) }}>{cell_9()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_17()) }} onClick={() => { calendertimeout.handleday.call(this, cell_17()) }}>{cell_17()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_10()) }} onPress={() => { calendertimeout.handleday.call(this, cell_10()) }}>{cell_10()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_18()) }} onClick={() => { calendertimeout.handleday.call(this, cell_18()) }}>{cell_18()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_11()) }} onPress={() => { calendertimeout.handleday.call(this, cell_11()) }}>{cell_11()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_19()) }} onClick={() => { calendertimeout.handleday.call(this, cell_19()) }}>{cell_19()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_12()) }} onPress={() => { calendertimeout.handleday.call(this, cell_12()) }}>{cell_12()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_20()) }} onClick={() => { calendertimeout.handleday.call(this, cell_20()) }}>{cell_20()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_13()) }} onPress={() => { calendertimeout.handleday.call(this, cell_13()) }}>{cell_13()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_21()) }} onClick={() => { calendertimeout.handleday.call(this, cell_21()) }}>{cell_21()}</Text>
-                        </View>
-                    </View>
-
-
-                    <View style={{ ...styles.generalFlex }}>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_22()) }} onClick={() => { calendertimeout.handleday.call(this, cell_22()) }}>{cell_22()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_23()) }} onClick={() => { calendertimeout.handleday.call(this, cell_23()) }}>{cell_23()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_24()) }} onClick={() => { calendertimeout.handleday.call(this, cell_24()) }}>{cell_24()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_25()) }} onClick={() => { calendertimeout.handleday.call(this, cell_25()) }}>{cell_25()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_26()) }} onClick={() => { calendertimeout.handleday.call(this, cell_26()) }}>{cell_26()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_27()) }} onClick={() => { calendertimeout.handleday.call(this, cell_27()) }}>{cell_27()}</Text>
-                        </View>
-                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_28()) }} onClick={() => { calendertimeout.handleday.call(this, cell_28()) }}>{cell_28()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_14()) }} onPress={() => { calendertimeout.handleday.call(this, cell_14()) }}>{cell_14()}</Text>
                         </View>
                     </View>
 
 
                     <View style={{ ...styles.generalFlex }}>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_29()) }} onClick={() => { calendertimeout.handleday.call(this, cell_29()) }}>{cell_29()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_15()) }} onPress={() => { calendertimeout.handleday.call(this, cell_15()) }}>{cell_15()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_30()) }} onClick={() => { calendertimeout.handleday.call(this, cell_30()) }}>{cell_30()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_16()) }} onPress={() => { calendertimeout.handleday.call(this, cell_16()) }}>{cell_16()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_31()) }} onClick={() => { calendertimeout.handleday.call(this, cell_31()) }}>{cell_31()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_17()) }} onPress={() => { calendertimeout.handleday.call(this, cell_17()) }}>{cell_17()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_32()) }} onClick={() => { calendertimeout.handleday.call(this, cell_32()) }}>{cell_32()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_18()) }} onPress={() => { calendertimeout.handleday.call(this, cell_18()) }}>{cell_18()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_33()) }} onClick={() => { calendertimeout.handleday.call(this, cell_33()) }}>{cell_33()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_19()) }} onPress={() => { calendertimeout.handleday.call(this, cell_19()) }}>{cell_19()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_34()) }} onClick={() => { calendertimeout.handleday.call(this, cell_34()) }}>{cell_34()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_20()) }} onPress={() => { calendertimeout.handleday.call(this, cell_20()) }}>{cell_20()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_35()) }} onClick={() => { calendertimeout.handleday.call(this, cell_35()) }}>{cell_35()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_21()) }} onPress={() => { calendertimeout.handleday.call(this, cell_21()) }}>{cell_21()}</Text>
+                        </View>
+                    </View>
+
+
+                    <View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_22()) }} onPress={() => { calendertimeout.handleday.call(this, cell_22()) }}>{cell_22()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_23()) }} onPress={() => { calendertimeout.handleday.call(this, cell_23()) }}>{cell_23()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_24()) }} onPress={() => { calendertimeout.handleday.call(this, cell_24()) }}>{cell_24()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_25()) }} onPress={() => { calendertimeout.handleday.call(this, cell_25()) }}>{cell_25()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_26()) }} onPress={() => { calendertimeout.handleday.call(this, cell_26()) }}>{cell_26()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_27()) }} onPress={() => { calendertimeout.handleday.call(this, cell_27()) }}>{cell_27()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_28()) }} onPress={() => { calendertimeout.handleday.call(this, cell_28()) }}>{cell_28()}</Text>
+                        </View>
+                    </View>
+
+
+                    <View style={{ ...styles.generalFlex }}>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_29()) }} onPress={() => { calendertimeout.handleday.call(this, cell_29()) }}>{cell_29()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_30()) }} onPress={() => { calendertimeout.handleday.call(this, cell_30()) }}>{cell_30()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_31()) }} onPress={() => { calendertimeout.handleday.call(this, cell_31()) }}>{cell_31()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_32()) }} onPress={() => { calendertimeout.handleday.call(this, cell_32()) }}>{cell_32()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_33()) }} onPress={() => { calendertimeout.handleday.call(this, cell_33()) }}>{cell_33()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_34()) }} onPress={() => { calendertimeout.handleday.call(this, cell_34()) }}>{cell_34()}</Text>
+                        </View>
+                        <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_35()) }} onPress={() => { calendertimeout.handleday.call(this, cell_35()) }}>{cell_35()}</Text>
                         </View>
                     </View>
 
                     <View style={{ ...styles.generalFlex }}>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_36()) }} onClick={() => { calendertimeout.handleday.call(this, cell_36()) }}>{cell_36()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_36()) }} onPress={() => { calendertimeout.handleday.call(this, cell_36()) }}>{cell_36()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
-                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_37()) }} onClick={() => { calendertimeout.handleday.call(this, cell_37()) }}>{cell_37()}</Text>
+                            <Text style={{ ...styles.generalFont, ...regularFont, ...calendertimeout.activecell.call(this, cell_37()) }} onPress={() => { calendertimeout.handleday.call(this, cell_37()) }}>{cell_37()}</Text>
                         </View>
                         <View style={{ ...styles.flex1, ...styles.alignCenter, ...styles.showBorder }}>
                             <Text style={{ ...styles.generalFont, ...regularFont }}>&nbsp;</Text>

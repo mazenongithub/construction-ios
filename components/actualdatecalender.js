@@ -8,12 +8,14 @@ import {View, Text, Image, TouchableOpacity} from 'react-native'
 class MaterialCalender {
 
     handleday(day) {
-  
+        if(day) {
         const timein = new MaterialDate();
         if (day < 10) {
             day = `0${day}`
         }
         timein.handleday.call(this, day);
+
+    }
     }
 
     showicon() {

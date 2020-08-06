@@ -29,6 +29,7 @@ export function MyStylesheet() {
         showBorder: {
             borderWidth: 1
         },
+
         boldFont: {
             fontWeight: 'bold'
         },

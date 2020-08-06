@@ -30,6 +30,7 @@ import MakeID from './makeids';
 import EmployeeID from './employeeid'
 import EquipmentID from './equipmentid';
 import MaterialID from './materialid';
+import ShowSchedule from './showschedule'
 
 
 
@@ -1396,6 +1397,7 @@ class Schedule extends Component {
         const materialdate = new MaterialDate();
         const timein = new TimeIn();
         const timeout = new TimeOut();
+       
 
         const showmaterialdate = () => {
             if (this.state.active === 'materials') {
@@ -1596,6 +1598,7 @@ class Schedule extends Component {
                         {laborrate()}
                         {equipmentrate()}
                         {showmaterialquantity()}
+
 
                         {this.showmaterialids()}
                         {this.showlaborids()}

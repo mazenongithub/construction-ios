@@ -87,6 +87,7 @@ class Construction {
         }
 
     }
+  
     getRegularFont() {
         const width = Dimensions.get('window').width;
         if (width > 400) {
@@ -751,6 +752,16 @@ class Construction {
         }
         return projectid;
     }
+    getactiveemployeeid() {
+        let employeeid = false;
+        if (this.props.project) {
+            if (this.props.project.hasOwnProperty("employeeid")) {
+                employeeid= this.props.project.employeeid
+            }
+
+        }
+        return employeeid;
+    }
     getactiveproject() {
         let project = false;
         if (this.props.project) {
@@ -828,18 +839,20 @@ class Construction {
     }
     getemployeebyproviderid(providerid) {
         let construction = new Construction();
-        let allusers = construction.getallusers.call(this);
-        let user = false;
-        if (allusers) {
-            // eslint-disable-next-line
-            allusers.map(myuser => {
-                if (myuser.providerid === providerid) {
-                    user = myuser;
-                }
 
-            })
-        }
-        return user;
+          
+            let myemployees = construction.getmyemployees.call(this)
+            let employees = false;
+            if (myemployees) {
+                // eslint-disable-next-line
+                myemployees.map(employee => {
+                    if (employee.providerid === providerid) {
+                        employees = employee;
+                    }
+                })
+            }
+            return employees;
+        
     }
 
     getspecficationsbyprojectid(projectid) {
@@ -1903,6 +1916,18 @@ class Construction {
         }
         return myaccount;
     }
+    getSmallFont() {
+      
+            return ({fontSize:18})
+
+
+    }
+    extraSmallFont() {
+      
+        return ({fontSize:14})
+
+
+}
     getcheckicon(){
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
@@ -1938,6 +1963,23 @@ class Construction {
         }
         return checkinvoice;
 
+    }
+
+    getemployeebyprofile(profile) {
+        const construction = new Construction()
+        let myemployees = construction.getmyemployees.call(this)
+        console.log("checkmyemployees", myemployees, myemployees.length)
+        let employees = false;
+        if (myemployees) {
+            // eslint-disable-next-line
+            myemployees.map(employee => {
+                console.log("checkemployee", employee.profile,profile)
+                if (employee.profile === profile) {
+                    employees = employee;
+                }
+            })
+        }
+        return employees;
     }
 
     checkinvoicematerialid(materialid) {
@@ -2431,6 +2473,55 @@ class Construction {
             }
         }
         return csis;
+    }
+
+
+    getschedulebyproviderid(providerid) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        let labor = [];
+        if(myuser) {
+            if(myuser.hasOwnProperty("company")) {
+                if(myuser.company.hasOwnProperty("projects")) {
+                    // eslint-disable-next-line
+                    myuser.company.projects.myproject.map(project=> {
+                       if(project.hasOwnProperty("schedulelabor"))  {
+                           // eslint-disable-next-line
+                           project.schedulelabor.mylabor.map(mylabor=> {
+                               if(mylabor.providerid === providerid) {
+                                   labor.push(mylabor)
+                               }
+                           })
+                       }
+                    })
+                }
+            }
+        }
+        return labor;
+    }
+
+
+    getprojectbymilestoneid(milestoneid) {
+     
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        let myproject = false;
+        if(myuser.hasOwnProperty("company")) {
+           if(myuser.company.hasOwnProperty("projects")) {
+                // eslint-disable-next-line
+                myuser.company.projects.myproject.map(project=> {
+                    if(project.hasOwnProperty("projectmilestones")) {
+                        // eslint-disable-next-line
+                        project.projectmilestones.mymilestone.map(milestone=> {
+                            if(milestone.milestoneid === milestoneid) {
+                                myproject = project;
+                            }
+                        })
+                    }
+                })
+            }
+        }
+        return myproject;
     }
     getcsibyid(csiid) {
         let csi = false;

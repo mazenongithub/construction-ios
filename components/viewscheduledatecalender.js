@@ -1,15 +1,16 @@
 import React from 'react';
 import Construction from './construction';
 import { MyStylesheet } from './styles';
-import {  monthstring, getFirstIsOnDate, check_29_feb_leapyear_date, check_30_date, check_31_date, getDayString } from './functions'
-import EquipmentDate from './equipmentdate';
-import {View, Text, Image, TouchableOpacity} from 'react-native'
+import {  dropDateIcon } from './svg';
+import { monthstring, getFirstIsOnDate, check_29_feb_leapyear_date, check_30_date, check_31_date, getDayString } from './functions'
+import MaterialDate from './viewscheduledate';
+import {Text, View, Image, TouchableOpacity} from 'react-native'
 
 class MaterialCalender {
 
     handleday(day) {
         if(day) {
-        const timein = new EquipmentDate();
+        const timein = new MaterialDate();
         if (day < 10) {
             day = `0${day}`
         }
@@ -18,28 +19,26 @@ class MaterialCalender {
     }
 
     showicon() {
-      
+        const styles = MyStylesheet();
         const construction = new Construction();
         const removeIcon = construction.getremoveicon.call(this);
         const downIcon = construction.getdownIcon.call(this)
-        if (this.state.equipmentcalender) {
+        if (this.state.showcalender) {
             return (
-                <TouchableOpacity onPress={() => { this.setState({ equipmentcalender: false }) }}>
+                <TouchableOpacity onPress={() => { this.setState({ showcalender: false }) }}>
                 <Image source={require('./png/removeIcon.png')}
                     style={removeIcon}
                     resizeMethod='scale'
                 />
-            </TouchableOpacity>
-               
-            )
+            </TouchableOpacity>)
         } else {
             return (
-                <TouchableOpacity onPress={() => { this.setState({ equipmentcalender: true }) }}>
-                 <Image source={require('./png/downicon.png')}
-                                        resizeMethod='scale'
-                                        style={[downIcon]}
-                                    />
-                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { this.setState({ showcalender: true }) }}>
+                <Image source={require('./png/downicon.png')}
+                                       resizeMethod='scale'
+                                       style={[downIcon]}
+                                   />
+               </TouchableOpacity>
             )
         }
 
@@ -48,11 +47,13 @@ class MaterialCalender {
         const construction = new Construction();
         const headerFont = construction.getHeaderFont.call(this);
         const styles = MyStylesheet();
-        if (this.state.equipmentcalender) {
-            let day = this.state.equipmentdateday;
-            let year = this.state.equipmentdateyear;
-            let month = this.state.equipmentdatemonth;
+        
+        if (this.state.showcalender) {
+            let day = this.state.day;
+            let year = this.state.year;
+            let month = this.state.month;
             const datestring = `${year}/${month}/${day}`
+            console.log(datestring)
             const newDate = new Date(datestring);
             month = monthstring(newDate.getMonth());
             const date = newDate.getDate();
@@ -66,7 +67,7 @@ class MaterialCalender {
         }
     }
     activecell(num) {
-        if (Number(num) === Number(this.state.equipmentdateday)) {
+        if (Number(num) === Number(this.state.day)) {
             return ({ backgroundColor: '#FED727', borderRadius: 5 })
         } else {
             return;
@@ -79,16 +80,16 @@ class MaterialCalender {
         const construction = new Construction();
         const regularFont = construction.getRegularFont.call(this);
         const calendertimein = new MaterialCalender();
-        let day = this.state.equipmentdateday;
-        let year = this.state.equipmentdateyear;
-        let month = this.state.equipmentdatemonth;
+        let day = this.state.day;
+        let year = this.state.year;
+        let month = this.state.month;
         const datestring = `${year}/${month}/${day}`
         const newDate = new Date(datestring);
-        const firstofmonth =  getFirstIsOnDate(newDate);
+        const firstofmonth = getFirstIsOnDate(newDate);
         const check29 = check_29_feb_leapyear_date(newDate);
         const check30 = check_30_date(newDate);
         const check31 = check_31_date(newDate);
-   
+
         const cell_1 = () => {
             if (firstofmonth === "Sun") {
                 return (1)
@@ -1117,7 +1118,7 @@ class MaterialCalender {
 
             }
         }
-        if (this.state.equipmentcalender) {
+        if (this.state.showcalender) {
             return (<View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
                 <View style={{ ...styles.flex1 }}>
 

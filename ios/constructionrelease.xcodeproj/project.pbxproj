@@ -151,6 +151,7 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = H3MA886RS5;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -277,6 +278,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = constructionrelease/constructionrelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 19;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = H3MA886RS5;
@@ -290,6 +293,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.civilengineer.construction;
 				PRODUCT_NAME = constructionrelease;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -300,6 +304,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = constructionrelease/constructionrelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = H3MA886RS5;
 				INFOPLIST_FILE = constructionrelease/Info.plist;
@@ -312,6 +318,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.civilengineer.construction;
 				PRODUCT_NAME = constructionrelease;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
