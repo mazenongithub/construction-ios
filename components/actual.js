@@ -30,6 +30,7 @@ import MakeID from './makeids';
 import EmployeeID from './employeeid'
 import EquipmentID from './equipmentid';
 import MaterialID from './materialid';
+import ScheduleView from './scheduleview';
 
 
 
@@ -172,6 +173,14 @@ class Actual extends Component {
         this.setState({ timeinmonth: timeinmonth(), timeinday: timeinday(), timeinyear: timeinyear(), timeinhours: timeinhours(), timeinminutes: timeinminutes(), timeinampm: timeinampm() })
     }
 
+    getSchedule() {
+        const construction = new Construction();
+        const params = construction.getactiveproject.call(this)
+        const schedule = construction.getAllActual.call(this, params.projectid);
+        return schedule;
+
+    }
+
     handleemployeeid(providerid) {
         const construction = new Construction();
         const makeid = new MakeID();
@@ -214,7 +223,7 @@ class Actual extends Component {
                     timeout = UTCTimeStringfromTime(timeout);
                     const laborrate = construction.gethourlyrate.call(this, providerid).toFixed(2)
                     const profit = 0;
-                    const engineerid = myuser.providerid;
+                    const engineerid = providerid;
 
                     const newLabor = CreateActualLabor(laborid, engineerid, milestoneid, csiid, timein, timeout, laborrate, '', '', profit)
 
@@ -1414,6 +1423,7 @@ class Actual extends Component {
         const materialdate = new MaterialDate();
         const timein = new TimeIn();
         const timeout = new TimeOut();
+        const scheduleview = new ScheduleView();
 
         const validate = () => {
             let validation = true;
@@ -1849,11 +1859,16 @@ class Actual extends Component {
                         {this.showlaborids()}
                         {this.showequipmentids()}
 
+                        {scheduleview.showschedule.call(this,"actual")}
                         {construction.showsaveproject.call(this)}
 
                     </View>
                 </View>)
         }
+        else {
+            return(<View><Text style={{...regularFont}}> Please Login to view actual </Text></View>)
+        }
+        
     }
 
 }

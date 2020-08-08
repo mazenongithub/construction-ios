@@ -89,20 +89,26 @@ class Construction {
     }
   
     getRegularFont() {
-        const width = Dimensions.get('window').width;
-        if (width > 400) {
-            return ({ fontSize: 20 })
-        } else {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        
+        if (menu.open) {
+          
             return ({ fontSize: 16 })
+        } else {
+   
+            return ({ fontSize: 20 })
         }
     }
 
     getHeaderFont() {
-        const width = Dimensions.get('window').width;
-        if (width > 400) {
-            return ({ fontSize: 24 })
-        } else {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        
+        if (menu.open) {
             return ({ fontSize: 20 })
+        } else {
+            return ({ fontSize: 24 })
         }
     }
     getcompany() {
@@ -984,6 +990,31 @@ class Construction {
 
         return companys;
     }
+
+    getactuallaborbyproviderid(providerid) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this);
+        let labor = [];
+        if(myuser) {
+            if(myuser.hasOwnProperty("company")) {
+                if(myuser.company.hasOwnProperty("projects")) {
+                    // eslint-disable-next-line
+                    myuser.company.projects.myproject.map(project=> {
+                       if(project.hasOwnProperty("actuallabor"))  {
+                           // eslint-disable-next-line
+                           project.actuallabor.mylabor.map(mylabor=> {
+                               if(mylabor.providerid === providerid) {
+                                   labor.push(mylabor)
+                               }
+                           })
+                       }
+                    })
+                }
+            }
+        }
+        return labor;
+    }
+    
     getAllSchedule(projectid) {
         const construction = new Construction();
 

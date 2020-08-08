@@ -59,6 +59,9 @@ export function MyStylesheet() {
             justifyContent: 'flex-end',
             alignItems: 'flex-end'
         },
+        alignRight:{
+            textAlign:'right'
+        },
         activeBackground: {
             backgroundColor: '#F2C4D2'
         },

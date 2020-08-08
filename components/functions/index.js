@@ -584,6 +584,29 @@ export function milestoneformatdatestring(datein) {
     }
 
 }
+
+export function getWeekSchedule(day_1, day_7, timein,timeout) {
+    // let day_1 = '2020-07-27';
+    // let day_7 = '2020-08-02';
+    // let timein = '2020-07-28 15:00:00'
+    // let timeout = '2020-07-29 02:00:00'
+    
+    const offset_1 = getOffsetDate(day_1)
+    const origin = new Date(`${day_1.replace(/-/g, '/')} 00:00:00${offset_1}`)
+    const t0 = origin.getTime();
+    const offset_2 = getOffsetDate(day_7)
+    const endpoint =new Date(`${day_7.replace(/-/g, '/')} 23:59:59${offset_2}`);
+    const tEnd = endpoint.getTime();
+    const point  = new Date(`${timein.replace(/-/g, '/')} UTC`)
+    const tX = point.getTime();
+    
+    const timeoutpoint =  new Date(`${timeout.replace(/-/g, '/')} UTC`)
+    const toutX = timeoutpoint.getTime()
+    const length = (toutX -tX)/(1000*60*60*(1/5))
+    const init = ((tX-t0)/(tEnd-t0))*840
+    return({init,length})
+    
+    }
 export function sorttimes(timeina, timeinb) {
     timeina = new Date(timeina.replace(/-/g, '/'))
     timeinb = new Date(timeinb.replace(/-/g, '/'))

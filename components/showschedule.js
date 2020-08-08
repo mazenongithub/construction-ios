@@ -11,12 +11,22 @@ import Svg, {
 } from 'react-native-svg';
 
 class ShowSchedule {
-    getschedule() {
+    getschedule(type) {
+
         const construction = new Construction();
         const schedules = this.getschedule();
         const regularFont = construction.extraSmallFont.call(this)
         console.log("myschedule", schedules)
         let schedulejsx = [];
+        const getColorClass = (type) => {
+            console.log("colorclass", type)
+            if (type === "schedule") {
+                return ("#6BB9F0")
+            } else if (type === "actual") {
+                return ("#830026")
+            }
+        }
+
         if (schedules) {
             
             schedules.map(schedule => {
@@ -33,7 +43,7 @@ class ShowSchedule {
                         console.log("initparams", params, schedule.timein, schedule.timeout)
                         schedulejsx.push(<G key={schedule.laborid}>
                        
-                        <Rect  fill="#6BB9F0" strokeWidth="1" stroke="rgb(0,0,0)" x="99" y={1 + init} width="298.16" height={params.height} />
+                        <Rect fill={getColorClass(type)} strokeWidth="1" stroke="rgb(0,0,0)" x="99" y={1 + init} width="298.16" height={params.height} />
                         <ForeignObject x="99" y={1 + init}  width={298} height={120}>
                         <View>
                         <Text style={{...regularFont}}>{inputUTCStringForLaborID(schedule.timein)}- </Text>
@@ -248,7 +258,7 @@ class ShowSchedule {
                         <TextSvg fontSize="16" fill="black" stroke="none" x="2.25" y="2191.35">10:00 pm</TextSvg>
                         <TextSvg fontSize="16" fill="black" stroke="none" x="2.25" y="2294.74">11:00 pm</TextSvg>
                         <TextSvg fontSize="16" fill="black" stroke="none" x="2.72" y="2394.74">12:00 am</TextSvg>
-                        {showschedule.getschedule.call(this)}
+                        {showschedule.getschedule.call(this,type)}
                     </Svg>
 
 

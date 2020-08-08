@@ -67,6 +67,13 @@ class Landing {
                 title: 'Calculating Labor Rate '
 
             },
+            {
+                imageid: 'viewschedule',
+                uri: require('../slides/viewschedule.png'),
+                capt: 'View Employees schedule. Output time chart by employee.',
+                title: 'View Schedule'
+
+            },
 
             {
                 imageid: 'equipment',
@@ -123,6 +130,13 @@ class Landing {
                 uri: require('../slides/scheduleequipment.png'),
                 capt: 'Schedule Material Component used for scheduling equipment ',
                 title: 'Schedule Equipment'
+
+            },
+            {
+                imageid: 'scheduleview',
+                uri: require('../slides/scheduleview.png'),
+                capt: 'Schedule View Time Charts helps with scheduling.  ',
+                title: 'Schedule View'
 
             },
             {

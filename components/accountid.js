@@ -71,7 +71,7 @@ showaccountid() {
 
         <View style={[styles.generalFlex]}>
         <View style={[styles.flex1]}>
-            <Text style={[styles.regularFont]}>Account ID</Text>
+            <Text style={[regularFont]}>Account ID</Text>
             {accountid.showactiveaccount.call(this)} 
             <TextInput style={[styles.defaultInput,regularFont]} 
                 value={this.state.accountname}

@@ -30,7 +30,8 @@ import MakeID from './makeids';
 import EmployeeID from './employeeid'
 import EquipmentID from './equipmentid';
 import MaterialID from './materialid';
-import ShowSchedule from './showschedule'
+import ScheduleView from './scheduleview'
+
 
 
 
@@ -215,7 +216,7 @@ class Schedule extends Component {
                     timeout = UTCTimeStringfromTime(timeout);
                     const laborrate = construction.gethourlyrate.call(this, providerid).toFixed(2)
                     const profit = 0;
-                    const engineerid = myuser.providerid;
+                    const engineerid = providerid;
 
                     const newLabor = CreateScheduleLabor(laborid, engineerid, milestoneid, csiid, timein, timeout, laborrate, '', '', profit)
 
@@ -823,6 +824,14 @@ class Schedule extends Component {
 
 
     }
+
+    getSchedule() {
+        const construction = new Construction();
+        const params = construction.getactiveproject.call(this)
+        const schedule = construction.getAllSchedule.call(this, params.projectid);
+        return schedule;
+
+    }
     makelaboractive(laborid) {
 
         const construction = new Construction();
@@ -1397,6 +1406,7 @@ class Schedule extends Component {
         const materialdate = new MaterialDate();
         const timein = new TimeIn();
         const timeout = new TimeOut();
+        const scheduleview = new ScheduleView();
        
 
         const showmaterialdate = () => {
@@ -1604,10 +1614,14 @@ class Schedule extends Component {
                         {this.showlaborids()}
                         {this.showequipmentids()}
 
+                        {scheduleview.showschedule.call(this,"schedule")}
+
                         {construction.showsaveproject.call(this)}
 
                     </View>
                 </View>)
+        } else {
+            return(<View><Text style={{...regularFont}}> Please Login to view schedule </Text></View>)
         }
     }
 
