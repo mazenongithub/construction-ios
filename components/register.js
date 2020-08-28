@@ -46,11 +46,11 @@ class Register {
         const myuser = construction.getuser.call(this);
         const profile = new Profile();
 
-        const showpassword = () => {
-            if(!this.state.clientid && !this.state.client) {
-                return(password.showpassword.call(this))
+        const showappleid = () => {
+
+            if(this.state.profile && this.state.profilecheck) {
+                return(appleid.showappleid.call(this, 'register'))
             }
-            
         }
 
         if(myuser) {
@@ -65,14 +65,13 @@ class Register {
                             <Text style={[styles.boldFont, headerFont, styles.alignCenter]}>Register </Text>
                         </View>
                     </View>
-                    {appleid.showappleid.call(this)}
+                    
 
                     {providerid.showprofile.call(this)}
 
-                    {emailaddress.showemailaddress.call(this)}
+                    
+                    {showappleid()}
 
-
-                    {register.handleregistericon.call(this)}
 
                     <View style={[styles.generalFlex, styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>

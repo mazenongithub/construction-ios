@@ -41,7 +41,7 @@ class ProviderID{
                     this.setState({ profilecheck: true });
                 }
                 else {
-                    this.setState({ profilecheck: false, message: response.message });
+                    this.setState({ profilecheck: false, message: response.invalid });
                 }
 
             } catch (err) {

@@ -3,7 +3,7 @@ import { Dimensions, View, TouchableOpacity, Image, Text } from 'react-native';
 import { MyStylesheet } from './styles';
 import { sortcode, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric, UTCTimefromCurrentDate, sortpart } from './functions'
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { SaveCompany, SaveProfile, SaveProject, ClientLogin, LoadAllUsers } from './actions/api'
+import { SaveCompany, SaveProfile, SaveProject, AppleLogin, LoadAllUsers } from './actions/api'
 
 
 class Construction {
@@ -87,16 +87,16 @@ class Construction {
         }
 
     }
-  
+
     getRegularFont() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
-        
+
         if (menu.open) {
-          
+
             return ({ fontSize: 16 })
         } else {
-   
+
             return ({ fontSize: 20 })
         }
     }
@@ -104,7 +104,7 @@ class Construction {
     getHeaderFont() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
-        
+
         if (menu.open) {
             return ({ fontSize: 20 })
         } else {
@@ -367,7 +367,7 @@ class Construction {
         }
         return material;
     }
-    async loginclient() {
+    async loginclient(type) {
         let emailaddress = this.state.emailaddress;
         let client = this.state.client;
         let clientid = this.state.clientid;
@@ -376,19 +376,14 @@ class Construction {
         let profile = this.state.profile;
         let phonenumber = this.state.phonenumber;
         let profileurl = this.state.profileurl;
-        let password = this.state.password
 
-        let values = { emailaddress, client, clientid, firstname, lastname, profile, phonenumber, profileurl, password }
+
+        let values = { emailaddress, client, clientid, firstname, lastname, profile, phonenumber, profileurl, type }
 
         try {
-            let response = await ClientLogin(values)
+            let response = await AppleLogin(values)
             console.log("RESPONSE LOGIN", response)
-            if (response.hasOwnProperty("allusers")) {
-                let companys = returnCompanyList(response.allusers);
-                this.props.reduxAllCompanys(companys)
-                this.props.reduxAllUsers(response.allusers);
-
-            }
+         
             if (response.hasOwnProperty("myuser")) {
 
                 this.props.reduxUser(response.myuser)
@@ -401,7 +396,7 @@ class Construction {
         }
     }
 
-    async appleSignIn() {
+    async appleSignIn(type) {
         const construction = new Construction();
         const navigation = construction.getnavigation.call(this)
         try {
@@ -428,18 +423,11 @@ class Construction {
                 }
                 this.setState({ emailaddress, client, clientid, firstname, lastname, emailaddresscheck })
 
-                if (navigation.main === 'login') {
-                    if (emailaddress && client && clientid) {
-                        construction.loginclient.call(this)
-                    }
-                } else if (navigation.main === 'register') {
-                    if (emailaddress && client && clientid && profile && profilecheck) {
-                        construction.loginclient.call(this)
-                    }
-                }
-
-
+                construction.loginclient.call(this,type)
             }
+
+
+
         } catch (err) {
             alert(err)
         }
@@ -464,17 +452,17 @@ class Construction {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         let check = false;
-        if(myuser) {
-        const employee =construction.getemployeebyid.call(this,myuser.providerid);
-        if(employee) {
-            if(employee.active === 'active') {
-                check = true;
+        if (myuser) {
+            const employee = construction.getemployeebyid.call(this, myuser.providerid);
+            if (employee) {
+                if (employee.active === 'active') {
+                    check = true;
+                }
             }
-        }
 
         }
         return check;
-        
+
 
     }
 
@@ -762,7 +750,7 @@ class Construction {
         let employeeid = false;
         if (this.props.project) {
             if (this.props.project.hasOwnProperty("employeeid")) {
-                employeeid= this.props.project.employeeid
+                employeeid = this.props.project.employeeid
             }
 
         }
@@ -846,19 +834,19 @@ class Construction {
     getemployeebyproviderid(providerid) {
         let construction = new Construction();
 
-          
-            let myemployees = construction.getmyemployees.call(this)
-            let employees = false;
-            if (myemployees) {
-                // eslint-disable-next-line
-                myemployees.map(employee => {
-                    if (employee.providerid === providerid) {
-                        employees = employee;
-                    }
-                })
-            }
-            return employees;
-        
+
+        let myemployees = construction.getmyemployees.call(this)
+        let employees = false;
+        if (myemployees) {
+            // eslint-disable-next-line
+            myemployees.map(employee => {
+                if (employee.providerid === providerid) {
+                    employees = employee;
+                }
+            })
+        }
+        return employees;
+
     }
 
     getspecficationsbyprojectid(projectid) {
@@ -995,26 +983,26 @@ class Construction {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         let labor = [];
-        if(myuser) {
-            if(myuser.hasOwnProperty("company")) {
-                if(myuser.company.hasOwnProperty("projects")) {
+        if (myuser) {
+            if (myuser.hasOwnProperty("company")) {
+                if (myuser.company.hasOwnProperty("projects")) {
                     // eslint-disable-next-line
-                    myuser.company.projects.myproject.map(project=> {
-                       if(project.hasOwnProperty("actuallabor"))  {
-                           // eslint-disable-next-line
-                           project.actuallabor.mylabor.map(mylabor=> {
-                               if(mylabor.providerid === providerid) {
-                                   labor.push(mylabor)
-                               }
-                           })
-                       }
+                    myuser.company.projects.myproject.map(project => {
+                        if (project.hasOwnProperty("actuallabor")) {
+                            // eslint-disable-next-line
+                            project.actuallabor.mylabor.map(mylabor => {
+                                if (mylabor.providerid === providerid) {
+                                    labor.push(mylabor)
+                                }
+                            })
+                        }
                     })
                 }
             }
         }
         return labor;
     }
-    
+
     getAllSchedule(projectid) {
         const construction = new Construction();
 
@@ -1794,38 +1782,38 @@ class Construction {
     async saveCompany() {
         const construction = new Construction()
         const checkmanager = construction.checkmanager.call(this)
-        if(checkmanager) {
-        let params = construction.getCompanyParams.call(this)
+        if (checkmanager) {
+            let params = construction.getCompanyParams.call(this)
 
-        const validate = construction.validateCompany.call(this, params);
-        if (validate.validate) {
-            try {
-                console.log("SAVECOMPANY", "PARAMS", params)
-                let response = await SaveCompany(params);
-                // console.log("SAVECOMPANY", "response", response)
-                construction.handlecompanyids.call(this, response)
-                if (response.hasOwnProperty("allusers")) {
-                    let companys = returnCompanyList(response.allusers);
-                    this.props.reduxAllCompanys(companys)
-                    this.props.reduxAllUsers(response.allusers);
-                }
-                if (response.hasOwnProperty("myuser")) {
-                    this.props.reduxUser(response.myuser)
-                }
+            const validate = construction.validateCompany.call(this, params);
+            if (validate.validate) {
+                try {
+                    console.log("SAVECOMPANY", "PARAMS", params)
+                    let response = await SaveCompany(params);
+                    // console.log("SAVECOMPANY", "response", response)
+                    construction.handlecompanyids.call(this, response)
+                    if (response.hasOwnProperty("allusers")) {
+                        let companys = returnCompanyList(response.allusers);
+                        this.props.reduxAllCompanys(companys)
+                        this.props.reduxAllUsers(response.allusers);
+                    }
+                    if (response.hasOwnProperty("myuser")) {
+                        this.props.reduxUser(response.myuser)
+                    }
 
-                if (response.hasOwnProperty("message")) {
-                    let dateupdated = inputUTCStringForLaborID(response.lastupdated)
-                    this.setState({ message: `${response.message} Last Updated ${dateupdated}` })
+                    if (response.hasOwnProperty("message")) {
+                        let dateupdated = inputUTCStringForLaborID(response.lastupdated)
+                        this.setState({ message: `${response.message} Last Updated ${dateupdated}` })
+                    }
+                } catch (err) {
+                    alert(err)
                 }
-            } catch (err) {
-                alert(err)
+            } else {
+                this.setState({ message: validate.message })
             }
         } else {
-            this.setState({ message: validate.message })
+            alert(`Only managers have access to save company`)
         }
-    } else {
-        alert(`Only managers have access to save company`)
-    }
     }
     getsavecompanyicon() {
         const construction = new Construction();
@@ -1866,19 +1854,31 @@ class Construction {
         </View>)
     }
 
+    validateSaveProfile() {
+       
+        let construction = new Construction();
+        let myuser = construction.getuser.call(this)
+        let errmsg = "";
+        if(myuser.invalid) {
+            errmsg += myuser.invalid;
+        }
+        if(myuser.invalidemail) {
+            errmsg += myuser.invalidemail;
+        }
+        console.log("validatesaveprofile", errmsg)
+        return errmsg;
+    }
+
     async savemyprofile() {
         let construction = new Construction();
         let myuser = construction.getuser.call(this)
         let values = { providerid: myuser.providerid, firstname: myuser.firstname, lastname: myuser.lastname, emailaddress: myuser.emailaddress, phonenumber: myuser.phonenumber, profileurl: myuser.profileurl, profile: myuser.profile }
+        let errmsg = construction.validateSaveProfile.call(this)
 
+        if(!errmsg) {
         let response = await SaveProfile(values)
         console.log(response)
-        if (response.hasOwnProperty("allusers")) {
-            let companys = returnCompanyList(response.allusers);
-            this.props.reduxAllCompanys(companys)
-            this.props.reduxAllUsers(response.allusers);
-
-        }
+      
         if (response.hasOwnProperty("myuser")) {
 
             this.props.reduxUser(response.myuser)
@@ -1891,6 +1891,11 @@ class Construction {
             this.setState({ message })
 
         }
+
+    } else {
+        console.log("validatesaveprofile",errmsg)
+        this.setState({ message:errmsg })
+    }
 
 
     }
@@ -1948,26 +1953,26 @@ class Construction {
         return myaccount;
     }
     getSmallFont() {
-      
-            return ({fontSize:18})
+
+        return ({ fontSize: 18 })
 
 
     }
     extraSmallFont() {
-      
-        return ({fontSize:14})
+
+        return ({ fontSize: 14 })
 
 
-}
-    getcheckicon(){
+    }
+    getcheckicon() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
-        if(menu.open) {
+        if (menu.open) {
             return ({ width: 33, height: 19 })
         } else {
             return ({ width: 112, height: 76 })
         }
-       
+
     }
 
     checkinvoice(projectid, invoiceid) {
@@ -2004,7 +2009,7 @@ class Construction {
         if (myemployees) {
             // eslint-disable-next-line
             myemployees.map(employee => {
-                console.log("checkemployee", employee.profile,profile)
+                console.log("checkemployee", employee.profile, profile)
                 if (employee.profile === profile) {
                     employees = employee;
                 }
@@ -2511,19 +2516,19 @@ class Construction {
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         let labor = [];
-        if(myuser) {
-            if(myuser.hasOwnProperty("company")) {
-                if(myuser.company.hasOwnProperty("projects")) {
+        if (myuser) {
+            if (myuser.hasOwnProperty("company")) {
+                if (myuser.company.hasOwnProperty("projects")) {
                     // eslint-disable-next-line
-                    myuser.company.projects.myproject.map(project=> {
-                       if(project.hasOwnProperty("schedulelabor"))  {
-                           // eslint-disable-next-line
-                           project.schedulelabor.mylabor.map(mylabor=> {
-                               if(mylabor.providerid === providerid) {
-                                   labor.push(mylabor)
-                               }
-                           })
-                       }
+                    myuser.company.projects.myproject.map(project => {
+                        if (project.hasOwnProperty("schedulelabor")) {
+                            // eslint-disable-next-line
+                            project.schedulelabor.mylabor.map(mylabor => {
+                                if (mylabor.providerid === providerid) {
+                                    labor.push(mylabor)
+                                }
+                            })
+                        }
                     })
                 }
             }
@@ -2533,18 +2538,18 @@ class Construction {
 
 
     getprojectbymilestoneid(milestoneid) {
-     
+
         const construction = new Construction();
         const myuser = construction.getuser.call(this);
         let myproject = false;
-        if(myuser.hasOwnProperty("company")) {
-           if(myuser.company.hasOwnProperty("projects")) {
+        if (myuser.hasOwnProperty("company")) {
+            if (myuser.company.hasOwnProperty("projects")) {
                 // eslint-disable-next-line
-                myuser.company.projects.myproject.map(project=> {
-                    if(project.hasOwnProperty("projectmilestones")) {
+                myuser.company.projects.myproject.map(project => {
+                    if (project.hasOwnProperty("projectmilestones")) {
                         // eslint-disable-next-line
-                        project.projectmilestones.mymilestone.map(milestone=> {
-                            if(milestone.milestoneid === milestoneid) {
+                        project.projectmilestones.mymilestone.map(milestone => {
+                            if (milestone.milestoneid === milestoneid) {
                                 myproject = project;
                             }
                         })

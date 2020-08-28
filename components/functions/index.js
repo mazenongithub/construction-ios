@@ -535,6 +535,13 @@ export function calculatetotalhours(timeout, timein) {
     let totalhours = ((dateout.getTime() - datein.getTime()) / (1000 * 60 * 60))
     return totalhours;
 }
+export function trailingZeros(num) {
+    num = Number(num)
+    if(num < 10 && num >=0) {
+        num = `0${num}`
+    }
+    return num;
+}
 export function inputUTCStringForLaborID(timein) {
 
     let datein = new Date(`${timein.replace(/-/g, '/')} UTC`)
@@ -568,7 +575,9 @@ export function inputUTCStringForLaborID(timein) {
     if (month < 10) {
         month = `0${month}`
     }
-    return (`${month}/${date}/${year} ${hours}:${minutes} ${ampm}`)
+    let seconds = datein.getSeconds();
+    seconds = trailingZeros(seconds)
+    return (`${month}/${date}/${year} ${hours}:${minutes}:${seconds} ${ampm}`)
 
 }
 

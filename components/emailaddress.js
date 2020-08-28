@@ -48,7 +48,7 @@ class EmailAddress {
                     this.setState({ emailaddresscheck: true, message:''});
                 }
                 else {
-                    this.setState({ emailaddresscheck: false, message: response.message });
+                    this.setState({ emailaddresscheck: false, message: response.invalid });
                 }
 
             } catch (err) {
@@ -73,7 +73,7 @@ class EmailAddress {
             <View style={[styles.generalFlex, styles.bottomMargin10]}>
                 <View style={[styles.flex3]}>
                     <Text style={[regularFont]}>Email Address </Text>
-                    <TextInput style={[regularFont, styles.defaultInput]}
+                    <TextInput style={[regularFont, styles.defaultInput, styles.minwidth90]}
                         onChangeText={text => { emailaddress.handleemailaddress.call(this, text) }}
                         onBlur={() => { emailaddress.verifyEmailAddress.call(this) }} 
                         value={this.state.emailaddress}

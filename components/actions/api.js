@@ -216,9 +216,42 @@ export async function ClientLogin(values) {
 
 }
 
-export async function ValidateCompanyID(url) {
 
-    var APIURL = `https://civilengineer.io/construction/api/checkcompanyid.php?url=${url}`
+export async function AppleLogin(values) {
+   
+    const variables = new EnvironmentalVariables();
+    const serverAPI = variables.getvariables().serverAPI;
+    var APIURL = `${serverAPI}/construction/applelogin`
+    return fetch(APIURL, {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+        }),
+
+        body: JSON.stringify(values)
+    })
+        .then(resp => {
+
+            if (!resp.ok) {
+                if (resp.status >= 400 && resp.status < 500) {
+                    return resp.json().then(data => {
+
+                        throw data.message;
+                    })
+                }
+
+            }
+
+            return resp.json();
+        })
+}
+
+export async function ValidateCompanyID(companyurl) {
+    const variables = new EnvironmentalVariables();
+    const serverAPI = variables.getvariables.call(this).serverAPI;
+
+    var APIURL = `${serverAPI}/construction/${companyurl}/checkcompany`
 
     return fetch(APIURL, {
         method: 'get',
@@ -237,8 +270,10 @@ export async function ValidateCompanyID(url) {
         })
 }
 export async function CheckProviderID(profile) {
+    const variables = new EnvironmentalVariables();
+    const serverAPI = variables.getvariables.call(this).serverAPI;
 
-    var APIURL = `https://civilengineer.io/projectmanagement/api/checkproviderid.php?profile=${profile}`
+    var APIURL = `${serverAPI}/construction/${profile}/checkprofile`
 
     return fetch(APIURL, { credentials: 'same-origin' })
         .then(resp => {
@@ -255,9 +290,10 @@ export async function CheckProviderID(profile) {
 }
 
 export async function CheckEmailAddress(emailaddress) {
+    const variables = new EnvironmentalVariables();
+    const serverAPI = variables.getvariables.call(this).serverAPI;
 
-
-    var APIURL = `https://civilengineer.io/projectmanagement/api/checkemailaddress.php?emailaddress=${emailaddress}`
+    var APIURL = `${serverAPI}/construction/${emailaddress}/checkemail`
 
     return fetch(APIURL, {
         credentials: 'same-origin'

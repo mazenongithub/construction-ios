@@ -2,9 +2,9 @@ import React from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { MyStylesheet } from './styles';
 import Construction from './construction';
-import EmailAddress from './emailaddress'
 import AppleID from './appleid';
-import Profile from './profile';
+import Profile from './profile'
+
 
 class Login {
 
@@ -27,15 +27,12 @@ class Login {
     showlogin() {
         const construction = new Construction();
         const styles = MyStylesheet();
-        const emailaddress = new EmailAddress();
         const appleid = new AppleID();
         const headerFont = construction.getHeaderFont.call(this)
         const regularFont = construction.getRegularFont.call(this)
-        const login = new Login();
-        const myuser = construction.getuser.call(this)
+        const myuser = construction.getuser.call(this);
         const profile = new Profile();
-      
-
+    
         const showpassword = () => {
             if(!this.state.clientid && !this.state.client) {
                 return(password.showpassword.call(this))
@@ -54,16 +51,9 @@ class Login {
                                 <Text style={[styles.boldFont, headerFont, styles.alignCenter]}>Login </Text>
                             </View>
                         </View>
-                        {appleid.showappleid.call(this)}
+                        {appleid.showappleid.call(this, "login")}
     
-                        {emailaddress.showemailaddress.call(this)}
-
-    
-                        <View style={[styles.generalFlex, styles.bottomMargin10]}>
-                            <View style={[styles.flex1, styles.alignContentCenter]}>
-                                {login.handlegoicon.call(this)}
-                            </View>
-                        </View>
+                   
     
                         <View style={[styles.generalFlex, styles.bottomMargin10]}>
                             <View style={[styles.flex1]}>

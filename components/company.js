@@ -14,6 +14,7 @@ class Company extends Component {
     }
 
     componentDidMount() {
+        const construction = new Construction();
         if(!this.props.allusers.hasOwnProperty("length")) {
             construction.loadallusers.call(this)
             }

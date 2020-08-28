@@ -166,6 +166,12 @@ export function MyStylesheet() {
         alignContentRight: {
             alignItems: 'flex-end'
         },
+        minWidth120:{
+            minWidth:120
+        },
+        minwidth90:{
+            minWidth:'90%'
+        },
         defaultInput: {
             height: 40,
             borderColor: 'gray',
