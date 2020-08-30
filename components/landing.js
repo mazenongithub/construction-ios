@@ -33,7 +33,7 @@ class Landing {
             {
                 imageid: 'company',
                 uri: require('../slides/company.png'),
-                capt: 'Create a new Company or Add self to existing Company. ',
+                capt: 'Create Company API allows you to create an company or add yourself to an existing company ',
                 title: 'Company'
 
             },

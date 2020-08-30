@@ -247,21 +247,26 @@ export async function AppleLogin(values) {
         })
 }
 
-export async function ValidateCompanyID(companyurl) {
+export async function ValidateCompanyID(values) {
     const variables = new EnvironmentalVariables();
-    const serverAPI = variables.getvariables.call(this).serverAPI;
+    const serverAPI = variables.getvariables().serverAPI
 
-    var APIURL = `${serverAPI}/construction/${companyurl}/checkcompany`
+    var APIURL = `${serverAPI}/construction/checknewcompanyid`
 
     return fetch(APIURL, {
-        method: 'get',
-        credentials: 'include'
+        method: 'post',
+        credentials: 'include',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+        }),
+
+        body: JSON.stringify(values)
     })
         .then(resp => {
 
             if (!resp.ok) {
-              
-                    let err =  'No network connection or the Server is not responding';
+        
+                    let err = 'Request failed or Server is not responding' ;
                     throw err;
                 
             }
@@ -269,6 +274,7 @@ export async function ValidateCompanyID(companyurl) {
             return resp.json();
         })
 }
+
 export async function CheckProviderID(profile) {
     const variables = new EnvironmentalVariables();
     const serverAPI = variables.getvariables.call(this).serverAPI;
