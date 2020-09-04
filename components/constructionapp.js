@@ -33,7 +33,8 @@ import Landing from './landing';
 import ViewAccount from './viewaccount';
 import CostEstimate from './costestimate';
 import MySchedule from './myschedule';
-import MyActual from './myactual'
+import MyActual from './myactual';
+import Milestones from './milestones'
 
 
 class ConstructionApp extends Component {
@@ -152,89 +153,91 @@ class ConstructionApp extends Component {
         switch (menu.main) {
             case 'register':
                 return (register.showregister.call(this));
-                break;
+                
             case 'login':
                 return (login.showlogin.call(this));
-                break;
+                
             case 'profile':
                 return (profile.showmyprofile.call(this));
-                break;
+                
             case 'company':
                 return (<Company update={this.updatestate.bind(this)} />);
-                break;
+                
             case 'employees':
                 return (<Employees update={this.updatestate.bind(this)} />);
-                break;
+                
             case 'equipment':
                 return (<Equipment update={this.updatestate.bind(this)} />);
-                break;
+                
             case 'materials':
                 return (<Materials update={this.updatestate.bind(this)} />);
-                break;
+                
             case 'viewschedule':
                 return (<MySchedule update={this.updatestate.bind(this)} />);
-                break;
-                case 'viewactual':
-                    return (<MyActual update={this.updatestate.bind(this)} />);
-                    break;
+                
+            case 'viewactual':
+                return (<MyActual update={this.updatestate.bind(this)} />);
+                
             case 'accounts':
                 return (accounts.showaccounts.call(this));
-                break;
+                
             case 'viewaccount':
                 return (viewaccount.showaccount.call(this));
-                break;
+                
             case 'project':
                 return (project.showproject.call(this));
-                break;
+                
             case 'costestimate':
                 return (costestimate.showestimate.call(this));
-                break;
+                
             case 'schedule':
                 return (<Schedule update={this.updatestate.bind(this)} />);
-                break;
+                
             case 'actual':
                 return (<Actual update={this.updatestate.bind(this)} />);
-                break;
+                
+            case 'milestones':
+                return (<Milestones update={this.updatestate.bind(this)} />);
+                
             case 'proposals':
                 return (proposals.showproposals.call(this));
-                break;
+                
             case 'viewproposal':
                 return (viewproposal.showproposal.call(this));
-                break;
+                
             case 'invoices':
                 return (invoices.showinvoices.call(this));
-                break;
+                
             case 'viewinvoice':
                 return (viewinvoice.showinvoice.call(this));
-                break;
+                
             case "proposallineitem":
                 return (proposallineitem.showproposallineitem.call(this))
-                break;
+                
             case "invoicelineitem":
                 return (invoicelineitem.showinvoicelineitem.call(this))
-                break;
+                
             case "bidschedule":
                 return (bidschedule.showbidschedule.call(this))
-                break;
+                
             case "bid":
                 return (bid.showbid.call(this));
-                break;
+                
             case "bidschedulelineitem":
                 return (bidschedulelineitem.showbidschedulelineitem.call(this))
-                break;
+                
             case "bidlineitem":
                 return (bidlineitem.showbidlineitem.call(this))
-                break;
+                
             case "specifications":
                 return (specifications.getspecifications.call(this));
             case "specification":
                 return (specification.getspecification.call(this))
             case "landing":
                 return (landing.showlanding.call(this));
-                break;
             default:
                 return (landing.showlanding.call(this));
-                break
+                break;
         }
     }
     handlelogin() {
@@ -308,10 +311,10 @@ class ConstructionApp extends Component {
         let menu = construction.getnavigation.call(this);
         menu.main = "viewactual";
         let myproject = construction.getactiveproject.call(this)
-        if(myproject) {
-        myproject.employeeid = providerid;
+        if (myproject) {
+            myproject.employeeid = providerid;
         } else {
-            myproject = {employeeid:providerid}
+            myproject = { employeeid: providerid }
         }
         this.props.reduxProject(myproject)
         this.props.reduxNavigation(menu)
@@ -323,10 +326,10 @@ class ConstructionApp extends Component {
         let menu = construction.getnavigation.call(this);
         menu.main = "viewschedule";
         let myproject = construction.getactiveproject.call(this)
-        if(myproject) {
-        myproject.employeeid = providerid;
+        if (myproject) {
+            myproject.employeeid = providerid;
         } else {
-            myproject = {employeeid:providerid}
+            myproject = { employeeid: providerid }
         }
         this.props.reduxProject(myproject)
         this.props.reduxNavigation(menu)
@@ -444,6 +447,14 @@ class ConstructionApp extends Component {
         menu.main = 'project'
         this.props.reduxNavigation(menu)
         this.props.reduxProject({ projectid });
+        this.setState({ render: 'render' })
+
+    }
+    handlemilestones() {
+        const construction = new Construction();
+        const menu = construction.getnavigation.call(this);
+        menu.main = 'milestones'
+        this.props.reduxNavigation(menu)
         this.setState({ render: 'render' })
 
     }
@@ -581,7 +592,7 @@ class ConstructionApp extends Component {
             }
             const accounts = () => {
                 if (checkmanager) {
-                    return (<Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => this.handleaccounts()}>  /accounts</Text>)
+                    return (<Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => this.handleaccounts()}>  /accounts</Text>)
                 }
             }
 
@@ -593,7 +604,7 @@ class ConstructionApp extends Component {
 
             const materials = () => {
                 if (checkmanager) {
-                    return (<Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handlematerials() }}>  /materials</Text>)
+                    return (<Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handlematerials() }}>  /materials</Text>)
                 }
             }
             const companylinks = () => {
@@ -607,8 +618,8 @@ class ConstructionApp extends Component {
                                 {accounts()}
                                 {equipment()}
                                 {materials()}
-                                <Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handleviewschedule(myuser.profile) }}>  /viewschedule</Text>
-                                <Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handleviewactual(myuser.profile) }}>  /viewactual</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handleviewschedule(myuser.profile) }}>  /viewschedule</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handleviewactual(myuser.profile) }}>  /viewactual</Text>
                             </View>)
                     }
                 }
@@ -626,12 +637,12 @@ class ConstructionApp extends Component {
                 if (myuser) {
                     return (
                         <View>
-                            <Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.handlecompany() }}>  {company()} </Text>
+                            <Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.handlecompany() }}>  {company()} </Text>
                             {companylinks()}
                         </View>
                     )
                 } else {
-                    return (<Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.handleregister() }}>  /register </Text>)
+                    return (<Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.handleregister() }}>  /register </Text>)
                 }
 
             }
@@ -642,7 +653,7 @@ class ConstructionApp extends Component {
                     return (<View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}><Text style={[styles.alignCenter, headerFont]} onPress={() => { this.logoutuser() }}>  /logout </Text></View>)
                 } else {
                     return (<View style={[styles.flex1, styles.showBorder, styles.minHeight30, styles.navContainer, styles.margin5]}>
-                        <Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.handlelogin() }}>/login</Text>
+                        <Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.handlelogin() }}>/login</Text>
                     </View>)
                 }
 
@@ -654,14 +665,14 @@ class ConstructionApp extends Component {
                     if (checkactive) {
                         return (
                             <View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.alignCenter, headerFont, styles.margin5]}>
-                                <Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]}>  /projects  </Text>
+                                <Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]}>  /projects  </Text>
                                 {this.getprojectlinks()}
                             </View>)
                     }
                 } else {
                     return (
                         <View style={[styles.minHeight30, styles.showBorder, styles.navContainer]}>
-                            <Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.handlelogin() }}>/login</Text></View>
+                            <Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.handlelogin() }}>/login</Text></View>
                     )
                 }
 
@@ -670,7 +681,7 @@ class ConstructionApp extends Component {
             const open_4 = () => {
                 if (myuser) {
                     return (<View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.margin5]}>
-                        <Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.logoutuser() }}>  /logout </Text>
+                        <Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.logoutuser() }}>  /logout </Text>
                     </View>)
                 } else {
 
@@ -678,9 +689,9 @@ class ConstructionApp extends Component {
             }
             const open_5 = () => {
                 if (myuser) {
-                    return (<Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.handleprofile() }}>  /{myuser.providerid} </Text>)
+                    return (<Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.handleprofile() }}>  /{myuser.providerid} </Text>)
                 } else {
-                    return (<Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]}>  / </Text>)
+                    return (<Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]}>  / </Text>)
                 }
             }
             const proposals = () => {
@@ -697,13 +708,13 @@ class ConstructionApp extends Component {
 
             const invoices = () => {
                 if (checkmanager) {
-                    return (<Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handleinvoices() }}>/invoices</Text>)
+                    return (<Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handleinvoices() }}>/invoices</Text>)
                 }
             }
 
             const bid = () => {
                 if (checkmanager) {
-                    return (<Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handlebid() }}>/bid</Text>)
+                    return (<Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handlebid() }}>/bid</Text>)
                 }
             }
             const open_6 = () => {
@@ -714,18 +725,19 @@ class ConstructionApp extends Component {
                     if (myproject) {
                         return (
                             <View style={[styles.minHeight30, styles.showBorder, styles.navContainer, styles.margin5, styles.bottomMargin10, styles.paddingTopBottom10]}>
-                                <Text style={[styles.alignCenter, headerFont,styles.bottomMargin10]} onPress={() => { this.makeprojectactive(myproject.projectid) }}>/{myproject.title}</Text>
+                                <Text style={[styles.alignCenter, headerFont, styles.bottomMargin10]} onPress={() => { this.makeprojectactive(myproject.projectid) }}>/{myproject.title}</Text>
 
-                                <Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handleschedule() }}>/schedule</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handleschedule() }}>/schedule</Text>
                                 {proposals()}
                                 {bidschedule()}
 
-                                <Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handleactual() }}>/actual</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handleactual() }}>/actual</Text>
                                 {invoices()}
                                 {bid()}
 
-                                <Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handlespecifications() }}>/specifications</Text>
-                                <Text style={[styles.alignCenter, regularFont,styles.bottomMargin10]} onPress={() => { this.handlecostestimate() }}>/estimate</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handlespecifications() }}>/specifications</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handlecostestimate() }}>/estimate</Text>
+                                <Text style={[styles.alignCenter, regularFont, styles.bottomMargin10]} onPress={() => { this.handlemilestones() }}>/milestones</Text>
                             </View>)
                     }
                 }

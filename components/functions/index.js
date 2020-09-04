@@ -645,6 +645,242 @@ export function sortcode(codeb, codea) {
     }
 }
 
+export function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  
+  
+export function checkemptyobject(obj) {
+    let empty = true;
+    // eslint-disable-next-line
+    for(let x in obj) {
+      empty = false;
+      
+    }
+    
+   return empty; 
+  }
+
+export function getScale(interval) {
+
+    let scale = "";
+    if (interval < 180) {
+        scale = "day"
+    } else if (interval <= 730) {
+        scale = "month"
+    } else {
+        scale = "year"
+    }
+    return scale;
+
+}
+export function calculatemonth(int, compl, start, completion) {
+    //int = '2020-04-18'
+    //compl = '2022-04-18'
+
+
+
+    let xo = int.split('-');
+    let x1 = xo[0]
+    let x2 = xo[1]
+
+    let initime = `${x1}-${x2}-01`
+    //start = '2020-04-18'
+    xo = (getDateInterval(initime, start) / 30.41) * 200;
+    //completion = '2020-09-18'
+    const days = getDateInterval(start, completion);
+    const width = (days / 30.41) * 200
+    return { width, xo }
+
+}
+
+export function increasedatebyoneday(timein) {
+
+    //let timein = '2020-12-31';
+    let offset = getOffsetDate(timein);
+    let datein = new Date(`${timein.replace(/-/g, '/')} 00:00:00${offset}`);
+    let newdate = new Date(datein.getTime())
+    let day = newdate.getDate();
+    let month = newdate.getMonth() + 1;
+    let year = newdate.getFullYear();
+    if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+        if (day === 31) {
+            day = 1;
+            if (month !== 12) {
+                month = month + 1;
+
+            } else {
+                month = 1;
+                year = year + 1;
+            }
+        } else {
+            day = day + 1;
+
+        }
+
+    }
+
+    if (month === 4 || month === 6 || month === 9 || month === 11) {
+
+        if (day === 30) {
+            day = 1;
+            month = month + 1;
+        } else {
+            day = day + 1;
+        }
+    }
+
+
+    if (month === 2) {
+        if (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)) {
+            if (day === 29) {
+                day = 1;
+                month = month + 1;
+            }
+        } else {
+            if (day === 28) {
+                day = 1;
+                month = month + 1;
+            }
+        }
+
+    }
+
+    if (day < 10) {
+        day = `0${day}`
+    }
+
+    if (month < 10) {
+        month = `0${month}`
+    }
+    return (`${year}-${month}-${day}`)
+}
+
+export function calculateyear(int, compl, start, completion) {
+    //int = '2020-04-18'
+    //compl = '2022-04-18'
+
+    let xo = int.split('-');
+    let x1 = xo[0]
+
+    let initime = `${x1}-01-01`
+
+
+    //start = '2020-04-18'
+    xo = (getDateInterval(initime, start) / 365) * 200;
+    //completion = '2020-09-18'
+    const days = getDateInterval(start, completion)
+    const width = (days / 365) * 200
+
+    return { width, xo }
+}
+
+export function monthString(month) {
+
+
+    switch (month) {
+        case 0:
+            return ("Jan");
+        case 1:
+            return ("Feb");
+        case 2:
+            return ("Mar");
+        case 3:
+            return ("Apr");
+        case 4:
+            return ("May");
+        case 5:
+            return ("Jun");
+        case 6:
+            return ("Jul");
+        case 7:
+            return ("Aug");
+        case 8:
+            return ("Sept");
+        case 9:
+            return ("Oct");
+        case 10:
+            return ("Nov");
+        case 11:
+            return ("Dec");
+        default:
+            break;
+    }
+}
+
+export function increaseCalendarDayOneMonth(monthstring) {
+    let offset = getOffsetDate(monthstring);
+    let datein = new Date(`${monthstring.replace(/-/g, '/')} 00:00:00${offset}`)
+    let currentMonth = datein.getMonth() + 1;
+    let year = datein.getFullYear();
+    let increaseMonth = currentMonth;
+    if (currentMonth === 12) {
+        increaseMonth = 1;
+        year += 1
+    } else {
+        increaseMonth += 1;
+    }
+
+    let day = datein.getDate();
+    if (increaseMonth < 10) {
+        increaseMonth = `0${increaseMonth}`
+    }
+
+    if (day < 10) {
+        day = `0${day}`
+    }
+
+    let newDate = `${year}-${increaseMonth}-${day}`
+    return (newDate)
+}
+
+export function calculateday(int, compl, start, completion) {
+    //int = '2020-04-18'
+    //compl = '2022-04-24'
+
+    let xo = int.split('-');
+    let x1 = xo[0];
+    let x2 = xo[1];
+  	let x3 = xo[2]
+
+    let initime = `${x1}-${x2}-${x3}`
+
+
+    //start = '2020-04-18'
+    xo = (getDateInterval(initime, start)) * 200;
+    //completion = '2020-04-20'
+    const days = getDateInterval(start, completion)
+    const width = (days) * 200
+
+    return { width, xo, initime }
+}
+
+export function calculateFloat (day_1, day_2) {
+    const date_1 =new Date(`${day_1.replace(/-/g, '/')} 00:00:00${getOffsetDate(day_1)}`)
+    const date_2 =new Date(`${day_2.replace(/-/g, '/')} 00:00:00${getOffsetDate(day_2)}`)
+    const time = date_2.getTime() - date_1.getTime();
+    return Math.round(time/(1000*60*60*24))
+    
+  }
+
+
+export function getDateInterval(start, completion) {
+
+    const offsetstart = getOffsetDate(start);
+    const datestart = new Date(`${start.replace(/-/g, '/')} 00:00:00${offsetstart}`)
+    //const offsetcompletion= getOffsetDate(completion);
+    const datecompletion = new Date(`${completion.replace(/-/g, '/')} 00:00:00${offsetstart}`)
+    const starttime = datestart.getTime();
+    const endtime = datecompletion.getTime();
+    const interval = (endtime - starttime) / (3600000 * 24);
+    return (interval)
+}
+
 export function validateEmail(value) {
     var reg_ex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
     var test = reg_ex.test(value)
