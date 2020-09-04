@@ -105,6 +105,13 @@ class Landing {
 
             },
             {
+                imageid: 'milestones',
+                uri: require('../slides/criticalpath.png'),
+                capt: 'Project Milestones, dates, and Critical Path are all provided by the PM for their project. ',
+                title: 'Milestones/Critical Path'
+
+            },
+            {
                 imageid: 'labor_1',
                 uri: require('../slides/labor_1.png'),
                 capt: 'Schedule labor component used for entering labor on the project ',
