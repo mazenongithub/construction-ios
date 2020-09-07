@@ -533,7 +533,7 @@ class ConstructionApp extends Component {
         const regularFont = construction.getRegularFont.call(this)
         if (myprojects) {
             myprojects.map(project => {
-                projectlinks.push(<Text style={[regularFont, styles.alignCenter]} onPress={() => { this.makeprojectactive(project.projectid) }} key={project.projectid}>/{project.title}</Text>)
+                projectlinks.push(<Text style={[regularFont, styles.alignCenter, styles.bottomMargin15]} onPress={() => { this.makeprojectactive(project.projectid) }} key={project.projectid}>/{project.title}</Text>)
 
             })
         }

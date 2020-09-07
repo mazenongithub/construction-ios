@@ -76,6 +76,13 @@ class Project {
                         </View>
                     </View>
 
+                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                   
+                   <View style={[styles.flex1]}>
+                       <Text style={[regularFont]}  onPress={() => { this.handlemilestones() }}> /milestones</Text>
+                   </View>
+               </View>
+
 
                 </View>
             </View>

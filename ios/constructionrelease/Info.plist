@@ -56,7 +56,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Give constructionrelease periences permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give constructionrelease periences permission to access your photos</string>
+	<string>Give $(PRODUCT_NAME) permission to save one profile photo</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>Allow constructionrelease to access your reminders</string>
 	<key>UIBackgroundModes</key>

@@ -235,9 +235,10 @@ class CriticalPath {
                 const milestone = construction.getmilestonebyid.call(this, this.state.activemilestoneid);
                 const float = construction.getfloatbymilestoneid.call(this,this.state.activemilestoneid) 
                 const projectfloat = construction.calcTotalProjectFloat.call(this,this.state.activemilestoneid)
+                const lag = construction.getlagbymilestoneid.call(this,this.state.activemilestoneid);
                 return (
                     <View style={{ ...styles.generalContainer, ...styles.bottomMargin15}}>
-                       <View style={{ ...styles.generalContainer }}><Text style={{ ...styles.generalFont, ...regularFont }}>Active Milestone Is: {milestone.milestone}  Float is {float} days Project Float is {projectfloat} days</Text></View> 
+                       <View style={{ ...styles.generalContainer }}><Text style={{ ...styles.generalFont, ...regularFont }}>Active Milestone Is: {milestone.milestone}  Float is {float} days Project Float is {projectfloat} days Lag is {lag} days</Text></View> 
                     </View>
                 )
             }
