@@ -112,7 +112,7 @@ class ScheduleView {
         
 
         const getColorClass = (type) => {
-            console.log("colorclass", type)
+         
             if (type === "schedule") {
                 return ("#6BB9F0")
             } else if (type === "actual") {

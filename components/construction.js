@@ -795,7 +795,7 @@ class Construction {
                 if (myproposal) {
 
                     const j = construction.getproposalkeybyid.call(this, projectid, proposalid)
-                    console.log('updateproposal', i, j, proposalid, projectid, UTCTimefromCurrentDate())
+                    
                     myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
                     this.props.reduxUser(myuser)
                     this.setState({ render: 'render' })
@@ -1788,9 +1788,9 @@ class Construction {
             const validate = construction.validateCompany.call(this, params);
             if (validate.validate) {
                 try {
-                    console.log("SAVECOMPANY", "PARAMS", params)
+              
                     let response = await SaveCompany(params);
-                    // console.log("SAVECOMPANY", "response", response)
+                    console.log("SAVECOMPANY", "response", response)
                     construction.handlecompanyids.call(this, response)
                     if (response.hasOwnProperty("allusers")) {
                         let companys = returnCompanyList(response.allusers);
@@ -1865,7 +1865,7 @@ class Construction {
         if(myuser.invalidemail) {
             errmsg += myuser.invalidemail;
         }
-        console.log("validatesaveprofile", errmsg)
+ 
         return errmsg;
     }
 
@@ -1893,7 +1893,7 @@ class Construction {
         }
 
     } else {
-        console.log("validatesaveprofile",errmsg)
+
         this.setState({ message:errmsg })
     }
 
@@ -2285,12 +2285,12 @@ class Construction {
     getemployeebyprofile(profile) {
         const construction = new Construction()
         let myemployees = construction.getmyemployees.call(this)
-        console.log("checkmyemployees", myemployees, myemployees.length)
+
         let employees = false;
         if (myemployees) {
             // eslint-disable-next-line
             myemployees.map(employee => {
-                console.log("checkemployee", employee.profile, profile)
+
                 if (employee.profile === profile) {
                     employees = employee;
                 }
@@ -2953,9 +2953,9 @@ class Construction {
         const AFactor = () => {
             const T = Period();
             const i = Number(myequipment.ownership.loaninterest);
-            console.log(T, i)
+ 
             if (T) {
-                console.log(AmmortizeFactor(i, T))
+    
                 return (AmmortizeFactor(i, T))
             } else {
 
@@ -2974,7 +2974,7 @@ class Construction {
         if (i > 0) {
             equipmentrate = (P() * AFactor()) / (workinghours);
         } else {
-            console.log(P(), totalworkinghours(), Period())
+        
             equipmentrate = P() / (totalworkinghours())
         }
 

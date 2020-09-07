@@ -53,7 +53,7 @@ class MaterialCalender {
             let year = this.state.year;
             let month = this.state.month;
             const datestring = `${year}/${month}/${day}`
-            console.log(datestring)
+       
             const newDate = new Date(datestring);
             month = monthstring(newDate.getMonth());
             const date = newDate.getDate();

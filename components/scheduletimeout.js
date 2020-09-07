@@ -411,9 +411,9 @@ class TimeOut {
                             let time = ampm;
                             let minutes = this.state.timeoutminutes;
                             let timeout = makeTimeString(year, month, day, hours, minutes, time);
-                            console.log(timeout)
+                    
                             timeout = UTCTimeStringfromTime(timeout);
-                            console.log(timeout)
+                    
                             myuser.company.projects.myproject[i].schedulelabor.mylabor[j].timeout = timeout;
                             this.props.reduxUser(myuser)
                             this.setState({ render: 'render' })

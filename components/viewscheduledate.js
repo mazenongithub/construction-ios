@@ -43,7 +43,7 @@ class MaterialDate {
         const regularFont = construction.getRegularFont.call(this)
         const materialdate = new MaterialDate();
         const calender = new MaterialCalender();
-        console.log(this.state.year,"showyear")
+ 
         return (
             <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
                 <View style={{ ...styles.flex1, ...styles.calenderContainer }}>
