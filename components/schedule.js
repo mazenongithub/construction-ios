@@ -224,7 +224,8 @@ class Schedule extends Component {
                     if (labors) {
                         myuser.company.projects.myproject[i].schedulelabor.mylabor.push(newLabor)
                     } else {
-                        myuser.company.projects.myproject[i].schedulelabor.mylabor = [newLabor]
+                        const schedulelabor = {mylabor:[newLabor]}
+                        myuser.company.projects.myproject[i].schedulelabor = schedulelabor;
                     }
                     this.props.reduxUser(myuser)
                     this.setState({ activelaborid: laborid, employee })
@@ -305,7 +306,8 @@ class Schedule extends Component {
                     if (equipments) {
                         myuser.company.projects.myproject[i].scheduleequipment.myequipment.push(newEquipment)
                     } else {
-                        myuser.company.projects.myproject[i].scheduleequipment.myequipment = [newEquipment]
+                        const scheduleequipment = {myequipment:[newEquipment]}
+                        myuser.company.projects.myproject[i].scheduleequipment = scheduleequipment;
                     }
                     this.props.reduxUser(myuser)
                     this.setState({ activeequipmentid: equipmentid, equipment: equipment.equipment })
@@ -379,7 +381,8 @@ class Schedule extends Component {
                         myuser.company.projects.myproject[i].schedulematerials.mymaterial.push(newMaterial)
 
                     } else {
-                        myuser.company.projects[i].materials = [newMaterial]
+                        const schedulematerials = {mymaterial:[newMaterial]}
+                        myuser.company.projects.myproject[i].schedulematerials = schedulematerials;
                     }
 
                     this.props.reduxUser(myuser)

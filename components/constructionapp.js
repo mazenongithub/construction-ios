@@ -450,12 +450,13 @@ class ConstructionApp extends Component {
         this.setState({ render: 'render' })
 
     }
+    
     handlemilestones() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
         menu.main = 'milestones'
         this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
+        this.setState({ activemilestoneid:false})
 
     }
     handleschedule() {

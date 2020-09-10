@@ -231,7 +231,8 @@ class Actual extends Component {
                     if (labors) {
                         myuser.company.projects.myproject[i].actuallabor.mylabor.push(newLabor)
                     } else {
-                        myuser.company.projects.myproject[i].actuallabor.mylabor = [newLabor]
+                        const actuallabor = {mylabor:[newLabor]}
+                        myuser.company.projects.myproject[i].actuallabor = actuallabor;
                     }
                     this.props.reduxUser(myuser)
                     this.setState({ activelaborid: laborid, employee })
@@ -312,7 +313,8 @@ class Actual extends Component {
                     if (equipments) {
                         myuser.company.projects.myproject[i].actualequipment.myequipment.push(newEquipment)
                     } else {
-                        myuser.company.projects.myproject[i].actualequipment.myequipment = [newEquipment]
+                        const actualequipment = {myequipment:[newEquipment]}
+                        myuser.company.projects.myproject[i].actualequipment = actualequipment;
                     }
                     this.props.reduxUser(myuser)
                     this.setState({ activeequipmentid: equipmentid, equipment: equipment.equipment })
@@ -386,8 +388,8 @@ class Actual extends Component {
                         myuser.company.projects.myproject[i].actualmaterials.mymaterial.push(newMaterial)
 
                     } else {
-                        myuser.company.projects[i].materials = [newMaterial]
-                    }
+                        const actualmaterials = {mymaterial:[newMaterial]}
+                        myuser.company.projects.myproject[i].actualmaterials = actualmaterials;                    }
 
                     this.props.reduxUser(myuser)
                     this.setState({ activematerialid: materialid, material: material.material })
@@ -1424,6 +1426,7 @@ class Actual extends Component {
         const timein = new TimeIn();
         const timeout = new TimeOut();
         const scheduleview = new ScheduleView();
+        const checkmanager = construction.checkmanager.call(this)
 
         const validate = () => {
             let validation = true;
@@ -1468,7 +1471,9 @@ class Actual extends Component {
 
             const showmaterialquantity = () => {
                 if (this.state.active === 'materials') {
+                    if(checkmanager) {
                     if (validate()) {
+                       
                         return (
                             <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
                                 <View style={{ ...styles.flex1, ...styles.addMargin }}>
@@ -1533,6 +1538,8 @@ class Actual extends Component {
 
                         }
                     }
+
+                }
 
                 }
             }
@@ -1729,10 +1736,10 @@ class Actual extends Component {
 
             const showemployeeid = () => {
                 if (this.state.active === 'labor') {
-
-                    if (this.state.activelaborid) {
+                  
                         const validate = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
                         if (validate) {
+
                             return (employeeid.showemployeeid.call(this))
                         } else {
                             const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
@@ -1744,14 +1751,8 @@ class Actual extends Component {
                             }
 
                         }
-                    } else {
-                        return (employeeid.showemployeeid.call(this))
-                    }
-
-                } else {
-                    return;
-                }
-
+                    } 
+  
             }
 
             const milestonescsi = () => {
@@ -1850,8 +1851,6 @@ class Actual extends Component {
                         {showmaterialdate()}
                         {showtimein()}
                         {showtimeout()}
-
-                        {laborrate()}
                         {equipmentrate()}
                         {showmaterialquantity()}
 
