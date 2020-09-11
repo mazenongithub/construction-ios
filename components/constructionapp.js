@@ -464,7 +464,7 @@ class ConstructionApp extends Component {
         const menu = construction.getnavigation.call(this);
         menu.main = 'schedule'
         this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
+        this.setState({ milestone:'', csi_1:'', csi_2:'', csi_3:'', csi_4:'' })
 
     }
     handleactual() {
@@ -472,7 +472,7 @@ class ConstructionApp extends Component {
         const menu = construction.getnavigation.call(this);
         menu.main = 'actual'
         this.props.reduxNavigation(menu)
-        this.setState({ render: 'render' })
+        this.setState({ milestone:'', csi_1:'', csi_2:'', csi_3:'', csi_4:'' })
 
     }
     handlecostestimate() {

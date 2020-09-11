@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,Text} from 'react-native';
+import {View,Text, TextInput} from 'react-native';
 import Construction from './construction'
 import {MyStylesheet} from './styles'
 import {milestoneformatdatestring} from './functions'
@@ -23,7 +23,14 @@ class MilestoneID {
         let milestoneids = [];
         if(mymilestones) {
             mymilestones.map(milestone=> {
-            milestoneids.push(milestoneid.showmilestone.call(this,milestone))
+                if(this.state.milestone) {
+                            if(milestone.milestone.trim().toLowerCase().startsWith(this.state.milestone.trim().toLowerCase())) {
+                                milestoneids.push(milestoneid.showmilestone.call(this,milestone))
+                            }
+                } else {
+                    milestoneids.push(milestoneid.showmilestone.call(this,milestone))
+                }
+           
             })
 
         }
@@ -47,6 +54,10 @@ class MilestoneID {
                 <View style={[styles.flex1]}>
                     <Text style={[regularFont]}> MilestoneID</Text>
                     {activemilestone()}
+                    <TextInput style={{...regularFont, ...styles.defaultInput}} 
+                        value={this.state.milestone}
+                        onChangeText={text=>{this.setState({milestone:text})}}
+                    />
                     {milestoneid.showmilestones.call(this)}
                 </View>
             </View>
