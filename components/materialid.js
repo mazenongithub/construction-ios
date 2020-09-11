@@ -27,6 +27,8 @@ class MaterialID {
         mymaterials.map(mymaterial=> {
             if(mymaterial.material.toLowerCase().startsWith(search) && search) {
             materialids.push(materialid.searchresult.call(this,mymaterial))
+            } else if (!search) {
+            materialids.push(materialid.searchresult.call(this,mymaterial))
             }
         })
     }

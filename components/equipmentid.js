@@ -23,9 +23,11 @@ class EquipmentID {
         const equipmentid = new EquipmentID();
         let results = [];
         let equipmentids = [];
-        if(myequipments && equipment) {
+        if(myequipments) {
             myequipments.map(myequipment => {
                 if(myequipment.equipment.toLowerCase().startsWith(equipment.toLowerCase()) && equipment) {
+                    results.push(myequipment)
+                } else if (!equipment) {
                     results.push(myequipment)
                 }
             })
@@ -56,7 +58,9 @@ class EquipmentID {
                     <Text style={[regularFont]}> Equipment</Text>
                     {activeequipment()}
                     <TextInput style={[regularFont,styles.defaultInput]} value={this.state.equipment} onChangeText={text=>{this.setState({equipment:text})}}/>
+                    <View style={{...styles.generalContainer, ...styles.maxHeight140}}>
                     {equipmentid.showresults.call(this)}
+                    </View>
                 </View>
             </View>
         )

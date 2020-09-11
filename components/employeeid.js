@@ -22,11 +22,13 @@ class EmployeeID {
                 myusers.push(construction.getemployeebyid.call(this,myemployee.providerid))
             })
         }
-        if(myusers.length>0 && search) {
+        if(myusers.length>0) {
             myusers.map(myuser=> {
                 
 
-                if (myuser.firstname.toLowerCase().startsWith(search.toLowerCase()) || myuser.lastname.toLowerCase().startsWith(search.toLowerCase())) {
+                if (myuser.firstname.toLowerCase().startsWith(search.toLowerCase()) || myuser.lastname.toLowerCase().startsWith(search.toLowerCase()) || `${myuser.firstname.toLowerCase()} ${myuser.lastname.toLowerCase()}`.startsWith(search.toLowerCase()) && search) {
+                    results.push(employeeid.showsearchids.call(this, myuser))
+                } else if(!search) {
                     results.push(employeeid.showsearchids.call(this, myuser))
                 }
             })
@@ -70,7 +72,9 @@ class EmployeeID {
                         value={this.state.employee}
                         onChangeText={text=>{this.setState({employee:text})}}
                     />
+                    <View style={{...styles.generalContainer, ...styles.maxHeight140}}>
                     {employeeid.showemployeesearch.call(this)}
+                    </View>
                 </View>
             </View>
            )
