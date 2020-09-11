@@ -58,7 +58,9 @@ class MilestoneID {
                         value={this.state.milestone}
                         onChangeText={text=>{this.setState({milestone:text})}}
                     />
+                    <View style={{...styles.generalContainer, ...styles.maxHeight140}}>
                     {milestoneid.showmilestones.call(this)}
+                    </View>
                 </View>
             </View>
            )

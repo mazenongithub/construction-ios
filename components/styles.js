@@ -172,6 +172,10 @@ export function MyStylesheet() {
         minwidth90:{
             minWidth:'90%'
         },
+        maxHeight140:{
+            maxHeight:140,
+            overflow: 'hidden'
+        },
         defaultInput: {
             height: 40,
             borderColor: 'gray',
