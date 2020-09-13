@@ -11,6 +11,9 @@ export function MyStylesheet() {
         activebutton:{
             backgroundColor:'#043D1A'
         },
+        blueLink:{
+            color:'#5F88C9'
+        },
         specialButton:{
             color:'#977F1A'
         },

@@ -170,7 +170,7 @@ class Accounts {
 
                     <View style={[styles.generalFlex,styles.bottomMargin10]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[styles.regularFont]} onPress={()=>{this.handleviewaccount(account.accountid)}}>View Account</Text>
+                            <Text style={[regularFont, styles.blueLink, styles.underline]} onPress={()=>{this.handleviewaccount(account.accountid)}}>View Account</Text>
                         </View>
                     </View>
                 </View>

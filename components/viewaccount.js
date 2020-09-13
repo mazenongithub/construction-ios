@@ -310,7 +310,7 @@ class ViewAccount {
 
                                 <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                     <View style={[styles.flex1]}>
-                                        <Text style={[regularFont]} onPress={()=>{viewaccount.opendashboard.call(this,account.stripedashboard)}}>{account.stripedashboard} </Text>
+                                        <Text style={[regularFont, styles.blueLink, styles.underline]} onPress={()=>{viewaccount.opendashboard.call(this,account.stripedashboard)}}>{account.stripedashboard} </Text>
                                     </View>
                                 </View>
 
@@ -331,7 +331,7 @@ class ViewAccount {
 
                                 <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                     <View style={[styles.flex1]}>
-                                        <Text style={[regularFont]} onPress={()=>{viewaccount.openAccount.call(this,account.accountid)}}>{`${clientAPI}/${providerid}/company/${companyid}/accounts/${accountid}`}</Text>
+                                        <Text style={[regularFont, styles.blueLink, styles.underline]} onPress={()=>{viewaccount.openAccount.call(this,account.accountid)}}>{`${clientAPI}/${providerid}/company/${companyid}/accounts/${accountid}`}</Text>
                                     </View>
                                 </View>
 

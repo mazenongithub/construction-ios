@@ -454,7 +454,7 @@ class Proposals {
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>x $</Text>
                         <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { proposals.handlematerialunitcost.call(this, text, item.materialid) }} />
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>=  / </Text>
-                        <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { proposals.handlematerialunitcost.call(this, text, item.materialid) }} />
+                        <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { proposals.handlematerialunit.call(this, text, item.materialid) }} />
                         <Text style={[regularFont]} onPress={() => { proposals.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                     </View>
                     <View style={[styles.flex1]}>

@@ -4,6 +4,7 @@ import Construction from './construction'
 import { MyStylesheet } from './styles'
 import { calculatetotalhours, inputUTCStringForLaborID, inputUTCStringForMaterialIDWithTime, CreateInvoice, inputDateObjOutputAdjString, isNumeric, UTCTimefromCurrentDate, UTCStringFormatDateforProposal } from './functions'
 import MakeID from './makeids';
+import { USER_FACING_NOTIFICATIONS } from 'expo-permissions'
 class Invoices {
 
     handlelaborprofit(profit, laborid) {
@@ -255,7 +256,7 @@ class Invoices {
         let construction = new Construction();
         const myuser = construction.getuser.call(this)
         const activeproject = construction.getactiveproject.call(this)
-
+       
         if (myuser) {
             if (this.state.activeinvoiceid) {
 
@@ -428,7 +429,7 @@ class Invoices {
         const invoices = new Invoices();
         const regularFont = construction.getRegularFont.call(this)
         const checkinvoice = construction.checkinvoiceequipmentid.call(this, item.equipmentid)
-        console.log("checkinvoiceequipment", checkinvoice)
+      
         if (checkinvoice) {
             if (menu.open) {
                 return (
