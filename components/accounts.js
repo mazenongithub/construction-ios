@@ -93,12 +93,11 @@ class Accounts {
             if (myuser) {
                 const checkmanager = construction.checkmanager.call(this);
                 if(checkmanager) {
+
                 const i = construction.getaccountkeybyid.call(this, account.accountid)
                 myuser.company.office.accounts.account.splice(i, 1);
-                if (myuser.company.office.accounts.account.length === 0) {
-                    delete myuser.company.office.accounts.account;
-                    delete myuser.company.office.accounts;
-                }
+                this.props.reduxUser(myuser)
+                this.setState({activeaccountid:false})
 
 
 

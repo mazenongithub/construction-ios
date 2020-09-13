@@ -48,10 +48,11 @@ class Schedule extends Component {
     }
 
     reset() {
+        this.setState({ quantity: "", unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee:'', activelaborid:'', activematerialid:'', activeequipmentid:'', milestone:'' })
         this.timeindefault()
         this.timeoutdefault();
         this.materialdatedefault();
-        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '' })
+       
 
     }
 
@@ -358,7 +359,7 @@ class Schedule extends Component {
                     if (mymaterial) {
                         const j = construction.getschedulematerialskeybyid.call(this, projectid, this.state.activematerialid)
                         myuser.company.projects.myproject[i].schedulematerials.mymaterial[j].mymaterialid = mymaterialid;
-                        this.reduxUser({ myuser })
+                        this.props.reduxUser(myuser)
                         this.setState({ material: material.material })
                     }
 
@@ -710,7 +711,7 @@ class Schedule extends Component {
                 const i = construction.getprojectkeybyid.call(this, projectid)
                 const material = construction.getschedulematerialsbyid.call(this, projectid, mymaterial.materialid)
                 if (material) {
-                    const j = construction.getschedulematerialskeybyid.call(this, projectid, material.materialid)
+                    const j = construction.getschedulematerialskeybyid.call(this, projectid, mymaterial.materialid)
                     myuser.company.projects.myproject[i].schedulematerials.mymaterial.splice(j, 1)
                     this.props.reduxUser(myuser)
                     this.reset();

@@ -75,6 +75,31 @@ class ScheduleView {
 
     }
 
+    validatenewequipment(equipment, equipmentid) {
+        let validate = true;
+        if (equipment.length > 0) {
+            // eslint-disable-next-line
+            equipment.map(myequipment => {
+                if (myequipment.hasOwnProperty(equipmentid)) {
+                    validate = false;
+                }
+            })
+        }
+        return validate;
+    }
+
+    getequipmentkey(equipment, equipmentid) {
+        let key = false;
+        // eslint-disable-next-line
+        equipment.map((myequipment, i) => {
+            if (myequipment.hasOwnProperty(equipmentid)) {
+                key = i;
+
+            }
+        })
+        return key;
+    }
+
     validatenewemployee(employees, providerid) {
         let validate = true;
         if (employees.length > 0) {
@@ -152,7 +177,7 @@ class ScheduleView {
 
                 } else if (schedule.hasOwnProperty("equipmentid")) {
 
-                    if (scheduleview.validatenewemployee.call(this,equipment, schedule.equipmentid)) {
+                    if (scheduleview.validatenewequipment.call(this,equipment, schedule.myequipmentid)) {
                         let me = {};
                         const myequipment = construction.getmyequipmentbyid.call(this, schedule.myequipmentid)
                         me[schedule.myequipmentid] = {};
@@ -165,7 +190,7 @@ class ScheduleView {
 
 
                     } else {
-                        let i = scheduleview.getemployeekey.call(this,equipment, schedule.myequipmentid)
+                        let i = scheduleview.getequipmentkey.call(this,equipment, schedule.myequipmentid)
 
                         equipment[i][schedule.myequipmentid].schedule.push({ equipmentid:schedule.equipmentid, timein: schedule.timein, timeout: schedule.timeout })
 

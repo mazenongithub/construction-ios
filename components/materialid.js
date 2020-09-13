@@ -58,10 +58,11 @@ class MaterialID {
                     <Text style={[regularFont]}> MaterialID</Text>
                     {activematerial()}
                     <TextInput style={[regularFont, styles.defaultInput]} value={this.state.material} onChangeText={text=>{this.setState({material:text})}}/>
+                    
+                    <View style={{...styles.generalContainer, ...styles.maxHeight140}}>
                     {materialid.showsearchresults.call(this)}
-
-
-                   
+                    </View>
+    
                 </View>
             </View>
         )

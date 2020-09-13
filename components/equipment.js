@@ -1186,7 +1186,6 @@ class Equipment extends Component {
                     this.setState({ render: 'render' })
 
                 } else {
-                    this.setState({ equipment })
                     let equipmentid = makeID.equipmentid.call(this);
                     let ownership = "";
                     let accountid = this.state.accountid;

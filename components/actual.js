@@ -50,7 +50,7 @@ class Actual extends Component {
         this.timeindefault()
         this.timeoutdefault();
         this.materialdatedefault();
-        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee: '' })
+        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee: '',  activelaborid:'', activematerialid:'', activeequipmentid:'', milestone:''})
 
     }
 
@@ -365,7 +365,7 @@ class Actual extends Component {
                     if (mymaterial) {
                         const j = construction.getactualmaterialskeybyid.call(this, projectid, this.state.activematerialid)
                         myuser.company.projects.myproject[i].actualmaterials.mymaterial[j].mymaterialid = mymaterialid;
-                        this.props.reduxUser({ myuser })
+                        this.props.reduxUser(myuser)
                         this.setState({ material: material.material })
                     }
 
