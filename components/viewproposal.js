@@ -298,7 +298,7 @@ class ViewProposal {
                         } else {
                             let unit = "";
                             let newItem = CreateBidScheduleItem(csiid, unit, quantity)
-                            if (myinvoice.hasOwnProperty("bid")) {
+                            if (myproposal.hasOwnProperty("bidschedule")) {
                                 myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem.push(newItem);
                             } else {
                                 myuser.company.projects.myproject[i].proposals.myproposal[j].bid = { biditem: [newItem] }
