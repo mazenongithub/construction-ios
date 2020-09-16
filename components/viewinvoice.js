@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, TextInput } from 'react-native'
 import Construction from './construction'
 import { MyStylesheet } from './styles'
-import { CreateBidScheduleItem, DirectCostForLabor, DirectCostForMaterial, DirectCostForEquipment, sorttimes, ProfitForLabor, ProfitForMaterial, ProfitForEquipment, isNumeric, UTCStringFormatDateforProposal, UTCTimefromCurrentDate, inputUTCStringForLaborID } from './functions'
+import { CreateBidScheduleItem, DirectCostForLabor, DirectCostForMaterial, DirectCostForEquipment, sorttimes, ProfitForLabor, ProfitForMaterial, ProfitForEquipment, isNumeric, UTCStringFormatDateforProposal, UTCTimefromCurrentDate, inputUTCStringForLaborID, sortcode } from './functions'
 
 class ViewInvoice {
     getinvoice() {
@@ -97,7 +97,9 @@ class ViewInvoice {
             })
         }
 
-        return csis;
+        return (csis.sort((a,b)=> {
+            return(sortcode(a,b))
+        }));
     }
     showbidtable() {
         const viewinvoice = new ViewInvoice();
@@ -247,18 +249,11 @@ class ViewInvoice {
         const viewinvoice = new ViewInvoice()
         let actualitem = viewinvoice.getactualitem.call(this, csiid);
 
-        if (actualitem) {
-            if (Number(actualitem.quantity) > 0) {
-                return Number(actualitem.quantity);
-
-            } else {
-
-                return ""
-            }
-
-        } else {
-            return ""
+        let quantity = "";
+        if(actualitem) {
+        quantity = actualitem.quantity
         }
+        return quantity;
 
     }
     getunitprice(csiid) {
@@ -290,23 +285,27 @@ class ViewInvoice {
                         let j = construction.getinvoicekeybyid.call(this, projectid, invoiceid)
 
                         const lineitem = construction.getinvoiceitem.call(this, csiid, invoiceid, projectid)
-                        const l = construction.getinvoiceitemkey.call(this, csiid, invoiceid, projectid)
+                        
                         if (lineitem) {
-
+                        
                             const k = construction.getinvoiceitemkey.call(this, csiid, invoiceid, projectid)
                             myuser.company.projects.myproject[i].invoices.myinvoice[j].bid.biditem[k].quantity = quantity;
-                            myuser.company.projects.myproject[i].invoices.myinvoice[l].updated = UTCTimefromCurrentDate();
-                            this.props.reduxUser(myuser);
-                            this.setState({ render: 'render' })
+                        
                         } else {
 
                             let unit = "";
                             let newItem = CreateBidScheduleItem(csiid, unit, quantity)
-                            myuser.company.projects.myproject[i].invoices.myinvoice[j].bid = { biditem: [newItem] }
-                            myuser.company.projects.myproject[i].invoices.myinvoice[l].updated = UTCTimefromCurrentDate();
-                            this.props.reduxUser(myuser);
-                            this.setState({ render: 'render' })
+                            if(invoice.hasOwnProperty("bid")) {
+                                myuser.company.projects.myproject[i].invoices.myinvoice[j].bid.biditem.push(newItem);
+                            } else {
+                                myuser.company.projects.myproject[i].invoices.myinvoice[j].bid = { biditem: [newItem] }
+                            }
+                           
                         }
+
+                        myuser.company.projects.myproject[i].invoices.myinvoice[j].updated = UTCTimefromCurrentDate();
+                        this.props.reduxUser(myuser);
+                        this.setState({ render: 'render' })
 
                     }
 
@@ -332,21 +331,29 @@ class ViewInvoice {
                     let j = construction.getinvoicekeybyid.call(this, projectid, invoiceid)
 
                     const lineitem = construction.getinvoiceitem.call(this, csiid, invoiceid, projectid)
-                    const l = construction.getinvoiceitemkey.call(this, csiid, invoiceid, projectid)
-                    if (lineitem) {
-                        const k = construction.getinvoiceitemkey.call(this, csiid, invoiceid, projectid)
-                        myuser.company.projects.myproject[i].invoices.myinvoice[j].bid.biditem[k].unit = unit;
-                        myuser.company.projects.myproject[i].invoices.myinvoice[l].updated = UTCTimefromCurrentDate();
-                        this.props.reduxUser(myuser);
-                        this.setState({ render: 'render' })
-                    } else {
-                        let quantity = "";
-                        let newItem = CreateBidScheduleItem(csiid, unit, quantity)
-                        myuser.company.projects.myproject[i].invoices.myinvoice[j].bid = { biditem: [newItem] }
-                        myuser.company.projects.myproject[i].invoices.myinvoice[l].updated = UTCTimefromCurrentDate();
-                        this.props.reduxUser(myuser);
-                        this.setState({ render: 'render' })
-                    }
+                    
+                      if (lineitem) {
+                        
+                            const k = construction.getinvoiceitemkey.call(this, csiid, invoiceid, projectid)
+                            myuser.company.projects.myproject[i].invoices.myinvoice[j].bid.biditem[k].unit=unit;
+                           
+                        
+                        } else {
+
+                            let quantity = "";
+                            let newItem = CreateBidScheduleItem(csiid, unit, quantity)
+                            if(invoice.hasOwnProperty("bid")) {
+                                myuser.company.projects.myproject[i].invoices.myinvoice[j].bid.biditem.push(newItem);
+                            } else {
+                                myuser.company.projects.myproject[i].invoices.myinvoice[j].bid = { biditem: [newItem] }
+                            }
+                           
+                        }
+                        myuser.company.projects.myproject[i].invoices.myinvoice[j].updated = UTCTimefromCurrentDate();
+                        this.props.reduxUser(myuser)
+                        this.setState({render:'render'})
+
+                        
                 }
 
             }
@@ -414,11 +421,11 @@ class ViewInvoice {
         const csi = construction.getcsibyid.call(this, item.csiid);
         const viewinvoice = new ViewInvoice();
         const directcost = Number(viewinvoice.getdirectcost.call(this, item.csiid)).toFixed(2);
-        const profit = +Number(viewinvoice.getprofit.call(this, item.csiid)).toFixed(4);
+        const profit = Number(viewinvoice.getprofit.call(this, item.csiid)).toFixed(4);
         const bidprice = Number(viewinvoice.getbidprice.call(this, item.csiid)).toFixed(2);
         const quantity = viewinvoice.getquantity.call(this, item.csiid);
         const unit = viewinvoice.getunit.call(this, item.csiid)
-        const unitprice = +Number(viewinvoice.getunitprice.call(this, item.csiid)).toFixed(2);
+        const unitprice = Number(viewinvoice.getunitprice.call(this, item.csiid)).toFixed(2);
         const activeproject = construction.getactiveproject.call(this);
         const projectid = activeproject.projectid;
         const invoiceid = activeproject.invoiceid;

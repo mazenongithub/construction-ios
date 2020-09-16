@@ -354,7 +354,7 @@ class Invoices {
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
-                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handlelaborprofit.call(this, text, item.laborid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit.toString()} onChangeText={text => { invoices.handlelaborprofit.call(this, text, item.laborid) }} />
                         </View>
 
                     </View>
@@ -369,7 +369,7 @@ class Invoices {
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
-                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handlelaborprofit.call(this, text, item.laborid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit.toString()} onChangeText={text => { invoices.handlelaborprofit.call(this, text, item.laborid) }} />
                         </View>
 
                     </View>
@@ -442,7 +442,7 @@ class Invoices {
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
-                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handleequipmentprofit.call(this, text, item.equipmentid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit.toString()} onChangeText={text => { invoices.handleequipmentprofit.call(this, text, item.equipmentid) }} />
                         </View>
 
                     </View>
@@ -457,7 +457,7 @@ class Invoices {
                         </View>
                         <View style={[styles.flex1]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>Profit</Text>
-                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit} onChangeText={text => { invoices.handleequipmentprofit.call(this, text, item.equipmentid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput]} value={item.profit.toString()} onChangeText={text => { invoices.handleequipmentprofit.call(this, text, item.equipmentid) }} />
                         </View>
 
                     </View>
@@ -529,11 +529,11 @@ class Invoices {
                     <View style={[styles.generalFlex, styles.bottomMargin10, invoices.activebackground.call(this, item.invoiceid)]} key={item.materialid}>
                         <View style={[styles.flex2, styles.flexDirection]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>{inputUTCStringForMaterialIDWithTime(item.timein)}  {material.material} CSI: {csi.csi} - {csi.title} </Text>
-                            <TextInput style={[regularFont, styles.smallField, styles.defaultInput]} value={item.quantity} onChangeText={text => { invoices.handlematerialquantity.call(this, text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.smallField, styles.defaultInput]} value={item.quantity.toString()} onChangeText={text => { invoices.handlematerialquantity.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>x $</Text>
-                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { invoices.handlematerialunitcost.call(this, text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost.toString()} onChangeText={text => { invoices.handlematerialunitcost.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>=  / </Text>
-                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { invoices.handlematerialunit.call(this, text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit.toString()} onChangeText={text => { invoices.handlematerialunit.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>
@@ -548,11 +548,11 @@ class Invoices {
                     <View style={[styles.generalFlex, styles.bottomMargin10, invoices.activebackground.call(this, item.invoiceid)]} key={item.materialid}>
                         <View style={[styles.flex3, styles.flexDirection]}>
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>{inputUTCStringForMaterialIDWithTime(item.timein)}  {material.material} CSI: {csi.csi} - {csi.title} </Text>
-                            <TextInput style={[regularFont, styles.smallField, styles.defaultInput]} value={item.quantity} onChangeText={text => { invoices.handlematerialquantity.call(this, text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.smallField, styles.defaultInput]} value={item.quantity.toString()} onChangeText={text => { invoices.handlematerialquantity.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>x $</Text>
-                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost} onChangeText={text => { invoices.handlematerialunitcost.call(this, text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unitcost.toString()} onChangeText={text => { invoices.handlematerialunitcost.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>=  / </Text>
-                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit} onChangeText={text => { invoices.handlematerialunit.call(this, text, item.materialid) }} />
+                            <TextInput style={[regularFont, styles.defaultInput, styles.smallField]} value={item.unit.toString()} onChangeText={text => { invoices.handlematerialunit.call(this, text, item.materialid) }} />
                             <Text style={[regularFont]} onPress={() => { invoices.addItem.call(this, item) }}>= ${amount.toFixed(2)} x {+Number(profit).toFixed(4)} = ${Number(amount * profit).toFixed(2)}</Text>
                         </View>
                         <View style={[styles.flex1]}>

@@ -150,7 +150,8 @@ export function MyStylesheet() {
             maxWidth: 280
         },
         smallField: {
-            maxWidth: 60
+            minWidth: 90,
+            maxWidth:120
         },
         alignCenter: {
             textAlign: 'center'

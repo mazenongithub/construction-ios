@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, TextInput } from 'react-native'
 import Construction from './construction'
 import { MyStylesheet } from './styles'
-import { CreateBidScheduleItem, DirectCostForLabor, DirectCostForMaterial, DirectCostForEquipment, sorttimes, ProfitForLabor, ProfitForMaterial, ProfitForEquipment, isNumeric, UTCStringFormatDateforProposal, UTCTimefromCurrentDate } from './functions'
+import { CreateBidScheduleItem, DirectCostForLabor, DirectCostForMaterial, DirectCostForEquipment, sorttimes, ProfitForLabor, ProfitForMaterial, ProfitForEquipment, isNumeric, UTCStringFormatDateforProposal, UTCTimefromCurrentDate, sortcode } from './functions'
 
 class ViewProposal {
     getproposal() {
@@ -92,12 +92,19 @@ class ViewProposal {
                 if (validateNewItem(csis, lineitem)) {
 
                     let newItem = CreateBidScheduleItem(lineitem.csiid, "", "0")
+                    let csi = construction.getcsibyid.call(this, lineitem.csiid)
+                    newItem.csi = csi.csi;
+                    newItem.title = csi.title;
                     csis.push(newItem)
                 }
             })
         }
 
-        return csis;
+        return (csis.sort((a, b) => {
+            return (sortcode(a, b))
+        }));
+
+
     }
     showbidtable() {
         const viewproposal = new ViewProposal();
@@ -246,19 +253,11 @@ class ViewProposal {
     getquantity(csiid) {
         const viewproposal = new ViewProposal()
         let scheduleitem = viewproposal.getscheduleitem.call(this, csiid);
-
+        let quantity = "";
         if (scheduleitem) {
-            if (Number(scheduleitem.quantity) > 0) {
-                return Number(scheduleitem.quantity);
-
-            } else {
-
-                return scheduleitem.quantity
-            }
-
-        } else {
-            return ""
+            quantity = scheduleitem.quantity
         }
+        return quantity;
 
     }
     getunitprice(csiid) {
@@ -294,17 +293,23 @@ class ViewProposal {
                         if (lineitem) {
                             let k = construction.getproposalitemkey.call(this, csiid, proposalid, projectid)
                             myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem[k].quantity = quantity;
-                            myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
-                            this.props.reduxUser(myuser)
-                            this.setState({ render: 'render' })
+
 
                         } else {
                             let unit = "";
                             let newItem = CreateBidScheduleItem(csiid, unit, quantity)
-                            myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule = { biditem: [newItem] }
-                            this.props.reduxUser(myuser);
-                            this.setState({ render: 'render' })
+                            if (myinvoice.hasOwnProperty("bid")) {
+                                myuser.company.projects.myproject[i].invoices.myinvoice[j].bid.biditem.push(newItem);
+                            } else {
+                                myuser.company.projects.myproject[i].invoices.myinvoice[j].bid = { biditem: [newItem] }
+                            }
+
+
                         }
+
+                        myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
+                        this.props.reduxUser(myuser);
+                        this.setState({ render: 'render' })
 
 
 
@@ -339,16 +344,17 @@ class ViewProposal {
                     if (lineitem) {
                         let k = construction.getproposalitemkey.call(this, csiid, proposalid, projectid)
                         myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem[k].unit = unit;
-                        myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
-                        this.props.reduxUser(myuser);
-                        this.setState({ render: 'render' })
+                   
                     } else {
                         let quantity = "";
                         let newItem = CreateBidScheduleItem(csiid, unit, quantity)
                         myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule = { biditem: [newItem] }
-                        this.props.reduxUser(myuser);
-                        this.setState({ render: 'render' })
+                    
                     }
+
+                    myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render' })
 
                 }
 
@@ -416,11 +422,11 @@ class ViewProposal {
         const csi = construction.getcsibyid.call(this, item.csiid);
         const viewproposal = new ViewProposal();
         const directcost = Number(viewproposal.getdirectcost.call(this, item.csiid)).toFixed(2);
-        const profit = +Number(viewproposal.getprofit.call(this, item.csiid)).toFixed(4);
+        const profit = Number(viewproposal.getprofit.call(this, item.csiid)).toFixed(4);
         const bidprice = Number(viewproposal.getbidprice.call(this, item.csiid)).toFixed(2);
         const quantity = viewproposal.getquantity.call(this, item.csiid);
         const unit = viewproposal.getunit.call(this, item.csiid)
-        const unitprice = +Number(viewproposal.getunitprice.call(this, item.csiid)).toFixed(2);
+        const unitprice = Number(viewproposal.getunitprice.call(this, item.csiid)).toFixed(2);
         const activeproject = construction.getactiveproject.call(this);
         const projectid = activeproject.projectid;
         const proposalid = activeproject.proposalid;

@@ -49,10 +49,11 @@ class Specifications {
         const headerFont = construction.getHeaderFont.call(this);
         const activeparams = construction.getactiveproject.call(this);
         const projectid = activeparams.projectid;
-        const myproject = construction.getprojectbyid.call(this,projectid);
         const specifications = new Specifications();
+        const myuser = construction.getuser.call(this)
+   
         if (myuser) {
-            if (checkactive) {
+            const myproject = construction.getprojectbyid.call(this,projectid);
         if(myproject) {
         return (
             <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
@@ -72,9 +73,6 @@ class Specifications {
 
         }
 
-    } else {
-        return (<Text style={[regularFont]}>You have to be active to view Specifications</Text>)
-    }
 
 } else {
     return (<Text style={[regularFont]}>You have to be logged in to view Specification</Text>)
