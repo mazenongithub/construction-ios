@@ -343,7 +343,7 @@ class ViewProposal {
                     const lineitem = construction.getproposalitem.call(this, csiid, proposalid, projectid)
                     if (lineitem) {
                         let k = construction.getproposalitemkey.call(this, csiid, proposalid, projectid)
-                        myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem[k].quantity = quantity;
+                        myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem[k].unit=unit;
 
 
                     } else {
