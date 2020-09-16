@@ -357,6 +357,9 @@ class ViewProposal {
 
 
                     }
+                    myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render' })
 
                 }
 
