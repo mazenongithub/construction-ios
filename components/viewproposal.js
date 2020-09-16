@@ -343,18 +343,20 @@ class ViewProposal {
                     const lineitem = construction.getproposalitem.call(this, csiid, proposalid, projectid)
                     if (lineitem) {
                         let k = construction.getproposalitemkey.call(this, csiid, proposalid, projectid)
-                        myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem[k].unit = unit;
-                   
+                        myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem[k].quantity = quantity;
+
+
                     } else {
                         let quantity = "";
                         let newItem = CreateBidScheduleItem(csiid, unit, quantity)
-                        myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule = { biditem: [newItem] }
-                    
-                    }
+                        if (myproposal.hasOwnProperty("bidschedule")) {
+                            myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule.biditem.push(newItem);
+                        } else {
+                            myuser.company.projects.myproject[i].proposals.myproposal[j].bidschedule = { biditem: [newItem] }
+                        }
 
-                    myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
-                    this.props.reduxUser(myuser);
-                    this.setState({ render: 'render' })
+
+                    }
 
                 }
 
