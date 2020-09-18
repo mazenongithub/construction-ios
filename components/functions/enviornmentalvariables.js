@@ -2,7 +2,7 @@ class EnvironmentalVariables {
     getvariables() {
         const variables = {
             development: {
-                serverAPI:'http://54.162.72.105:8081',
+                serverAPI:'http://54.226.101.76:8081',
                 clientAPI:'http://construction.civilengineer.io'
             },
             production: {

@@ -1826,7 +1826,7 @@ class Actual extends Component {
 
                         <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
                             <View style={{ ...styles.flex1 }}>
-                                <View style={{ ...styles.generalContainer }}><Text style={{ ...headerFont, ...styles.boldFont, ...styles.headerFamily, ...styles.alignCenter }}>Actual </Text></View>
+                                <View style={{ ...styles.generalContainer }}><Text style={{ ...headerFont, ...styles.boldFont, ...styles.headerFamily, ...styles.alignCenter }}>/actual </Text></View>
                                 <View style={{ ...styles.generalContainer }}><Text style={{ ...headerFont, ...styles.boldFont, ...styles.headerFamily, ...styles.alignCenter }}>/{project.title} </Text></View>
                             </View>
                         </View>

@@ -118,6 +118,8 @@ class Equipment extends Component {
                 if (account) {
                     accountname = account.accountname;
                 }
+
+                if(myequipment.hasOwnProperty("ownership")) { 
                 const purchasedateyear = myequipment.ownership.purchasedate.substring(0, 4)
                 const purchasedatemonth = myequipment.ownership.purchasedate.substring(5, 7);
                 const purchasedateday = myequipment.ownership.purchasedate.substring(8, 10);
@@ -125,6 +127,10 @@ class Equipment extends Component {
                 const saledatemonth = myequipment.ownership.saledate.substring(5, 7);
                 const saledateday = myequipment.ownership.saledate.substring(8, 10);
                 this.setState({ activeequipmentid: equipmentid, purchasedateyear, purchasedatemonth, purchasedateday, saledateyear, saledatemonth, saledateday, accountname })
+                } else {
+                    this.setState({ activeequipmentid: equipmentid}) 
+                }
+             
             }
         } else {
 
@@ -1187,7 +1193,7 @@ class Equipment extends Component {
 
                 } else {
                     let equipmentid = makeID.equipmentid.call(this);
-                    let ownership = "";
+                    let ownership = this.state.ownership;
                     let accountid = this.state.accountid;
                     let newEquipment = CreateEquipment(equipmentid, equipment, ownership, accountid)
                     if (myuser.company.hasOwnProperty("equipment")) {

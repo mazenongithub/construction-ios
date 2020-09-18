@@ -778,7 +778,8 @@ class ViewInvoice {
 
                         <View style={[styles.generalFlex, styles.bottomMargin10]}>
                             <View style={[styles.flex1]}>
-                                <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}/invoice/{invoiceid}</Text>
+                                <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}</Text>
+                                <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/invoice/{invoiceid}</Text>
                             </View>
                         </View>
                         {viewinvoice.showbidtable.call(this)}
