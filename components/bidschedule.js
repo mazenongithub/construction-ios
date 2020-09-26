@@ -2,16 +2,118 @@ import React from 'react'
 import { Text, View, TextInput } from 'react-native'
 import Construction from './construction'
 import { MyStylesheet } from './styles'
-import { CreateBidScheduleItem,DirectCostForLabor,DirectCostForMaterial,DirectCostForEquipment,sorttimes,ProfitForLabor,ProfitForMaterial,ProfitForEquipment} from './functions'
+import { CreateBidScheduleItem, DirectCostForLabor, DirectCostForMaterial, DirectCostForEquipment, sorttimes, ProfitForLabor, ProfitForMaterial, ProfitForEquipment } from './functions'
 
 class BidSchedule {
- 
+
+    handlequantity(csiid, quantity) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        const activeproject = construction.getactiveproject.call(this)
+        const projectid = activeproject.projectid;
+        if(myuser) {
+            const project = construction.getprojectbyid.call(this,projectid);
+            if (project) {
+    
+                const i = construction.getprojectkeybyid.call(this, project.projectid);
+                const scheduleitems = construction.getbidschedule.call(this,projectid)
+                if(scheduleitems) {
+    
+                const scheduleitem = construction.getbidschedulebyid.call(this, project.projectid, csiid)
+                if (scheduleitem) {
+                    const j = construction.getbidschedulekeybyid.call(this, project.projectid,csiid)
+                    myuser.company.projects.myproject[i].bidschedule[j].quantity = quantity;
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render' })
+                   
+                } else {
+                    let newItem = {csiid, quantity, unit:'', providerid:myuser.providerid}
+                    myuser.company.projects.myproject[i].bidschedule.push(newItem)
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render' })
+                }
+    
+            } else {
+                let newItem = {csiid, quantity, unit:'', providerid:myuser.providerid}
+                myuser.company.projects.myproject[i].bidschedule = [newItem]
+                this.props.reduxUser(myuser);
+                this.setState({ render: 'render' })
+            }
+    
+           
+    
+    
+            }
+        }
+    
+    }
+    
+    
+    handleunit(csiid, unit) {
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        const activeproject = construction.getactiveproject.call(this)
+        const projectid = activeproject.projectid;
+        if(myuser) {
+            const project = construction.getprojectbyid.call(this,projectid);
+            if (project) {
+                const i = construction.getprojectkeybyid.call(this, project.projectid);
+                const scheduleitems = construction.getbidschedule.call(this,project.projectid)
+                if(scheduleitems) {
+                   
+                const scheduleitem = construction.getbidschedulebyid.call(this, project.projectid,csiid)
+              
+                if (scheduleitem) {
+                    
+                    const j = construction.getbidschedulekeybyid.call(this, project.projectid, csiid)
+                    myuser.company.projects.myproject[i].bidschedule[j].unit = unit;
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render' })
+                   
+                } else {
+                    let newItem = {csiid, quantity:'', unit, providerid:myuser.providerid}
+                    myuser.company.projects.myproject[i].bidschedule.push(newItem)
+                    this.props.reduxUser(myuser);
+                    this.setState({ render: 'render' })
+                }
+    
+            } else {
+                let newItem = {csiid, quantity:'', unit, providerid:myuser.providerid}
+                myuser.company.projects.myproject[i].bidschedule = [newItem]
+                this.props.reduxUser(myuser);
+                this.setState({ render: 'render' })
+            }
+    
+           
+    
+    
+            }
+        }
+    
+    }
+    
+   
+     
+        getunit(csiid) {
+            const construction = new Construction();
+            const activeproject = construction.getactiveproject.call(this)
+            const projectid = activeproject.projectid;
+            let unit = ""
+            const item = construction.getbidschedulebyid.call(this, projectid,csiid);
+            if (item) {
+                unit = item.unit
+            }
+            return unit 
+    
+            }
+    
+
     getitems() {
         const construction = new Construction();
         const activeproject = construction.getactiveproject.call(this)
         const projectid = activeproject.projectid;
-        let payitems = construction.getAllSchedule.call(this,projectid)
-    
+        let payitems = construction.getAllSchedule.call(this, projectid)
+
         let items = [];
         const validateNewItem = (items, item) => {
             let validate = true;
@@ -25,39 +127,39 @@ class BidSchedule {
         }
         // eslint-disable-next-line
         payitems.map(item => {
-    
+
             if (item.hasOwnProperty("laborid")) {
-    
+
                 items.push(item)
-    
-    
+
+
             }
             if (item.hasOwnProperty("materialid")) {
-    
+
                 items.push(item)
-    
-    
+
+
             }
             if (item.hasOwnProperty("equipmentid")) {
-    
+
                 items.push(item)
-    
-    
+
+
             }
-    
+
         })
         let csis = [];
         if (items.length > 0) {
             // eslint-disable-next-line
             items.map(lineitem => {
                 if (validateNewItem(csis, lineitem)) {
-    
+
                     let newItem = CreateBidScheduleItem(lineitem.csiid, "", 0)
                     csis.push(newItem)
                 }
             })
         }
-    
+
         return csis;
     }
     showbidtable() {
@@ -76,14 +178,14 @@ class BidSchedule {
         const construction = new Construction()
         const project = construction.getactiveproject.call(this);
         const projectid = project.projectid;
-        const myproject = construction.getprojectbyid.call(this,projectid)
+        const myproject = construction.getprojectbyid.call(this, projectid)
         let directcost = 0;
         if (myproject) {
             if (myproject.hasOwnProperty("schedulelabor")) {
                 // eslint-disable-next-line
                 myproject.schedulelabor.mylabor.map(mylabor => {
 
-                    if (mylabor.csiid === csiid ) {
+                    if (mylabor.csiid === csiid) {
 
                         directcost += DirectCostForLabor(mylabor)
 
@@ -94,7 +196,7 @@ class BidSchedule {
             if (myproject.hasOwnProperty("schedulematerials")) {
                 // eslint-disable-next-line
                 myproject.schedulematerials.mymaterial.map(mymaterial => {
-                    if (mymaterial.csiid === csiid ) {
+                    if (mymaterial.csiid === csiid) {
                         directcost += DirectCostForMaterial(mymaterial)
                     }
 
@@ -105,7 +207,7 @@ class BidSchedule {
         if (myproject.hasOwnProperty("scheduleequipment")) {
             // eslint-disable-next-line
             myproject.scheduleequipment.myequipment.map(myequipment => {
-                if (myequipment.csiid === csiid ) {
+                if (myequipment.csiid === csiid) {
                     directcost += DirectCostForEquipment(myequipment)
                 }
 
@@ -118,12 +220,12 @@ class BidSchedule {
     itemsbycsiid(csiid) {
         const construction = new Construction();
         const project = construction.getactiveproject.call(this);
-        const myproject = construction.getprojectbyid.call(this,project.projectid)
+        const myproject = construction.getprojectbyid.call(this, project.projectid)
         let items = [];
         if (myproject.hasOwnProperty("schedulelabor")) {
             // eslint-disable-next-line
             myproject.schedulelabor.mylabor.map(mylabor => {
-                if (mylabor.csiid === csiid ) {
+                if (mylabor.csiid === csiid) {
                     items.push(mylabor)
                 }
             })
@@ -132,7 +234,7 @@ class BidSchedule {
         if (myproject.hasOwnProperty("schedulematerials")) {
             // eslint-disable-next-line
             myproject.schedulematerials.mymaterial.map(mymaterial => {
-                if (mymaterial.csiid === csiid ) {
+                if (mymaterial.csiid === csiid) {
                     items.push(mymaterial)
                 }
             })
@@ -141,7 +243,7 @@ class BidSchedule {
         if (myproject.hasOwnProperty("scheduleequipment")) {
             // eslint-disable-next-line
             myproject.scheduleequipment.myequipment.map(myequipment => {
-                if (myequipment.csiid === csiid ) {
+                if (myequipment.csiid === csiid) {
                     items.push(myequipment)
                 }
             })
@@ -156,7 +258,7 @@ class BidSchedule {
         const bidschedule = new BidSchedule();
         let profit = 0;
         let directcost = 0;
-        let items = bidschedule.itemsbycsiid.call(this,csiid);
+        let items = bidschedule.itemsbycsiid.call(this, csiid);
         // eslint-disable-next-line
         items.map(item => {
             if (item.hasOwnProperty("laborid")) {
@@ -179,8 +281,8 @@ class BidSchedule {
     }
     getbidprice(csiid) {
         const bidschedule = new BidSchedule()
-        let directcost = Number(bidschedule.getdirectcost.call(this,csiid));
-        let profit = Number(bidschedule.getprofit.call(this,csiid));
+        let directcost = Number(bidschedule.getdirectcost.call(this, csiid));
+        let profit = Number(bidschedule.getprofit.call(this, csiid));
 
         if (!profit) {
             profit = 1
@@ -190,62 +292,23 @@ class BidSchedule {
         let bidprice = directcost * profit;
         return bidprice;
     }
-    getunit(csiid) {
-        let unit = ""
-        const construction = new Construction();
-        const activeproject = construction.getactiveproject.call(this)
-        const projectid = activeproject.projectid;
-        let myproposal = construction.getproposalsbyprojectid.call(this,projectid)
-        if (myproposal) {
-            // eslint-disable-next-line
-            myproposal.map(proposals => {
 
-                if (proposals.hasOwnProperty("bidschedule")) {
-                    // eslint-disable-next-line
-                    proposals.bidschedule.biditem.map(item => {
-                        if (item.csiid === csiid) {
-                            unit = item.unit
-                        }
-                    })
-                }
-
-
-            })
-
-        }
-        return unit;
-
-    }
     getquantity(csiid) {
-        let quantity = 0;
         const construction = new Construction();
         const activeproject = construction.getactiveproject.call(this)
         const projectid = activeproject.projectid;
-        let myproposal = construction.getproposalsbyprojectid.call(this,projectid)
-        if (myproposal) {
-            // eslint-disable-next-line
-            myproposal.map(proposals => {
-
-                if (proposals.hasOwnProperty("bidschedule")) {
-                    // eslint-disable-next-line
-                    proposals.bidschedule.biditem.map(item => {
-                        if (item.unit && item.unit !== 'Lump Sum' && item.unit != 'L.S.' && item.csiid === csiid) {
-                            quantity += Number(item.quantity);
-                        }
-                    })
-                }
-
-
-            })
+        let quantity = ""
+        const item = construction.getbidschedulebyid.call(this, projectid,csiid);
+        if (item) {
+            quantity = item.quantity
+        }
+        return quantity 
 
         }
-        return quantity;
-
-    }
     getunitprice(csiid) {
         const bidschedule = new BidSchedule();
-        let quantity = Number(bidschedule.getquantity.call(this,csiid));
-        let bidprice = Number(bidschedule.getbidprice.call(this,csiid));
+        let quantity = Number(bidschedule.getquantity.call(this, csiid));
+        let bidprice = Number(bidschedule.getbidprice.call(this, csiid));
 
         if (quantity > 0 && bidprice > 0) {
             return (bidprice / quantity)
@@ -262,34 +325,41 @@ class BidSchedule {
         const menu = construction.getnavigation.call(this)
         const csi = construction.getcsibyid.call(this, item.csiid);
         const bidschedule = new BidSchedule();
-        const directcost = Number(bidschedule.getdirectcost.call(this,item.csiid)).toFixed(2);
-        const profit = +Number(bidschedule.getprofit.call(this,item.csiid)).toFixed(4);
-        const bidprice = Number(bidschedule.getbidprice.call(this,item.csiid)).toFixed(2);
-        const quantity = bidschedule.getquantity.call(this,item.csiid);
-        const unit = bidschedule.getunit.call(this,item.csiid)
-        const unitprice = +Number(bidschedule.getunitprice.call(this,item.csiid)).toFixed(2);
-        const regularFont = construction.getRegularFont.call(this)
-        
+        const directcost = Number(bidschedule.getdirectcost.call(this, item.csiid)).toFixed(2);
+        const profit = +Number(bidschedule.getprofit.call(this, item.csiid)).toFixed(4);
+        const bidprice = Number(bidschedule.getbidprice.call(this, item.csiid)).toFixed(2);
+        const unitprice = +Number(bidschedule.getunitprice.call(this, item.csiid)).toFixed(2);
+        const regularFont = construction.getRegularFont.call(this);
+        const activeparams = construction.getactiveproject.call(this)
+        const projectid = activeparams.projectid;
+        const project = construction.getprojectbyid.call(this,projectid)
+        const unit = bidschedule.getunit.call(this, item.csiid)
+   
+
         if (menu.open) {
             return (<View style={[styles.generalFlex, styles.bottomMargin10]} key={item.csiid}>
                 <View style={[styles.flex1]}>
 
                     <View style={[styles.generalFlex]}>
                         <View style={[styles.flex1, styles.showBorder]}>
-                            <Text style={[regularFont]} onPress={()=>{this.handlebidschedulelineitem(item.csiid)}}> {csi.csi}-{csi.title}</Text>
+                            <Text style={[regularFont]} onPress={() => { this.handlebidschedulelineitem(item.csiid) }}> {csi.csi}-{csi.title}</Text>
                         </View>
                     </View>
 
                     <View style={[styles.generalFlex]}>
                         <View style={[styles.flex1, styles.showBorder]}>
                             <Text style={[regularFont, styles.alignCenter]}>Quantity</Text>
-                            <Text style={[ regularFont, styles.alignCenter]}>{quantity.toString()}</Text>
-                          
+                            <TextInput value={bidschedule.getquantity.call(this,item.csiid).toString()}
+                                onChangeText={text => { bidschedule.handlequantity.call(this, item.csiid, text) }}
+                                style={[styles.defaultInput, regularFont, styles.alignCenter]} />
+
                         </View>
                         <View style={[styles.flex1, styles.showBorder]}>
 
                             <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
-                            <Text style={[ regularFont,styles.alignCenter]}>{unit}</Text>
+                            <TextInput value={bidschedule.getunit.call(this, item.csiid)}
+                                onChangeText={text => { bidschedule.handleunit.call(this, item.csiid, text) }}
+                                style={[styles.alignCenter, regularFont, styles.defaultInput]} />
 
                         </View>
                     </View>
@@ -301,7 +371,7 @@ class BidSchedule {
                         </View>
                         <View style={[styles.flex1, styles.showBorder]}>
                             <Text style={[regularFont, styles.alignCenter]}>Overhead and Profit %</Text>
-                            <Text style={[ regularFont,styles.alignCenter]}>{profit.toString()} </Text>
+                            <Text style={[regularFont, styles.alignCenter]}>{profit.toString()} </Text>
                         </View>
                     </View>
 
@@ -312,7 +382,7 @@ class BidSchedule {
                         </View>
                         <View style={[styles.flex1, styles.showBorder]}>
                             <Text style={[regularFont, styles.alignCenter]}>Unit Price</Text>
-                            <Text style={[regularFont, styles.alignCenter]}>${unitprice}</Text>
+                            <Text style={[regularFont, styles.alignCenter]}>${unitprice}/{unit}</Text>
                         </View>
                     </View>
 
@@ -329,19 +399,23 @@ class BidSchedule {
 
                         <View style={[styles.generalFlex]}>
                             <View style={[styles.flex2, styles.showBorder]}>
-                                <Text style={[regularFont]} onPress={()=>{this.handlebidschedulelineitem(item.csiid)}}> {csi.csi}-{csi.title}</Text>
+                                <Text style={[regularFont]} onPress={() => { this.handlebidschedulelineitem(item.csiid) }}> {csi.csi}-{csi.title}</Text>
                             </View>
                             <View style={[styles.flex1, styles.showBorder]}>
-                                <Text style={[regularFont, styles.alignCenter]}>Quantity</Text>
-                                <Text style={[ regularFont, styles.alignCenter]}>{quantity.toString()}</Text>
-                            
+                            <Text style={[regularFont, styles.alignCenter]}>Quantity</Text>
+                            <TextInput value={bidschedule.getquantity.call(this, item.csiid).toString()}
+                                onChangeText={text => { bidschedule.handlequantity.call(this, item.csiid, text) }}
+                                style={[styles.defaultInput, regularFont, styles.alignCenter]} />
+
 
                             </View>
                             <View style={[styles.flex1, styles.showBorder]}>
 
-                                <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
-                                <Text style={[ regularFont]}>{unit}</Text>
-                            
+                            <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
+                            <TextInput value={bidschedule.getunit.call(this, item.csiid)}
+                                onChangeText={text => { bidschedule.handleunit.call(this, item.csiid, text) }}
+                                style={[styles.alignCenter, regularFont, styles.defaultInput]} />
+
                             </View>
                         </View>
 
@@ -352,7 +426,7 @@ class BidSchedule {
                             </View>
                             <View style={[styles.flex1, styles.showBorder]}>
                                 <Text style={[regularFont, styles.alignCenter]}>Overhead and Profit %</Text>
-                                <Text style={[ regularFont]}>{profit.toString()} </Text>
+                                <Text style={[regularFont]}>{profit.toString()} </Text>
                             </View>
                             <View style={[styles.flex1, styles.showBorder]}>
                                 <Text style={[regularFont, styles.alignCenter]}>Bid Price</Text>
@@ -360,7 +434,7 @@ class BidSchedule {
                             </View>
                             <View style={[styles.flex1, styles.showBorder]}>
                                 <Text style={[regularFont, styles.alignCenter]}>Unit Price</Text>
-                                <Text style={[regularFont, styles.alignCenter]}>${unitprice}</Text>
+                                <Text style={[regularFont, styles.alignCenter]}>${unitprice}/{unit}</Text>
                             </View>
                         </View>
 
@@ -369,7 +443,8 @@ class BidSchedule {
                 </View>
             )
 
-        }
+        
+    }
 
 
     }
@@ -381,27 +456,27 @@ class BidSchedule {
         const bidschedule = new BidSchedule();
         const myuser = construction.getuser.call(this)
         const headerFont = construction.getHeaderFont.call(this)
-        if(myuser) {
+        if (myuser) {
             const checkmanager = construction.checkmanager.call(this)
-            if(checkmanager) {
-        return (
-            <View style={[styles.generalFlex]}>
-                <View style={[styles.flex1]}>
-
-                    <View style={[styles.generalFlex, styles.bottomMargin10]}>
+            if (checkmanager) {
+                return (
+                    <View style={[styles.generalFlex]}>
                         <View style={[styles.flex1]}>
-                            <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}/bidschedule </Text>
+
+                            <View style={[styles.generalFlex, styles.bottomMargin10]}>
+                                <View style={[styles.flex1]}>
+                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}/bidschedule </Text>
+                                </View>
+                            </View>
+                            {bidschedule.showbidtable.call(this)}
                         </View>
                     </View>
-                    {bidschedule.showbidtable.call(this)}
-                </View>
-            </View>
-        )
+                )
             } else {
-                return(<Text style={[regularFont]}> Only Managers can view bid schedule</Text>)
+                return (<Text style={[regularFont]}> Only Managers can view bid schedule</Text>)
             }
         } else {
-            return(construction.loginMessage.call(this,"Bid Schedule"))
+            return (construction.loginMessage.call(this, "Bid Schedule"))
         }
     }
 }

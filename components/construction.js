@@ -8,6 +8,100 @@ import { SaveCompany, SaveProfile, SaveProject, AppleLogin, LoadAllUsers } from 
 
 class Construction {
 
+
+    getbidactual(projectid) {
+        const construction = new Construction();
+        const project = construction.getprojectbyid.call(this,projectid)
+        let actual = false;
+        if(project.hasOwnProperty("bid")) {
+            actual = project.bid
+        }
+        return actual;
+    
+    }
+
+    getbidschedulekeybyid(projectid,csiid) {
+        const construction = new Construction();
+        const schedule = construction.getbidschedule.call(this,projectid)
+        let key = false;
+        if(schedule) {
+            // eslint-disable-next-line
+            schedule.map((item,i)=> {
+                if(item.csiid === csiid) {
+                    key = i;
+                }
+            })
+        }
+        return key;
+    
+    }
+
+    getbidactualkeybyid(projectid,csiid) {
+        const construction = new Construction();
+        const actual = construction.getbidactual.call(this,projectid)
+        let key = false;
+        if(actual) {
+            // eslint-disable-next-line
+            actual.map((item,i)=> {
+                if(item.csiid === csiid) {
+                    key = i;
+                }
+            })
+        }
+        return key;
+    
+    }
+
+    getbidactualbyid(projectid,csiid) {
+        const construction = new Construction();
+        const actual = construction.getbidactual.call(this,projectid)
+        let myitem = false;
+        if(actual) {
+            // eslint-disable-next-line
+            actual.map(item=> {
+                if(item.csiid === csiid) {
+                    myitem = item;
+                }
+            })
+        }
+        return myitem;
+    
+    }
+
+    getbidschedule(projectid) {
+        const construction = new Construction();
+        const project = construction.getprojectbyid.call(this,projectid)
+        let schedule = false;
+        if(project.hasOwnProperty("bidschedule")) {
+            schedule = project.bidschedule;
+        }
+        return schedule;
+
+    }
+
+    getbidschedulebyid(projectid,csiid) {
+  
+            const construction = new Construction();
+            const schedule = construction.getbidschedule.call(this,projectid)
+      
+        let myitem = false;
+        if(schedule) {
+ 
+            // eslint-disable-next-line
+            schedule.map(item=> {
+                if(item.csiid === csiid) {
+                    myitem = item;
+                }
+            })
+        }
+
+         
+        return myitem;
+
+    }
+
+
+
     getbuttonheight() {
         if (this.state.width > 1200) {
             return ({ height: 75 })
