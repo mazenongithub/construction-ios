@@ -333,7 +333,7 @@ class BidSchedule {
         const activeparams = construction.getactiveproject.call(this)
         const projectid = activeparams.projectid;
         const project = construction.getprojectbyid.call(this,projectid)
-        const unit = bidschedule.getunit.call(this, item.csiid)
+        const unit = bidschedule.getunit.call(this, item.csiid);
    
 
         if (menu.open) {
@@ -357,7 +357,7 @@ class BidSchedule {
                         <View style={[styles.flex1, styles.showBorder]}>
 
                             <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
-                            <TextInput value={bidschedule.getunit.call(this, item.csiid)}
+                            <TextInput value={unit}
                                 onChangeText={text => { bidschedule.handleunit.call(this, item.csiid, text) }}
                                 style={[styles.alignCenter, regularFont, styles.defaultInput]} />
 
@@ -412,7 +412,7 @@ class BidSchedule {
                             <View style={[styles.flex1, styles.showBorder]}>
 
                             <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
-                            <TextInput value={bidschedule.getunit.call(this, item.csiid)}
+                            <TextInput value={unit}
                                 onChangeText={text => { bidschedule.handleunit.call(this, item.csiid, text) }}
                                 style={[styles.alignCenter, regularFont, styles.defaultInput]} />
 
@@ -465,10 +465,12 @@ class BidSchedule {
 
                             <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                 <View style={[styles.flex1]}>
-                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}/bidschedule </Text>
+                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}</Text>
+                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/bidschedule </Text>
                                 </View>
                             </View>
                             {bidschedule.showbidtable.call(this)}
+                            {construction.showsaveproject.call(this)}
                         </View>
                     </View>
                 )

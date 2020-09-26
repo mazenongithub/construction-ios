@@ -436,7 +436,6 @@ class Bid {
         const directcost = Number(bid.getdirectcost.call(this, item.csiid)).toFixed(2);
         const profit = +Number(bid.getprofit.call(this, item.csiid)).toFixed(4);
         const bidprice = Number(bid.getbidprice.call(this, item.csiid)).toFixed(2);
-        const quantity = bid.getquantity.call(this, item.csiid);
         const unit = bid.getunit.call(this, item.csiid)
         const unitprice = +Number(bid.getunitprice.call(this, item.csiid)).toFixed(2);
         const regularFont = construction.getRegularFont.call(this)
@@ -462,7 +461,7 @@ class Bid {
                         <View style={[styles.flex1, styles.showBorder]}>
 
                             <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
-                            <TextInput value={bid.getunit.call(this, item.csiid)}
+                            <TextInput value={unit}
                                 onChangeText={text => { bid.handleunit.call(this, item.csiid, text) }}
                                 style={[styles.alignCenter, regularFont, styles.defaultInput]} />
 
@@ -487,7 +486,7 @@ class Bid {
                         </View>
                         <View style={[styles.flex1, styles.showBorder]}>
                             <Text style={[regularFont, styles.alignCenter]}>Unit Price</Text>
-                            <Text style={[regularFont, styles.alignCenter]}>${unitprice}</Text>
+                            <Text style={[regularFont, styles.alignCenter]}>${unitprice}/{unit}</Text>
                         </View>
                     </View>
 
@@ -517,7 +516,7 @@ class Bid {
                             <View style={[styles.flex1, styles.showBorder]}>
 
                             <Text style={[regularFont, styles.alignCenter]}>Unit</Text>
-                            <TextInput value={bid.getunit.call(this, item.csiid)}
+                            <TextInput value={unit}
                                 onChangeText={text => { bid.handleunit.call(this, item.csiid, text) }}
                                 style={[styles.alignCenter, regularFont, styles.defaultInput]} />
 
@@ -571,10 +570,12 @@ class Bid {
 
                             <View style={[styles.generalFlex, styles.bottomMargin10]}>
                                 <View style={[styles.flex1]}>
-                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title}/bid </Text>
+                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/{myproject.title} </Text>
+                                    <Text style={[headerFont, styles.boldFont, styles.alignCenter]}>/bid </Text>
                                 </View>
                             </View>
                             {bid.showbidtable.call(this)}
+                            {construction.showsaveproject.call(this)}
                         </View>
                     </View>
                 )
