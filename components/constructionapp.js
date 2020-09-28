@@ -153,82 +153,82 @@ class ConstructionApp extends Component {
         switch (menu.main) {
             case 'register':
                 return (register.showregister.call(this));
-                
+
             case 'login':
                 return (login.showlogin.call(this));
-                
+
             case 'profile':
                 return (profile.showmyprofile.call(this));
-                
+
             case 'company':
                 return (<Company update={this.updatestate.bind(this)} />);
-                
+
             case 'employees':
                 return (<Employees update={this.updatestate.bind(this)} />);
-                
+
             case 'equipment':
                 return (<Equipment update={this.updatestate.bind(this)} />);
-                
+
             case 'materials':
                 return (<Materials update={this.updatestate.bind(this)} />);
-                
+
             case 'viewschedule':
                 return (<MySchedule update={this.updatestate.bind(this)} />);
-                
+
             case 'viewactual':
                 return (<MyActual update={this.updatestate.bind(this)} />);
-                
+
             case 'accounts':
                 return (accounts.showaccounts.call(this));
-                
+
             case 'viewaccount':
                 return (viewaccount.showaccount.call(this));
-                
+
             case 'project':
                 return (project.showproject.call(this));
-                
+
             case 'costestimate':
                 return (costestimate.showestimate.call(this));
-                
+
             case 'schedule':
                 return (<Schedule update={this.updatestate.bind(this)} />);
-                
+
             case 'actual':
                 return (<Actual update={this.updatestate.bind(this)} />);
-                
+
             case 'milestones':
                 return (<Milestones update={this.updatestate.bind(this)} />);
-                
+
             case 'proposals':
                 return (proposals.showproposals.call(this));
-                
+
             case 'viewproposal':
                 return (viewproposal.showproposal.call(this));
-                
+
             case 'invoices':
                 return (invoices.showinvoices.call(this));
-                
+
             case 'viewinvoice':
                 return (viewinvoice.showinvoice.call(this));
-                
+
             case "proposallineitem":
                 return (proposallineitem.showproposallineitem.call(this))
-                
+
             case "invoicelineitem":
                 return (invoicelineitem.showinvoicelineitem.call(this))
-                
+
             case "bidschedule":
                 return (bidschedule.showbidschedule.call(this))
-                
+
             case "bid":
                 return (bid.showbid.call(this));
-                
+
             case "bidschedulelineitem":
                 return (bidschedulelineitem.showbidschedulelineitem.call(this))
-                
+
             case "bidlineitem":
                 return (bidlineitem.showbidlineitem.call(this))
-                
+
             case "specifications":
                 return (specifications.getspecifications.call(this));
             case "specification":
@@ -450,13 +450,13 @@ class ConstructionApp extends Component {
         this.setState({ render: 'render' })
 
     }
-    
+
     handlemilestones() {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this);
         menu.main = 'milestones'
         this.props.reduxNavigation(menu)
-        this.setState({ activemilestoneid:false})
+        this.setState({ activemilestoneid: false })
 
     }
     handleschedule() {
@@ -464,7 +464,7 @@ class ConstructionApp extends Component {
         const menu = construction.getnavigation.call(this);
         menu.main = 'schedule'
         this.props.reduxNavigation(menu)
-        this.setState({ milestone:'', csi_1:'', csi_2:'', csi_3:'', csi_4:'' })
+        this.setState({ milestone: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '' })
 
     }
     handleactual() {
@@ -472,7 +472,7 @@ class ConstructionApp extends Component {
         const menu = construction.getnavigation.call(this);
         menu.main = 'actual'
         this.props.reduxNavigation(menu)
-        this.setState({ milestone:'', csi_1:'', csi_2:'', csi_3:'', csi_4:'' })
+        this.setState({ milestone: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '' })
 
     }
     handlecostestimate() {
@@ -802,18 +802,54 @@ class ConstructionApp extends Component {
                 </View>)
 
         }
+
         const mainIcon = () => {
-            let width = 0.27 * Number(this.state.width)
-            height = 0.76 * width;
-            return ({ width: Math.round(width), height: Math.round(height) })
+
+            if (this.state.width > 1200) {
+                return ({ width: 147, height: 104 })
+            } else if (this.state.width > 780) {
+                return ({ width: 119, height: 84 })
+            } else {
+                return ({ width: 61, height: 43 })
+
+            }
+
+
 
         }
+
         const mainLogo = () => {
-            let width = 0.72 * Number(this.state.width)
-            let height = .29 * width
-            return ({ width: Math.round(width), height: Math.round(height) })
+
+
+            let width = "";
+            let height = "";
+
+            if (this.state.width > 1200) {
+                return ({ width: 768, height: 115 })
+            } else if (this.state.width > 780) {
+                return ({ width: 549, height: 81 })
+            } else {
+
+                return ({ width: 308, height: 46 })
+
+            }
 
         }
+
+        const iconimage = () => {
+            if (menu.open) {
+                return (<Image source={require('./png/hamburgericon.png')}
+                    resizeMethod='scale'
+                    style={mainIcon()}
+                />)
+            } else {
+                return (<Image source={require('./png/hamburgeropen.png')}
+                    resizeMethod='scale'
+                    style={mainIcon()}
+                />)
+            }
+        }
+
         return (
             <View style={[styles.generalFlex, styles.topMargin35, styles.leftMargin5]}>
 
@@ -823,17 +859,11 @@ class ConstructionApp extends Component {
 
                         <View style={[styles.flex1, styles.navHeight]}>
                             <TouchableOpacity onPress={() => { this.handlemenu() }}>
-                                <Image source={require('./png/icon.png')}
-                                    resizeMethod='scale'
-                                    style={mainIcon()}
-                                />
-
+                                {iconimage()}
                             </TouchableOpacity>
-
                         </View>
-                        <View style={[styles.flex3, styles.navHeight, styles.alignContentCenter]}>
-
-                            <Image source={require('./png/logo.png')}
+                        <View style={[styles.flex3, styles.navHeight]}>
+                            <Image source={require('./png/mainlogo.png')}
                                 resizeMethod='scale'
                                 style={[mainLogo(), styles.leftMargin10]}
                             />

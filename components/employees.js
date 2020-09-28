@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, Alert, Dimensions} from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
@@ -13,8 +13,26 @@ import {isNumeric} from './functions'
 class Employees extends Component {
     constructor(props) {
         super(props)
-        this.state = { render: '', accountname:'', activeemployeeid: '', activebenefitid: '', amount: "", accountid: '', benefit: '' }
+        this.state = { render: '', accountname:'', activeemployeeid: '', activebenefitid: '', amount: "", accountid: '', benefit: '', width:0, height:0 }
+        this.updatedimesions = this.updatedimesions.bind(this)
+   
     }
+
+    
+    componentDidMount() {
+
+        Dimensions.addEventListener('change', this.updatedimesions);
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+      
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updatedimesions)
+    }
+    updatedimesions() {
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
+
     makeemployeeactive(employeeid) {
         if (this.state.activeemployeeid === employeeid) {
             this.setState({ activeemployeeid: false })

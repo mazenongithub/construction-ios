@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, Alert,Dimensions } from 'react-native'
 import {
     inputUTCStringForLaborID,
     calculatetotalhours,
@@ -39,13 +39,23 @@ class Schedule extends Component {
     constructor(props) {
         super(props);
         this.state = { render: '', width: 0, height: 0, active: '', activelaborid: false, activeequipmentid: false, activematerialid: false, providerid: '', timeinmonth: '', timeinday: '', timeinyear: '', timeinhours: '', timeinminutes: '', timeinampm: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '', timeoutmonth: '', timeoutday: '', timeoutminutes: '', timeouthours: '', timeoutyear: '', timeoutampm: '', milestoneid: '', csiid: '', laborrate: 0, equipmentrate: 0, mymaterialid: '', myequipmentid: '', materialdateday: '', materialdatemonth: '', materialdateyear: '', quantity: '', unit: '', unitcost: '', calendertimein: true, calendertimeout: true, materialcalender: true, material: '', equipment: '', employee: '', milestone:''}
-
+        this.updatedimesions = this.updatedimesions.bind(this)
     }
     componentDidMount() {
         this.timeindefault()
         this.timeoutdefault();
         this.materialdatedefault();
+        Dimensions.addEventListener('change', this.updatedimesions);
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
     }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updatedimesions)
+    }
+    updatedimesions() {
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
+    
 
     reset() {
         this.setState({ quantity: "", unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee:'', activelaborid:'', activematerialid:'', activeequipmentid:'', milestone:'' })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Alert, View, Text, TextInput, Image } from 'react-native';
+import { TouchableOpacity, Alert, View, Text, TextInput, Image,Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
@@ -13,9 +13,24 @@ class Materials extends Component {
     constructor(props) {
         super(props)
         this.state = this.state = { render: '', accountname: '', activematerialid: '', materialid: '', material: '', accountid: '', unit: '', unitcost: '', message: '' }
+        this.updatedimesions = this.updatedimesions.bind(this)
+   
     }
-
-
+    
+    
+    componentDidMount() {
+    
+        Dimensions.addEventListener('change', this.updatedimesions);
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+      
+    }
+    
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updatedimesions)
+    }
+    updatedimesions() {
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
     makematerialactive(materialid) {
         const construction = new Construction();
         const material = construction.getmymaterialbyid.call(this, materialid);

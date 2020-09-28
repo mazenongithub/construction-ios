@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, Alert,Dimensions } from 'react-native'
 import {
     inputUTCStringForLaborID,
     calculatetotalhours,
@@ -37,20 +37,30 @@ import ScheduleView from './scheduleview';
 class Actual extends Component {
     constructor(props) {
         super(props);
-        this.state = { render: '', width: 0, height: 0, active: '', activelaborid: false, activeequipmentid: false, activematerialid: false, providerid: '', timeinmonth: '', timeinday: '', timeinyear: '', timeinhours: '', timeinminutes: '', timeinampm: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '', timeoutmonth: '', timeoutday: '', timeoutminutes: '', timeouthours: '', timeoutyear: '', timeoutampm: '', milestoneid: '', csiid: '', laborrate: 0, equipmentrate: 0, mymaterialid: '', myequipmentid: '', materialdateday: '', materialdatemonth: '', materialdateyear: '', quantity: '', unit: '', unitcost: '', calendertimein: true, calendertimeout: true, materialcalender: true, material: '', equipment: '', employee: '', milestones:'', milestone:'' }
-
+        this.state = { render: '', width: 0, height: 0, active: '', activelaborid: false, activeequipmentid: false, activematerialid: false, providerid: '', timeinmonth: '', timeinday: '', timeinyear: '', timeinhours: '', timeinminutes: '', timeinampm: '', csi_1: '', csi_2: '', csi_3: '', csi_4: '', timeoutmonth: '', timeoutday: '', timeoutminutes: '', timeouthours: '', timeoutyear: '', timeoutampm: '', milestoneid: '', csiid: '', laborrate: 0, equipmentrate: 0, mymaterialid: '', myequipmentid: '', materialdateday: '', materialdatemonth: '', materialdateyear: '', quantity: '', unit: '', unitcost: '', calendertimein: true, calendertimeout: true, materialcalender: true, material: '', equipment: '', employee: '', milestones: '', milestone: '' }
+        this.updatedimesions = this.updatedimesions.bind(this)
     }
     componentDidMount() {
         this.timeindefault()
         this.timeoutdefault();
         this.materialdatedefault();
+        Dimensions.addEventListener('change', this.updatedimesions);
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updatedimesions)
+
+    }
+    updatedimesions() {
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
     }
 
     reset() {
         this.timeindefault()
         this.timeoutdefault();
         this.materialdatedefault();
-        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee: '',  activelaborid:'', activematerialid:'', activeequipmentid:'', milestone:''})
+        this.setState({ quantity: '', unit: '', unitcost: '', laborrate: '', equipmentrate: '', material: '', equipment: '', employee: '', activelaborid: '', activematerialid: '', activeequipmentid: '', milestone: '' })
 
     }
 
@@ -231,7 +241,7 @@ class Actual extends Component {
                     if (labors) {
                         myuser.company.projects.myproject[i].actuallabor.mylabor.push(newLabor)
                     } else {
-                        const actuallabor = {mylabor:[newLabor]}
+                        const actuallabor = { mylabor: [newLabor] }
                         myuser.company.projects.myproject[i].actuallabor = actuallabor;
                     }
                     this.props.reduxUser(myuser)
@@ -313,7 +323,7 @@ class Actual extends Component {
                     if (equipments) {
                         myuser.company.projects.myproject[i].actualequipment.myequipment.push(newEquipment)
                     } else {
-                        const actualequipment = {myequipment:[newEquipment]}
+                        const actualequipment = { myequipment: [newEquipment] }
                         myuser.company.projects.myproject[i].actualequipment = actualequipment;
                     }
                     this.props.reduxUser(myuser)
@@ -388,8 +398,9 @@ class Actual extends Component {
                         myuser.company.projects.myproject[i].actualmaterials.mymaterial.push(newMaterial)
 
                     } else {
-                        const actualmaterials = {mymaterial:[newMaterial]}
-                        myuser.company.projects.myproject[i].actualmaterials = actualmaterials;                    }
+                        const actualmaterials = { mymaterial: [newMaterial] }
+                        myuser.company.projects.myproject[i].actualmaterials = actualmaterials;
+                    }
 
                     this.props.reduxUser(myuser)
                     this.setState({ activematerialid: materialid, material: material.material })
@@ -664,20 +675,20 @@ class Actual extends Component {
                     let csi_2 = "";
                     let csi_3 = "";
                     let csi_4 = "";
-         
-                    if(csi) {
-                     csi_1 = csi.csi.substring(0, 2)
-                     csi_2 = csi.csi.substring(2, 4);
-                     csi_3 = csi.csi.substring(4, 6);
-                    
-                    if (csi.csi.length > 6) {
-                        csi_4 = csi.csi.substring(7, 9);
+
+                    if (csi) {
+                        csi_1 = csi.csi.substring(0, 2)
+                        csi_2 = csi.csi.substring(2, 4);
+                        csi_3 = csi.csi.substring(4, 6);
+
+                        if (csi.csi.length > 6) {
+                            csi_4 = csi.csi.substring(7, 9);
+                        }
                     }
-                }
 
                     const material = construction.getmymaterialbyid.call(this, mymaterial.mymaterialid)
 
-                  
+
 
                     this.setState({ materialdatemonth, materialdateday, materialdateyear, activematerialid: materialid, csi_1, csi_2, csi_3, csi_4, material: material.material })
 
@@ -878,17 +889,17 @@ class Actual extends Component {
                     let csi_2 = "";
                     let csi_3 = "";
                     let csi_4 = "";
-         
-                    if(csi) {
-                     csi_1 = csi.csi.substring(0, 2)
-                     csi_2 = csi.csi.substring(2, 4);
-                     csi_3 = csi.csi.substring(4, 6);
-                    
-                    if (csi.csi.length > 6) {
-                        csi_4 = csi.csi.substring(7, 9);
+
+                    if (csi) {
+                        csi_1 = csi.csi.substring(0, 2)
+                        csi_2 = csi.csi.substring(2, 4);
+                        csi_3 = csi.csi.substring(4, 6);
+
+                        if (csi.csi.length > 6) {
+                            csi_4 = csi.csi.substring(7, 9);
+                        }
+
                     }
-               
-                }
 
                     this.setState({ activelaborid: laborid, timeinmonth, timeinday, timeinyear, timeinhours, timeinminutes, timeinampm, timeoutmonth, timeoutday, timeoutyear, timeouthours, timeoutminutes, timeoutampm, csi_1, csi_2, csi_3, csi_4, employee })
 
@@ -961,28 +972,28 @@ class Actual extends Component {
     showlaborids() {
         const construction = new Construction();
         const activeparams = construction.getactiveproject.call(this)
-       
+
         const checkmanager = construction.checkmanager.call(this)
         let laborids = [];
         const myuser = construction.getuser.call(this);
-        if(myuser) {
+        if (myuser) {
             const project = construction.getprojectbyid.call(this, activeparams.projectid);
-        if (project) {
-            const projectid = project.projectid;
-            const labors = construction.getactuallabor.call(this, projectid)
-            if (labors) {
-                // eslint-disable-next-line
-                labors.map(labor => {
-                    if(labor.providerid === myuser.providerid || checkmanager) {
-                    laborids.push(this.showlaborid(labor))
-                    }
+            if (project) {
+                const projectid = project.projectid;
+                const labors = construction.getactuallabor.call(this, projectid)
+                if (labors) {
+                    // eslint-disable-next-line
+                    labors.map(labor => {
+                        if (labor.providerid === myuser.providerid || checkmanager) {
+                            laborids.push(this.showlaborid(labor))
+                        }
 
 
-                })
+                    })
+                }
+
             }
-
         }
-    }
         return laborids;
 
     }
@@ -1471,75 +1482,75 @@ class Actual extends Component {
 
             const showmaterialquantity = () => {
                 if (this.state.active === 'materials') {
-                    if(checkmanager) {
-                    if (validate()) {
-                       
-                        return (
-                            <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
-                                <View style={{ ...styles.flex1, ...styles.addMargin }}>
-                                    <View style={{ ...styles.generalContainer }}>
-                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity</Text>
+                    if (checkmanager) {
+                        if (validate()) {
+
+                            return (
+                                <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                                    <View style={{ ...styles.flex1, ...styles.addMargin }}>
+                                        <View style={{ ...styles.generalContainer }}>
+                                            <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity</Text>
+                                        </View>
+                                        <View style={{ ...styles.generalContainer }}>
+                                            <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                                value={this.getquantity()}
+                                                onChangeText={text => { this.handlequantity(text) }}
+                                            />
+                                        </View>
+
                                     </View>
-                                    <View style={{ ...styles.generalContainer }}>
-                                        <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
-                                            value={this.getquantity()}
-                                            onChangeText={text => { this.handlequantity(text) }}
-                                        />
+                                    <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                                        <View style={{ ...styles.generalContainer }}>
+                                            <Text style={{ ...styles.generalFont, ...regularFont }}>Unit</Text>
+                                        </View>
+                                        <View style={{ ...styles.generalContainer }}>
+                                            <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                                value={this.getunit()}
+                                                onChangeText={text => { this.handleunit(text) }}
+                                            />
+                                        </View>
+
+                                    </View>
+                                    <View style={{ ...styles.flex1, ...styles.addMargin }}>
+
+                                        <View style={{ ...styles.generalContainer }}>
+                                            <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost</Text>
+                                        </View>
+                                        <View style={{ ...styles.generalContainer }}>
+                                            <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
+                                                value={this.getunitcost()}
+                                                onChangeText={text => { this.handleunitcost(text) }}
+                                            />
+                                        </View>
+
                                     </View>
 
                                 </View>
-                                <View style={{ ...styles.flex1, ...styles.addMargin }}>
+                            )
 
-                                    <View style={{ ...styles.generalContainer }}>
-                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit</Text>
-                                    </View>
-                                    <View style={{ ...styles.generalContainer }}>
-                                        <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
-                                            value={this.getunit()}
-                                            onChangeText={text => { this.handleunit(text) }}
-                                        />
-                                    </View>
+                        } else {
+                            if (this.state.activematerialid) {
+                                const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
+                                if (mymaterial) {
+                                    return (<View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
+                                        <View style={{ ...styles.flex1 }}>
+                                            <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity: {mymaterial.quantity}</Text>
+                                        </View>
+                                        <View style={{ ...styles.flex1 }}>
+                                            <Text style={{ ...styles.generalFont, ...regularFont }}>Unit: {mymaterial.unit}</Text>
+                                        </View>
+                                        <View style={{ ...styles.flex1 }}>
+                                            <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost: {mymaterial.unitcost}</Text>
+                                        </View>
+                                    </View>)
 
-                                </View>
-                                <View style={{ ...styles.flex1, ...styles.addMargin }}>
-
-                                    <View style={{ ...styles.generalContainer }}>
-                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost</Text>
-                                    </View>
-                                    <View style={{ ...styles.generalContainer }}>
-                                        <TextInput style={{ ...styles.generalFont, ...regularFont, ...styles.defaultInput }}
-                                            value={this.getunitcost()}
-                                            onChangeText={text => { this.handleunitcost(text) }}
-                                        />
-                                    </View>
-
-                                </View>
-
-                            </View>
-                        )
-
-                    } else {
-                        if (this.state.activematerialid) {
-                            const mymaterial = construction.getactualmaterialsbyid.call(this, projectid, this.state.activematerialid)
-                            if (mymaterial) {
-                                return (<View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
-                                    <View style={{ ...styles.flex1 }}>
-                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Quantity: {mymaterial.quantity}</Text>
-                                    </View>
-                                    <View style={{ ...styles.flex1 }}>
-                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit: {mymaterial.unit}</Text>
-                                    </View>
-                                    <View style={{ ...styles.flex1 }}>
-                                        <Text style={{ ...styles.generalFont, ...regularFont }}>Unit Cost: {mymaterial.unitcost}</Text>
-                                    </View>
-                                </View>)
+                                }
 
                             }
-
                         }
-                    }
 
-                }
+                    }
 
                 }
             }
@@ -1736,23 +1747,23 @@ class Actual extends Component {
 
             const showemployeeid = () => {
                 if (this.state.active === 'labor') {
-                  
-                        const validate = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
-                        if (validate) {
 
-                            return (employeeid.showemployeeid.call(this))
-                        } else {
-                            const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
-                            if (mylabor) {
-                                const employee = construction.getemployeebyid.call(this, mylabor.providerid);
-                                if (employee) {
-                                    return (<Text style={{ ...styles.generalFont, ...regularFont, ...styles.bottomMargin15 }}>Employee: {employee.firstname} {employee.lastname}</Text>)
-                                }
+                    const validate = construction.checkinvoicelaborid.call(this, this.state.activelaborid)
+                    if (validate) {
+
+                        return (employeeid.showemployeeid.call(this))
+                    } else {
+                        const mylabor = construction.getactuallaborbyid.call(this, projectid, this.state.activelaborid)
+                        if (mylabor) {
+                            const employee = construction.getemployeebyid.call(this, mylabor.providerid);
+                            if (employee) {
+                                return (<Text style={{ ...styles.generalFont, ...regularFont, ...styles.bottomMargin15 }}>Employee: {employee.firstname} {employee.lastname}</Text>)
                             }
-
                         }
-                    } 
-  
+
+                    }
+                }
+
             }
 
             const milestonescsi = () => {
@@ -1858,16 +1869,16 @@ class Actual extends Component {
                         {this.showlaborids()}
                         {this.showequipmentids()}
 
-                        {scheduleview.showschedule.call(this,"actual")}
+                        {scheduleview.showschedule.call(this, "actual")}
                         {construction.showsaveproject.call(this)}
 
                     </View>
                 </View>)
         }
         else {
-            return(<View><Text style={{...regularFont}}> Please Login to view actual </Text></View>)
+            return (<View><Text style={{ ...regularFont }}> Please Login to view actual </Text></View>)
         }
-        
+
     }
 
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { MyStylesheet } from './styles';
-import { Alert, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { Alert, View, Text, TextInput, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { LoadAllUsers, RegisterNewCompany, AddExistingCompany, ValidateCompanyID } from './actions/api';
 import { returnCompanyList, CreateCompany, validateCompanyID, validateProviderID } from './functions';
 import Construction from './construction';
@@ -11,14 +11,29 @@ class Company extends Component {
     constructor(props) {
         super(props)
         this.state = { render: '', url: '', company: '', urlcheck: false, message: '' }
+        this.updatedimesions = this.updatedimesions.bind(this)
+   
     }
-
+    
+    
     componentDidMount() {
+    
+        Dimensions.addEventListener('change', this.updatedimesions);
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
         const construction = new Construction();
         if(!this.props.allusers.hasOwnProperty("length")) {
             construction.loadallusers.call(this)
             }
+      
     }
+    
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updatedimesions)
+    }
+    updatedimesions() {
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
+    
     async loadallusers() {
         try {
             let response = await LoadAllUsers();

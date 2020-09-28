@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, View, TouchableOpacity, Image, Text } from 'react-native';
 import { MyStylesheet } from './styles';
-import { checkemptyobject,calculateday, calculatemonth, calculateyear, getScale, calculateFloat, getDateInterval, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric, UTCTimefromCurrentDate, sortpart, getDateTime } from './functions'
+import { checkemptyobject, calculateday, calculatemonth, calculateyear, getScale, calculateFloat, getDateInterval, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric, UTCTimefromCurrentDate, sortpart, getDateTime } from './functions'
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { SaveCompany, SaveProfile, SaveProject, AppleLogin, LoadAllUsers } from './actions/api'
 
@@ -11,91 +11,91 @@ class Construction {
 
     getbidactual(projectid) {
         const construction = new Construction();
-        const project = construction.getprojectbyid.call(this,projectid)
+        const project = construction.getprojectbyid.call(this, projectid)
         let actual = false;
-        if(project.hasOwnProperty("bid")) {
+        if (project.hasOwnProperty("bid")) {
             actual = project.bid
         }
         return actual;
-    
+
     }
 
-    getbidschedulekeybyid(projectid,csiid) {
+    getbidschedulekeybyid(projectid, csiid) {
         const construction = new Construction();
-        const schedule = construction.getbidschedule.call(this,projectid)
+        const schedule = construction.getbidschedule.call(this, projectid)
         let key = false;
-        if(schedule) {
+        if (schedule) {
             // eslint-disable-next-line
-            schedule.map((item,i)=> {
-                if(item.csiid === csiid) {
+            schedule.map((item, i) => {
+                if (item.csiid === csiid) {
                     key = i;
                 }
             })
         }
         return key;
-    
+
     }
 
-    getbidactualkeybyid(projectid,csiid) {
+    getbidactualkeybyid(projectid, csiid) {
         const construction = new Construction();
-        const actual = construction.getbidactual.call(this,projectid)
+        const actual = construction.getbidactual.call(this, projectid)
         let key = false;
-        if(actual) {
+        if (actual) {
             // eslint-disable-next-line
-            actual.map((item,i)=> {
-                if(item.csiid === csiid) {
+            actual.map((item, i) => {
+                if (item.csiid === csiid) {
                     key = i;
                 }
             })
         }
         return key;
-    
+
     }
 
-    getbidactualbyid(projectid,csiid) {
+    getbidactualbyid(projectid, csiid) {
         const construction = new Construction();
-        const actual = construction.getbidactual.call(this,projectid)
+        const actual = construction.getbidactual.call(this, projectid)
         let myitem = false;
-        if(actual) {
+        if (actual) {
             // eslint-disable-next-line
-            actual.map(item=> {
-                if(item.csiid === csiid) {
+            actual.map(item => {
+                if (item.csiid === csiid) {
                     myitem = item;
                 }
             })
         }
         return myitem;
-    
+
     }
 
     getbidschedule(projectid) {
         const construction = new Construction();
-        const project = construction.getprojectbyid.call(this,projectid)
+        const project = construction.getprojectbyid.call(this, projectid)
         let schedule = false;
-        if(project.hasOwnProperty("bidschedule")) {
+        if (project.hasOwnProperty("bidschedule")) {
             schedule = project.bidschedule;
         }
         return schedule;
 
     }
 
-    getbidschedulebyid(projectid,csiid) {
-  
-            const construction = new Construction();
-            const schedule = construction.getbidschedule.call(this,projectid)
-      
+    getbidschedulebyid(projectid, csiid) {
+
+        const construction = new Construction();
+        const schedule = construction.getbidschedule.call(this, projectid)
+
         let myitem = false;
-        if(schedule) {
- 
+        if (schedule) {
+
             // eslint-disable-next-line
-            schedule.map(item=> {
-                if(item.csiid === csiid) {
+            schedule.map(item => {
+                if (item.csiid === csiid) {
                     myitem = item;
                 }
             })
         }
 
-         
+
         return myitem;
 
     }
@@ -188,10 +188,26 @@ class Construction {
 
         if (menu.open) {
 
-            return ({ fontSize: 16 })
+            if (this.state.width > 1200) {
+                return ({ fontSize: 24 })
+
+            } else if (this.state.width > 600) {
+                return ({ fontSize: 20 })
+            } else {
+                return ({ fontSize: 16 })
+            }
+
+
         } else {
 
-            return ({ fontSize: 20 })
+            if (this.state.width > 1200) {
+                return ({ fontSize: 30 })
+
+            } else if (this.state.width > 600) {
+                return ({ fontSize: 24 })
+            } else {
+                return ({ fontSize: 20 })
+            }
         }
     }
 
@@ -200,11 +216,28 @@ class Construction {
         const menu = construction.getnavigation.call(this);
 
         if (menu.open) {
-            return ({ fontSize: 20 })
+
+            if (this.state.width > 1200) {
+                return ({ fontSize: 30 })
+
+            } else if (this.state.width > 600) {
+                return ({ fontSize: 24 })
+            } else {
+                return ({ fontSize: 20 })
+            }
         } else {
-            return ({ fontSize: 24 })
+
+            if (this.state.width > 1200) {
+                return ({ fontSize: 36 })
+
+            } else if (this.state.width > 600) {
+                return ({ fontSize: 30 })
+            } else {
+                return ({ fontSize: 24 })
+            }
         }
     }
+
     getcompany() {
         let construction = new Construction();
         let myuser = construction.getuser.call(this);
@@ -477,7 +510,7 @@ class Construction {
         try {
             let response = await AppleLogin(values)
             console.log("RESPONSE LOGIN", response)
-         
+
             if (response.hasOwnProperty("myuser")) {
 
                 this.props.reduxUser(response.myuser)
@@ -517,7 +550,7 @@ class Construction {
                 }
                 this.setState({ emailaddress, client, clientid, firstname, lastname, emailaddresscheck })
 
-                construction.loginclient.call(this,type)
+                construction.loginclient.call(this, type)
             }
 
 
@@ -889,7 +922,7 @@ class Construction {
                 if (myproposal) {
 
                     const j = construction.getproposalkeybyid.call(this, projectid, proposalid)
-                    
+
                     myuser.company.projects.myproject[i].proposals.myproposal[j].updated = UTCTimefromCurrentDate();
                     this.props.reduxUser(myuser)
                     this.setState({ render: 'render' })
@@ -1882,7 +1915,7 @@ class Construction {
             const validate = construction.validateCompany.call(this, params);
             if (validate.validate) {
                 try {
-              
+
                     let response = await SaveCompany(params);
                     console.log("SAVECOMPANY", "response", response)
                     construction.handlecompanyids.call(this, response)
@@ -1909,16 +1942,34 @@ class Construction {
             alert(`Only managers have access to save company`)
         }
     }
+
     getsavecompanyicon() {
         const construction = new Construction();
-        const menu = construction.getnavigation.call(this);
-        if (menu.open) {
-            return ({ width: 153, height: 31 })
+        const menu = construction.getnavigation.call(this)
+
+        if (this.state.width > 1200) {
+
+            return ({ width: 349, height: 88 })
+
+        } else if (this.state.width > 600) {
+            return ({ width: 260, height: 66 })
+        
         } else {
 
-            return ({ width: 243, height: 48 })
+            if(menu.open) {
+
+                return ({ width: 160, height: 40 })
+                
+            } else {
+
+                return ({ width: 227, height: 58 })
+
+            }
+            
         }
+
     }
+
     showsavecompany() {
         const styles = MyStylesheet();
         const construction = new Construction();
@@ -1949,17 +2000,17 @@ class Construction {
     }
 
     validateSaveProfile() {
-       
+
         let construction = new Construction();
         let myuser = construction.getuser.call(this)
         let errmsg = "";
-        if(myuser.invalid) {
+        if (myuser.invalid) {
             errmsg += myuser.invalid;
         }
-        if(myuser.invalidemail) {
+        if (myuser.invalidemail) {
             errmsg += myuser.invalidemail;
         }
- 
+
         return errmsg;
     }
 
@@ -1969,27 +2020,27 @@ class Construction {
         let values = { providerid: myuser.providerid, firstname: myuser.firstname, lastname: myuser.lastname, emailaddress: myuser.emailaddress, phonenumber: myuser.phonenumber, profileurl: myuser.profileurl, profile: myuser.profile }
         let errmsg = construction.validateSaveProfile.call(this)
 
-        if(!errmsg) {
-        let response = await SaveProfile(values)
-        console.log(response)
-      
-        if (response.hasOwnProperty("myuser")) {
+        if (!errmsg) {
+            let response = await SaveProfile(values)
+            console.log(response)
 
-            this.props.reduxUser(response.myuser)
+            if (response.hasOwnProperty("myuser")) {
+
+                this.props.reduxUser(response.myuser)
+            }
+
+
+            if (response.hasOwnProperty("message")) {
+                let lastupdated = inputUTCStringForLaborID(response.lastupdated)
+                let message = `${response.message} Last updated ${lastupdated}`
+                this.setState({ message })
+
+            }
+
+        } else {
+
+            this.setState({ message: errmsg })
         }
-
-
-        if (response.hasOwnProperty("message")) {
-            let lastupdated = inputUTCStringForLaborID(response.lastupdated)
-            let message = `${response.message} Last updated ${lastupdated}`
-            this.setState({ message })
-
-        }
-
-    } else {
-
-        this.setState({ message:errmsg })
-    }
 
 
     }
@@ -1998,44 +2049,44 @@ class Construction {
         const construction = new Construction();
         const milestones = construction.getmilestones.call(this);
         let lag = 0;
-    
+
         const checklag = (startdate, enddate, i, lag) => {
             let replacelag = false;
-    
-    
-            const check = Math.round((startdate-enddate)*(1/(1000*60*60*24)))
-            
-            
-            if(i===0 && check>0) {
+
+
+            const check = Math.round((startdate - enddate) * (1 / (1000 * 60 * 60 * 24)))
+
+
+            if (i === 0 && check > 0) {
                 replacelag = true;
-            } else if(check < lag) {
+            } else if (check < lag) {
                 replacelag = true;
             }
-    
-        
-    
+
+
+
             return replacelag;
         }
-        
-        if(milestones) {
-            const mymilestone = construction.getmilestonebyid.call(this,milestoneid);
-            if(mymilestone) {
-    
-            const startdate = getDateTime(mymilestone.start);
-    
-            if(mymilestone.hasOwnProperty("predessors")) {
-                // eslint-disable-next-line
-                mymilestone.predessors.map((predessor,i)=> {
-    
-                    const enddate = getDateTime(construction.getmilestonebyid.call(this,predessor.predessor).completion)
-                 
-                    if(startdate >= enddate && checklag(startdate,enddate,i,lag)) {
-                        lag = Math.round((startdate-enddate)*(1/(1000*60*60*24)))
-                    }
-    
-                })
-            }
-    
+
+        if (milestones) {
+            const mymilestone = construction.getmilestonebyid.call(this, milestoneid);
+            if (mymilestone) {
+
+                const startdate = getDateTime(mymilestone.start);
+
+                if (mymilestone.hasOwnProperty("predessors")) {
+                    // eslint-disable-next-line
+                    mymilestone.predessors.map((predessor, i) => {
+
+                        const enddate = getDateTime(construction.getmilestonebyid.call(this, predessor.predessor).completion)
+
+                        if (startdate >= enddate && checklag(startdate, enddate, i, lag)) {
+                            lag = Math.round((startdate - enddate) * (1 / (1000 * 60 * 60 * 24)))
+                        }
+
+                    })
+                }
+
             }
         }
         return lag;
@@ -2047,18 +2098,18 @@ class Construction {
         let float = 0;
         let i = 0;
         for (let mypath in paths[milestoneid]['paths']) {
-    
+
             let floatcheck = paths[milestoneid]['paths'][mypath]['float']
-    
+
             if (floatcheck < float || i === 0) {
                 float = floatcheck
-    
+
             }
-    
+
             i += 1;
         }
         return float;
-    
+
     }
 
     checkemptypathsbymilestoneid(milestoneid) {
@@ -2066,53 +2117,53 @@ class Construction {
         const paths = construction.getpaths.call(this)
         const path = paths[milestoneid];
         let empty = false;
-        if(checkemptyobject(path.paths)) {
-           empty  = true;
+        if (checkemptyobject(path.paths)) {
+            empty = true;
         }
-        return empty; 
-        }
+        return empty;
+    }
 
 
     calcTotalProjectFloat(milestoneid) {
         const construction = new Construction();
         const paths = construction.getpaths.call(this)
         let checkcalc = true
-        let i =0;
+        let i = 0;
         let activemilestoneid = milestoneid;
-        while(checkcalc) {
-       
-       
-          window[`checkfloat_${i.toString()}`] = 0;
-              
-              
-              let j = 0;
-               checkcalc = false;
-               for (window[`mypath_${i.toString()}`] in paths[activemilestoneid]['paths']) {
-                   
-                if(!construction.checkemptypathsbymilestoneid.call(this,window[`mypath_${i.toString()}`])) {
-                  checkcalc = true 
-                 }
-                    
-                
-                    if (j === 0 || window[`checkfloat_${i.toString()}`] > construction.getfloatbymilestoneid.call(this, window[`mypath_${i.toString()}`])) {
-                       window[`checkfloat_${i.toString()}`] = construction.getfloatbymilestoneid.call(this, window[`mypath_${i.toString()}`])
-                       activemilestoneid = window[`mypath_${i.toString()}`]
-                   }
-                j+=1
-              }
-          
-               i+=1;
-        
+        while (checkcalc) {
+
+
+            window[`checkfloat_${i.toString()}`] = 0;
+
+
+            let j = 0;
+            checkcalc = false;
+            for (window[`mypath_${i.toString()}`] in paths[activemilestoneid]['paths']) {
+
+                if (!construction.checkemptypathsbymilestoneid.call(this, window[`mypath_${i.toString()}`])) {
+                    checkcalc = true
+                }
+
+
+                if (j === 0 || window[`checkfloat_${i.toString()}`] > construction.getfloatbymilestoneid.call(this, window[`mypath_${i.toString()}`])) {
+                    window[`checkfloat_${i.toString()}`] = construction.getfloatbymilestoneid.call(this, window[`mypath_${i.toString()}`])
+                    activemilestoneid = window[`mypath_${i.toString()}`]
+                }
+                j += 1
+            }
+
+            i += 1;
+
         }
-       let float = construction.getfloatbymilestoneid.call(this, milestoneid)
-       let projectfloat = 0;
-       for(let k=0;k<i;k++) {
-         projectfloat+= Number(window[`checkfloat_${k.toString()}`])
-       }
-       return float + projectfloat
-       }
-    
-    
+        let float = construction.getfloatbymilestoneid.call(this, milestoneid)
+        let projectfloat = 0;
+        for (let k = 0; k < i; k++) {
+            projectfloat += Number(window[`checkfloat_${k.toString()}`])
+        }
+        return float + projectfloat
+    }
+
+
 
     getpaths() {
         const construction = new Construction();
@@ -2121,21 +2172,21 @@ class Construction {
         const activeparams = construction.getactiveproject.call(this)
         const project = construction.getprojectbyid.call(this, activeparams.projectid)
         let paths = {}
-    
-    
+
+
         const getmilestonebyid = (paths, milestoneid) => {
             let mymilestone = false;
             if (paths.hasOwnProperty(milestoneid)) {
-    
+
                 mymilestone = paths[milestoneid]
             }
-    
+
             return mymilestone;
-    
+
         }
-    
+
         const getPathsbyMilestoneID = (milestones, milestoneid) => {
-    
+
             let path = {};
             // eslint-disable-next-line
             milestones.map(milestone => {
@@ -2145,21 +2196,21 @@ class Construction {
                         if (predessor.predessor === milestoneid) {
                             path[`${milestone.milestoneid}`] = {};
                             path[`${milestone.milestoneid}`]['type'] = predessor.type
-    
-    
-    
+
+
+
                         }
-    
-    
+
+
                     })
-    
-    
-    
+
+
+
                 }
-    
-    
+
+
             })
-    
+
             return path;
         }
         if (milestones) {
@@ -2170,38 +2221,38 @@ class Construction {
                 paths[`${milestone.milestoneid}`]['start'] = milestone.start
                 paths[`${milestone.milestoneid}`]['completion'] = milestone.completion;
                 paths[`${milestone.milestoneid}`]['paths'] = getPathsbyMilestoneID(milestones, milestone.milestoneid)
-    
+
             })
-    
-    
-    
-    
+
+
+
+
             let interval = getDateInterval(projectinterval.start, projectinterval.completion)
             let scale = getScale(interval)
             let mymilestones = [];
-    
+
             // eslint-disable-next-line
             Object.getOwnPropertyNames(paths).map(path => {
                 mymilestones.push(path)
             })
-    
+
             // eslint-disable-next-line
             mymilestones.map((milestoneid, i) => {
-    
+
                 if ((paths[milestoneid]).hasOwnProperty("paths")) {
-    
-    
-    
+
+
+
                     if (Object.getOwnPropertyNames(paths[milestoneid].paths).length > 0) {
-    
+
                         // eslint-disable-next-line
                         Object.getOwnPropertyNames(paths[milestoneid].paths).map(prop => {
-    
+
                             const milestone_2 = getmilestonebyid(paths, prop)
                             let params = {};
                             let params_2 = {};
                             if (milestone_2) {
-    
+
                                 if (scale === 'month') {
                                     params = calculatemonth(projectinterval.start, projectinterval.completion, paths[milestoneid]['start'], paths[milestoneid]['completion'])
                                     params_2 = calculatemonth(projectinterval.start, projectinterval.completion, milestone_2['start'], milestone_2['completion'])
@@ -2213,8 +2264,8 @@ class Construction {
                                     params_2 = calculateday(projectinterval.start, projectinterval.completion, milestone_2['start'], milestone_2['completion'])
                                 }
                             }
-                            const y1 = 80 + 100 * (construction.getmilestonekeybyid.call(this, activeparams.projectid,milestoneid));
-                            const y2 = 80 + 100 * (construction.getmilestonekeybyid.call(this,activeparams.projectid, prop));
+                            const y1 = 80 + 100 * (construction.getmilestonekeybyid.call(this, activeparams.projectid, milestoneid));
+                            const y2 = 80 + 100 * (construction.getmilestonekeybyid.call(this, activeparams.projectid, prop));
                             let x1 = "";
                             if (paths[milestoneid].paths[prop].type === 'start-to-finish') {
                                 x1 = params.xo + params.width;
@@ -2226,35 +2277,35 @@ class Construction {
                             paths[milestoneid].paths[prop]['y2'] = y2
                             paths[milestoneid].paths[prop]['x2'] = params_2.xo
                             paths[milestoneid].paths[prop]['float'] = 'float';
-    
-    
+
+
                         })
-    
+
                     }
-    
-    
+
+
                 }
-    
-    
+
+
             })
         }
-    
-    
+
+
         let milestone_1 = "";
         let milestone_2 = "";
         for (let myprop in paths) {
             milestone_1 = getmilestonebyid(paths, myprop)
-    
-    
-    
+
+
+
             for (let mypath in paths[myprop]['paths']) {
                 milestone_2 = getmilestonebyid(paths, mypath)
                 let float = calculateFloat(milestone_1.completion, milestone_2.start)
                 paths[myprop]['paths'][mypath]['float'] = float
             }
-    
+
         }
-    
+
         return paths;
     }
 
@@ -2272,7 +2323,7 @@ class Construction {
             interval = { start, completion }
         }
         return interval;
-    
+
     }
 
     showsaveprofile() {
@@ -2280,11 +2331,12 @@ class Construction {
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
         const saveProfileIcon = () => {
-            if (menu.open) {
-                return ({ width: 155, height: 39 })
+            if (this.state.width > 1200) {
+                return ({ width: 308, height: 78 })
+            } else if (this.state.width > 600) {
+                return ({ width: 228, height: 58 })
             } else {
-
-                return ({ width: 257, height: 65 })
+                return ({ width: 186, height: 47 })
             }
 
         }
@@ -2829,15 +2881,27 @@ class Construction {
         const styles = MyStylesheet();
         const construction = new Construction();
         const menu = construction.getnavigation.call(this)
-        const saveProfileIcon = () => {
-            if (menu.open) {
-                return ({ width: 148, height: 30 })
-            } else {
-
-                return ({ width: 254, height: 52 })
-            }
+     
+            const saveProfileIcon = () => {
+                if (menu.open) {
+                    if (this.state.width > 1200) {
+                        return ({ width: 273, height: 56 })
+    
+                    } else if (this.state.width > 600) {
+    
+                        return ({ width: 210, height: 44 })
+    
+                    } else {
+                        return ({ width: 148, height: 30 })
+                    }
+    
+                } else {
+    
+                    return ({ width: 254, height: 52 })
+                }
 
         }
+        
         return (<View style={styles.generalFlex, styles.bottomMargin10}>
             <View style={styles.flex1}>
 
@@ -3047,9 +3111,9 @@ class Construction {
         const AFactor = () => {
             const T = Period();
             const i = Number(myequipment.ownership.loaninterest);
- 
+
             if (T) {
-    
+
                 return (AmmortizeFactor(i, T))
             } else {
 
@@ -3068,7 +3132,7 @@ class Construction {
         if (i > 0) {
             equipmentrate = (P() * AFactor()) / (workinghours);
         } else {
-        
+
             equipmentrate = P() / (totalworkinghours())
         }
 

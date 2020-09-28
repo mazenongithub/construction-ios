@@ -6,7 +6,7 @@ import { MyStylesheet } from './styles';
 import {  milestoneformatdatestring } from './functions';
 import Construction from './construction';
 import CriticalPath from './criticalpath'
-import {View, Text} from 'react-native';
+import {View, Text,Dimensions} from 'react-native';
 class Milestones extends Component {
     constructor(props) {
         super(props);
@@ -19,9 +19,24 @@ class Milestones extends Component {
        
 
         }
+        this.updatedimesions = this.updatedimesions.bind(this)
    
     }
-
+    
+    
+    componentDidMount() {
+    
+        Dimensions.addEventListener('change', this.updatedimesions);
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+      
+    }
+    
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updatedimesions)
+    }
+    updatedimesions() {
+        this.setState({ width: Dimensions.get('window').width, height: Dimensions.get('window').height })
+    }
 
     loadmilestoneids() {
         const construction = new Construction();
