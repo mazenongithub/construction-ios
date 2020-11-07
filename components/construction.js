@@ -3,10 +3,58 @@ import { Dimensions, View, TouchableOpacity, Image, Text } from 'react-native';
 import { MyStylesheet } from './styles';
 import { checkemptyobject, calculateday, calculatemonth, calculateyear, getScale, calculateFloat, getDateInterval, sorttimes, inputUTCStringForLaborID, returnCompanyList, CreateUser, getEquipmentRentalObj, calculatetotalhours, AmmortizeFactor, calculateTotalMonths, FutureCostPresent, isNumeric, UTCTimefromCurrentDate, sortpart, getDateTime } from './functions'
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { SaveCompany, SaveProfile, SaveProject, AppleLogin, LoadAllUsers } from './actions/api'
+import { SaveCompany, SaveProfile, SaveProject, AppleLogin, LoadAllUsers, LoadSpecifications } from './actions/api'
 
 
 class Construction {
+
+    async loadprojectspecs(projectid) {
+        console.log("loadspecs", projectid)
+        const construction = new Construction();
+        const myuser = construction.getuser.call(this)
+        if (myuser) {
+
+            const project = construction.getprojectbyid.call(this, projectid)
+
+            if (project) {
+                const i = construction.getprojectkeybyid.call(this,project.projectid)
+
+
+                try {
+                    let specifications = [];
+                    let specs = await LoadSpecifications(projectid);
+                   console.log(specs)
+                    if(specs.hasOwnProperty("length")) {
+                        
+                        specs.map(spec => {
+                            
+                            if(spec.hasOwnProperty("specifications")) {
+                                
+                                spec.specifications.map(myspec=> {
+                                    
+                                    specifications.push(myspec)
+                                })
+                            }
+
+                        })
+
+                    }
+                    
+                    myuser.company.projects.myproject[i].specifications = specifications;
+                    this.props.reduxUser(myuser)
+                    this.setState({render:'render'})
+                    
+
+
+                } catch (err) {
+                    alert(err)
+                }
+
+            }
+
+        }
+
+    }
 
 
     getbidactual(projectid) {

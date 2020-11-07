@@ -32,7 +32,7 @@ class Specifications {
         let specids = [];
         if(myproject) {
         const specs = construction.getspecficationsbyprojectid.call(this, myproject.projectid)
-        console.log(specs)
+   
         if (specs) {
             // eslint-disable-next-line
             specs.map(spec => {
@@ -54,7 +54,14 @@ class Specifications {
    
         if (myuser) {
             const myproject = construction.getprojectbyid.call(this,projectid);
-        if(myproject) {
+            
+            if(myproject) {
+              
+
+                if(!myproject.hasOwnProperty("specifications")) {
+                    construction.loadprojectspecs.call(this,myproject.projectid) 
+                }
+
         return (
             <View style={{ ...styles.generalFlex, ...styles.bottomMargin15 }}>
                 <View style={{ ...styles.flex1 }}>

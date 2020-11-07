@@ -29,6 +29,12 @@ export function MyStylesheet() {
         marginLeft60: {
             marginLeft: 60
         },
+        marginLeft90: {
+            marginLeft: 90
+        },
+        marginLeft120: {
+            marginLeft: 120
+        },
         showBorder: {
             borderWidth: 1
         },
